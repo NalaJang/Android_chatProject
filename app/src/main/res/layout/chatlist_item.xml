@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/workerImage_list"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_baseline_account_circle_24"
+            />
+
+        <TextView
+            android:id="@+id/workerId_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/workerImage_list"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp"
+            android:text="사용자 아이디"
+            />
+
+        <TextView
+            android:id="@+id/workerContent_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/workerImage_list"
+            android:layout_below="@+id/workerId_list"
+            android:layout_marginLeft="8dp"
+            android:maxWidth="250dp"
+            android:textSize="15dp"
+            android:text="대화명"
+            />
+
+        <Button
+            android:id="@+id/deleteButton_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/chatButton_list"
+            android:text="삭제"
+            />
+
+        <Button
+            android:id="@+id/chatButton_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentRight="true"
+            android:text="채팅"
+            />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">>
+
+    <group
+        android:checkableBehavior="single"
+        >
+
+        <item
+            android:id="@+id/room_image_drawer"
+            android:title="현재 채팅방 배경 화면"
+            />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/delete_drawer"
+                android:title="대화 내용 모두 삭제"
+                />
+
+            <item
+                android:id="@+id/save_drawer"
+                android:title="대화 내용 저장"
+                />
+
+        </menu>
+    </item>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/exit_drawer"
+                android:icon="@drawable/ic_baseline_exit_to_app_24"
+                android:title="채팅방 나가기"
+                />
+        </menu>
+    </item>
+</menu>
