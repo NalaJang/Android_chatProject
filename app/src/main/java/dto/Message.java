@@ -10,6 +10,8 @@ public class Message {
     private String roomId;
     private String photo;
 
+    public Message() {}
+
     public Message(String signal, String toId, String fromId, String message, String time, String roomId, String photo) {
         this.signal = signal;
         this.toId = toId;

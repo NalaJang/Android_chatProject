@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,16 @@ import android.widget.Toast;
 import java.util.Vector;
 
 import adapter.Chat_room_list_Adapter;
+import chat.ChatConnThread;
+import chat.MsgUtils;
+import chat.ThreadUtils;
 import dto.RoomList;
 import dto.UserDto;
 
 
 public class Chat_room_listFragment extends Fragment {
 
-    UserDto userDto;
-    EntranceActivity activity;
+    private static final String TAG = Chat_room_listFragment.class.getSimpleName();
 
     RecyclerView recyclerView;
     Chat_room_list_Adapter adapter;
@@ -34,19 +38,9 @@ public class Chat_room_listFragment extends Fragment {
     String userId_db;
     Button delete_button;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    Handler chatConnHandler;
+    ChatConnThread chatConnThread;
 
-        activity = (EntranceActivity)getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        activity = null;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,8 +92,18 @@ public class Chat_room_listFragment extends Fragment {
 //                    activity.onChangeFragment(i);
 //                }
 
+                //생성자
+                chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
+                chatConnThread = new ChatConnThread(getContext(), userId_db);
+
+                Log.d(TAG, "userId ====> " + userId_db);
+
+                //핸들러 객체에 넣기
+                chatConnHandler.post(chatConnThread);
+                MsgUtils.setCurrentRoom(roomList.getRoom_name());
+
+
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);
-//                intent.putExtra("userDto", userDto);
                 intent.putExtra("roomName", roomList.getRoom_name());
                 intent.putExtra("userId_db", userId_db);
 

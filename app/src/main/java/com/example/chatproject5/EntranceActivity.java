@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,7 +24,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import chat.ChatConnThread;
+import chat.MsgUtils;
+import chat.ThreadUtils;
+
 public class EntranceActivity extends AppCompatActivity{
+
+    private static final String TAG = EntranceActivity.class.getSimpleName();
 
     Chat_listFragment chat_listFragment;
     Chat_room_listFragment chat_room_listActivity;
@@ -30,6 +38,9 @@ public class EntranceActivity extends AppCompatActivity{
 
     Intent intent;
     String userId_db;
+    Handler chatConnHandler;
+    ChatConnThread chatConnThread;
+
 
     //상단 메뉴 추가
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,6 +54,7 @@ public class EntranceActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrance);
+
 
         chat_listFragment = new Chat_listFragment();
         chat_room_listActivity = new Chat_room_listFragment();
@@ -74,8 +86,21 @@ public class EntranceActivity extends AppCompatActivity{
         bundle.putString("userPoint_db", userPoint_db);
 
 
+        //생성자
+        chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
+        chatConnThread = new ChatConnThread(this, userId_db);
+
+        Log.d(TAG, "userId ====" + userId_db);
+
+        //핸들러 객체에 넣기
+        chatConnHandler.post(chatConnThread);
+        MsgUtils.setConnThread(chatConnThread);
+
+
+
         //첫 화면 고정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, chat_room_listActivity).commit();
+        //정보 보내기
         chat_room_listActivity.setArguments(bundle);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -188,13 +213,19 @@ public class EntranceActivity extends AppCompatActivity{
     public void setSearchWorker(String urlStr) {
 
         Document doc = Jsoup.parse(urlStr);
-        Elements workerId = doc.select("ol > li.id");
-        Elements workerContent = doc.select("ol > li.content");
+        Elements workerNum_db = doc.select("ol > li.num");
+        Elements workerId_db = doc.select("ol > li.id");
+        Elements workerContent_db = doc.select("ol > li.content");
 
         ArrayList<String> items = new ArrayList<>();
 
-        for(int i = 0; i < workerId.size(); i++) {
-            items.add(workerId.get(i).text());
+        for(int i = 0; i < workerId_db.size(); i++) {
+
+            //num, content 추가
+            items.add(workerNum_db.get(i).text());
+            items.add(workerId_db.get(i).text());
+            items.add(workerContent_db.get(i).text());
+
             intent.putStringArrayListExtra("strings", items);
 
         }

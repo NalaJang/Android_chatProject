@@ -24,6 +24,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import chat.ChatConnThread;
+import chat.MsgUtils;
+import chat.ThreadUtils;
 import database.UserHelper;
 import dto.CoordinatorDto;
 import dto.UserDto;
@@ -34,13 +37,13 @@ import dto.UserDto;
 public class MainActivity extends AppCompatActivity {
 
     UserHelper db;
-    UserDto userDto;
-    CoordinatorDto coordinatorDto;
 
     EditText userId, userPw;
 
     Intent intent;
     Handler handler = new Handler();
+//    Handler chatConnHandler;
+//    ChatConnThread chatConnThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,20 @@ public class MainActivity extends AppCompatActivity {
         Button button_login = findViewById(R.id.button_login);
         TextView search_id = findViewById(R.id.search_id_login);
         TextView sign_up = findViewById(R.id.sign_up_login);
+
+        /*
+        //생성자
+        chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
+        chatConnThread = new ChatConnThread(this, userId.getText().toString());
+
+        Log.d(TAG, "userId ====" + userId.getText().toString());
+
+        //핸들러 객체에 넣기
+        chatConnHandler.post(chatConnThread);
+        MsgUtils.setConnThread(chatConnThread);
+
+         */
+
 
         //로그인 버튼 클릭
         button_login.setOnClickListener(new View.OnClickListener() {
