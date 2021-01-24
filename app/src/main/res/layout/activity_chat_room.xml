@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Input message"
+            android:hint="메세지를 입력해 주세요."
             android:inputType="textMultiLine"
             android:padding="10dp"
             android:maxLines="3"
@@ -39,7 +39,9 @@
             android:id="@+id/send_button_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="send"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:text="전송"
             android:backgroundTint="#ff8800"
             android:layout_marginLeft="8dp"/>
     </LinearLayout>

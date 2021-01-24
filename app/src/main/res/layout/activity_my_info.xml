@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_margin="30dp"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:textSize="20dp"
-        android:text="내 정보"
-        />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,7 +30,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:enabled="false"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="아이디"
+                />
+
+            <EditText
+                android:id="@+id/userId_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:textSize="20dp"
                 android:enabled="false"
                 />
@@ -55,25 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
                 android:textSize="20dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="아이디"
-                />
-
-            <EditText
-                android:id="@+id/userId_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
-                android:textSize="20dp"
-                android:enabled="false"
                 />
 
             <TextView
@@ -88,7 +77,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
                 android:textSize="20dp"
                 android:hint="8자 이상"
                 />
@@ -105,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
                 android:hint="test@example.com"
                 android:textSize="20dp"
                 />
@@ -122,36 +109,39 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/black"
                 android:hint="01012345678"
                 android:textSize="20dp"
                 />
 
             <Button
                 android:id="@+id/edit_button"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:textSize="20dp"
+                android:background="@color/button"
+                android:textColor="@color/white"
+                android:textSize="17dp"
                 android:text="변경"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:textSize="25dp"
                 android:text="배송지"
                 />
 
             <Button
                 android:id="@+id/addAddress_button"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
-                android:textSize="20dp"
+                android:background="@color/button"
+                android:textColor="@color/white"
+                android:textSize="17dp"
                 android:text="배송지 추가하기"
                 />
 

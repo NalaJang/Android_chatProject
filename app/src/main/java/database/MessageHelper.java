@@ -29,7 +29,7 @@ public class MessageHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String body = "create table if not exists message (" +
-                "userId text, otherId text, roomPosition text, content text, time text)";
+                "_no integer PRIMARY KEY AUTOINCREMENT, userId text, otherId text, roomPosition text, content text, time text)";
 
         //실행
         db.execSQL(body);

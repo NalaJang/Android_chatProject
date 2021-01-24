@@ -54,22 +54,31 @@ public enum Signals {
         switch (type) {
             case 140:
                 return LOGIN;
+
             case 150:
                 return LOGOUT;
+
             case 100:
                 return MSG;
+
             case 110:
                 return CHECK_IN;
+
             case 120:
                 return CHECK_OUT;
+
             case 130:
                 return MSG_IMG;
+
             case 200:
                 return GROUP_CHATTING;
+
             case 210:
                 return OPEN_GROUPROOM;
+
             case 220:
                 return CHECK_IN_GROUPROOM;
+
             case 230:
                 return CHECK_OUT_GROUPROOM;
             case 300:

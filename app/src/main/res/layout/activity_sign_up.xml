@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="30dp"
     android:orientation="vertical">
 
     <ScrollView
@@ -12,14 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:textColor="@color/black"
-                android:textSize="30dp"
-                android:text="회원가입"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,7 +27,7 @@
                 android:id="@+id/userName_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="30dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,7 +40,7 @@
                 android:id="@+id/userId_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="30dp"
                 android:hint="특수문자 제외 8~16자리"/>
 
             <TextView
@@ -59,7 +54,7 @@
                 android:id="@+id/userPw_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="30dp"
                 android:hint="4~16자리"/>
 
             <TextView
@@ -73,7 +68,7 @@
                 android:id="@+id/userEmail_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="30dp"
                 android:hint="user@example.com"/>
 
             <TextView
@@ -87,6 +82,7 @@
                 android:id="@+id/userPhone_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:hint="01012345678"/>
 
             <CheckBox
@@ -105,6 +101,11 @@
                 android:id="@+id/button_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/button"
+                android:textColor="@color/white"
+                android:textSize="17dp"
                 android:text="가입하기"/>
         </LinearLayout>
     </ScrollView>

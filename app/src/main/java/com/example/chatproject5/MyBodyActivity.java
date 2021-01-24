@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ import dto.BodyDto;
 
 public class MyBodyActivity extends AppCompatActivity {
 
+    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/mybodyInsert.do";
+
     BodyHelper db;
     String userId_db;
     TextView shoulder_edit, weight_edit;
@@ -29,48 +32,28 @@ public class MyBodyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_my_body);
+
+        setTitle("내 체형");
 
         //정보 받기
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
+//        String shoulder_db = intent.getStringExtra("shoulder_db");
 
         shoulder_edit = findViewById(R.id.shoulder_edit);
         weight_edit = findViewById(R.id.weight_body);
-        Button editButton = findViewById(R.id.edit_button_body);
+
+//        shoulder_edit.setText(shoulder_db);
+
 
         //등록 버튼
+        Button editButton = findViewById(R.id.edit_button_body);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/mybodyInsert.do";
-
-                /*
-                BodyDto bodyDto = new BodyDto();
-                bodyDto.setId(userId_db);
-                bodyDto.setShoulder(shoulder_edit.getText().toString());
-                bodyDto.setWeight(weight_edit.getText().toString());
-
-                Log.d("====id", userId_db);
-                Log.d("====shoulder", shoulder_edit.getText().toString());
-
-                try {
-
-                    Boolean insertBody = db.insertBody(bodyDto);
-
-
-                    if(insertBody == true) {
-                        Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                 */
 
                 new Thread(new Runnable() {
                     @Override
@@ -136,5 +119,16 @@ public class MyBodyActivity extends AppCompatActivity {
         Log.d("====", output.toString());
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
+
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

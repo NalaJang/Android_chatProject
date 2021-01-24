@@ -11,4 +11,6 @@
     <color name="colorPrimaryDark">#FFC107</color>
     <color name="colorAccent">#D81B60</color>
     <color name="textThemeDark">#FF000000</color>
+    <color name="button">#E16037</color>
+    <color name="otherButton">#E4E3E2</color>
 </resources>

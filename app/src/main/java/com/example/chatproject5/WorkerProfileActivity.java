@@ -80,8 +80,6 @@ public class WorkerProfileActivity extends AppCompatActivity {
         Log.d("workerId = ", workerId_db);/**************** 주석 *********************/
 
 //        num_db = intent.getStringExtra("position");
-        num_db = intent.getIntExtra("position", 0);
-
 
         try {
             URL url = new URL(urlStr);
@@ -93,7 +91,7 @@ public class WorkerProfileActivity extends AppCompatActivity {
                 conn.setDoInput(true);
 
                 OutputStream outputStream = conn.getOutputStream();
-                String params = "id=" + userId_db + "&counselorId=" + workerId_db;
+                String params = "id=" + userId_db + "&workerId=" + workerId_db;
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));

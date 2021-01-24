@@ -49,7 +49,7 @@ public class ChatConnThread extends Thread{
     public ChatConnThread(Context context, String userId) {
         this.context = context;
         this.userId = userId;
-        Log.d(TAG, "소켓 연결");
+        Log.d(TAG, "ChatConnThread, 소켓 연결");
     }
 
     public void setContext(Context context) {
@@ -68,9 +68,11 @@ public class ChatConnThread extends Thread{
         String sendMsg = "";
 
         int signal = Integer.parseInt(msg.getSignal());
-        Log.d(TAG, "============signal=======> " + signal);
+        Log.d(TAG, "===========sendMsg, signal =======> " + signal); //-> 100
+        Log.d(TAG, "===========sendMsg, msg =======> " + msg.getMessage()); //-> 100
 
         dbHelper = new MessageHelper(context);
+        Log.d(TAG, "===========sendMsg, context ======> " + context.toString());
         database = dbHelper.getWritableDatabase();
 
         switch(Signals.getSignals(signal)) {
@@ -102,11 +104,11 @@ public class ChatConnThread extends Thread{
                 break;
 
             //메세지
-            case MSG :
+            case MSG :  //-> signal : 100
 //                sendMsg = msg.getSignal() + delim1
 //                        + msg.getMessage();
 
-                sendMsg = Signals.MSG.getSignal() + delim1
+                sendMsg = Signals.MSG.getSignal() + delim1 //-> 100/@
                         + msg.getMessage();
 
 
@@ -114,6 +116,8 @@ public class ChatConnThread extends Thread{
                     checkConnSocket();
                     output.println(sendMsg);
                     output.flush();
+
+                    Log.d(TAG, "===========sendMsg, output.println(sendMsg)=======> " + sendMsg);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -134,15 +138,18 @@ public class ChatConnThread extends Thread{
             try {
 
                 checkConnSocket();
-                Log.d(TAG, "readLine while 문 안");
+                Log.d(TAG, "while 문");
 
 
 
                 String line = input.readLine();
+                Log.d(TAG, "run 의 while 문 안, line =========> " + line);
 //                String lines[] = line.split(delim1);
+
+
                 String[] splitData = StringSplit1(line);
                 int signal = Integer.parseInt(splitData[0]);
-                Log.d(TAG, "signal =========> " + signal);
+                Log.d(TAG, "run 의 while 문 안, signal =========> " + signal);
                 dbHelper = new MessageHelper(context);
                 database = dbHelper.getWritableDatabase();  //DB 가져오기
 
@@ -180,19 +187,20 @@ public class ChatConnThread extends Thread{
 
     public synchronized void checkConnSocket() {
         while(true && !isOnLine()) {
+
+            Log.d(TAG, "synchronized void checkConnSocket 들어옴 ");
+
             try {
                 socket = new Socket(Constants.SEVER_IP, Constants.SERVER_PORT);
                 output = new PrintWriter
                         (new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                 input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                Log.d(TAG, "InputStream " + input.toString());
-                Log.d(TAG, "OutputStream " + output.toString());
 
                 output.println(Signals.LOGIN.getSignal() + delim1 + userId); //-> 140/@아이디값 : 핸들러가 new 해서 생성됨
 //                output.flush();
 
-                Log.d(TAG, "output.println " + Signals.LOGIN.getSignal() + delim1 + userId);
+                Log.d(TAG, "checkConnSocket : output.println => " + Signals.LOGIN.getSignal() + delim1 + userId);
 
                 Thread.sleep(100);
 
@@ -245,6 +253,8 @@ public class ChatConnThread extends Thread{
 
     public String[] StringSplit1(String data) {
         String[] result = new String[2];
+
+        Log.d(TAG, "======StringSplit1 result======>" + result);
 
         Log.d(TAG, "======StringSplit1 data1======>" + data);
 

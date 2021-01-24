@@ -89,9 +89,6 @@ public class EntranceActivity extends AppCompatActivity{
         //생성자
         chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
         chatConnThread = new ChatConnThread(this, userId_db);
-
-        Log.d(TAG, "userId ====" + userId_db);
-
         //핸들러 객체에 넣기
         chatConnHandler.post(chatConnThread);
         MsgUtils.setConnThread(chatConnThread);
@@ -207,12 +204,13 @@ public class EntranceActivity extends AppCompatActivity{
 
         }
         setSearchWorker(output.toString());
+        Log.d("workeroutput", output.toString());
     }
 
 
-    public void setSearchWorker(String urlStr) {
+    public void setSearchWorker(String str) {
 
-        Document doc = Jsoup.parse(urlStr);
+        Document doc = Jsoup.parse(str);
         Elements workerNum_db = doc.select("ol > li.num");
         Elements workerId_db = doc.select("ol > li.id");
         Elements workerContent_db = doc.select("ol > li.content");
@@ -222,11 +220,14 @@ public class EntranceActivity extends AppCompatActivity{
         for(int i = 0; i < workerId_db.size(); i++) {
 
             //num, content 추가
-            items.add(workerNum_db.get(i).text());
+//            items.add(workerNum_db.get(i).text());
             items.add(workerId_db.get(i).text());
-            items.add(workerContent_db.get(i).text());
+//            items.add(workerContent_db.get(i).text());
 
             intent.putStringArrayListExtra("strings", items);
+            intent.putExtra("workerNum_db", workerNum_db.get(i).text());
+//            intent.putExtra("workerId_db", workerId_db.get(i).text());
+            intent.putExtra("workerContent_db", workerContent_db.get(i).text());
 
         }
     }

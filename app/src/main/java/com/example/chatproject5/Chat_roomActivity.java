@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +38,7 @@ import database.MessageHelper;
 import dto.Message;
 import dto.MessageData;
 
-public class Chat_roomActivity extends AppCompatActivity implements Runnable{
+public class Chat_roomActivity extends AppCompatActivity {
 
     private static final String TAG = Chat_roomActivity.class.getSimpleName();
 
@@ -49,7 +50,6 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
 
     String userId_db;
     String roomName;
-    Vector<MessageData> messageData = new Vector<>();
 
     TextView message_text;
     EditText message_edit;
@@ -73,6 +73,7 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
 
+
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
         roomName = intent.getStringExtra("roomName");
@@ -95,21 +96,11 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
         listView.setAdapter(adapter3);
 
 
-        //생성자
-        chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
-        chatConnThread = new ChatConnThread(this, userId_db);
-
-        Log.d(TAG, "userId ====" + userId_db);
-
-        //핸들러 객체에 넣기
-        chatConnHandler.post(chatConnThread);
-
-
 
 
         //////////////////////////채팅 관련
-        Thread thread = new Thread(this);
-        thread.start();
+//        Thread thread = new Thread(this);
+//        thread.start();
 
         //실제 배포시에는 적용 x
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -149,7 +140,7 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
 
 
 //                    message_edit.setText("");
-                    et.setText("");
+//                    et.setText("");
 
                     //추가(21.01.23)
                     Message msgData = new Message();
@@ -160,15 +151,18 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
                     msgData.setTime(timeNow.format(today));
                     msgData.setRoomId(roomName);
                     msgData.setPhoto("");
+                    Log.d(TAG, "-------msg-------------------------> " + et.getText().toString()); //-> 100
 
                     messageItems3.add(msgData);
                     MsgUtils.sendMsg(msgData);
-                    Log.d(TAG, "sendMsg 들어옴");
-                    Log.d(TAG, et.getText().toString());
+
+//                    output.println(msg);
+
+                    Log.d(TAG, "sendButton 클릭");
 
 //                    MsgUtils.sendMsg(100, userId_db, userId_db, et.getText().toString(), timeNow.format(today), roomName, "");
 
-
+                    et.setText("");
 //                    output.println(msg);    //메세지 출력
                     messageItems.add(data);//추가
                     adapter.notifyDataSetChanged();//새로고침
@@ -181,14 +175,15 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
     }   //end onCreate
 
 
-    //채팅 스레드
+    //채팅 스레드 -> chatConnThread 에서 실행
+    /*
     @Override
     public void run() {
 
         try {
             Socket socket = new Socket(ip, port);
 
-            Log.d("=========", "소켓 연결");
+            Log.d(TAG, "채팅 스레드 run 들어옴, 소켓 연결");
 
             output = new PrintWriter
                     (new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
@@ -199,6 +194,7 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
             while(true) {
                 String msg = input.readLine();
 
+                Log.d(TAG, "채팅 스레드 while 들어옴==> " + msg);
 //                StringTokenizer st = new StringTokenizer(msg);
                 StringTokenizer st = new StringTokenizer(msg, "/");
                 String str = "";
@@ -206,7 +202,7 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
                 while(st.hasMoreElements()) {
                     str = st.nextToken();
 
-                    Log.d("===========str=========", str);
+                    Log.d(TAG, "===========str=========" + str);
                     //str = 메시지
                     //message = 사용자 리스트
 
@@ -224,6 +220,21 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
             e.printStackTrace();
         }
     }
+
+     */
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
+
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /* listView 로 값을 넣었기 때문에 없어도 됨.
     public void println(String msg){
         handler.post(new Runnable() {
@@ -272,6 +283,6 @@ public class Chat_roomActivity extends AppCompatActivity implements Runnable{
         }
         super.onBackPressed();
     }   //end backPressed
-    
+
  */
 }

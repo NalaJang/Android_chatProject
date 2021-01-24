@@ -38,9 +38,6 @@ public class Chat_room_listFragment extends Fragment {
     String userId_db;
     Button delete_button;
 
-    Handler chatConnHandler;
-    ChatConnThread chatConnThread;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,15 +89,9 @@ public class Chat_room_listFragment extends Fragment {
 //                    activity.onChangeFragment(i);
 //                }
 
-                //생성자
-                chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
-                chatConnThread = new ChatConnThread(getContext(), userId_db);
-
-                Log.d(TAG, "userId ====> " + userId_db);
-
-                //핸들러 객체에 넣기
-                chatConnHandler.post(chatConnThread);
+                //추가(21.01.23)
                 MsgUtils.setCurrentRoom(roomList.getRoom_name());
+                Log.d(TAG, "roomName ======> " + roomList.getRoom_name());
 
 
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);

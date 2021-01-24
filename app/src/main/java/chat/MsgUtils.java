@@ -11,7 +11,7 @@ public class MsgUtils {
 
     public static void setConnThread(ChatConnThread thread) {
         connThread = thread;
-        Log.d("==== MsgUtils ====", thread.toString());
+        Log.d("==== MsgUtils, setConnThread ====", thread.toString());
     }
 
     public static void sendMsg(Message msg) {

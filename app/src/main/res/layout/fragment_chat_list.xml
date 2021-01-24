@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="15dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/userImage_list"
@@ -49,11 +49,11 @@
     </RelativeLayout>
 
     <View
+        android:background="#66bdbdbd"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignBottom="@id/user_img_item"
-        android:background="#FF0000"/>
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
 
     <Button
         android:id="@+id/button_chat_list"

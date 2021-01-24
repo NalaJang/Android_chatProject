@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,8 +37,6 @@ import dto.UserDto;
  ******************************************/
 public class MainActivity extends AppCompatActivity {
 
-    UserHelper db;
-
     EditText userId, userPw;
 
     Intent intent;
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = new UserHelper(this);
 
         userId = findViewById(R.id.userId_text_login);
         userPw = findViewById(R.id.userPw_text_login);

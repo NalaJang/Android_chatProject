@@ -8,6 +8,7 @@
 
     <string name="info">알림</string>
     <string name="close">닫기</string>
+    <string name="goLogin">로그인화면으로</string>
     <string name="title_activity_plus_menu">PlusMenuActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:layout_margin="15dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/userImage_menu"
@@ -51,6 +51,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
+            android:background="@color/button"
+            android:textColor="@color/white"
+            android:textSize="17dp"
             android:text="내 정보 "
             />
 
@@ -60,13 +63,13 @@
         android:background="#66bdbdbd"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="42dp"
         >
 
         <Button
@@ -74,6 +77,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/ic_myorder"
+            android:drawablePadding="10dip"
+            android:textSize="15dp"
             android:text="주문배송"
             />
 
@@ -83,6 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_toRightOf="@+id/order_menu"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/ic_mybody"
+            android:drawablePadding="10dip"
+            android:textSize="15dp"
             android:text="내 체형"
             />
 
@@ -91,110 +102,80 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/body_menu"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/ic_mypoint"
+            android:drawablePadding="10dip"
+            android:textSize="15dp"
             android:text="포인트"
             />
-
-        <TextView
-            android:id="@+id/order_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="20dp"
-            android:layout_below="@+id/order_menu"
-            android:text="주문배송"
-            />
-
-        <TextView
-            android:id="@+id/body_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/body_menu"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="65dp"
-            android:layout_toRightOf="@+id/order_text"
-            android:text="내 체형"
-            />
-
-        <TextView
-            android:id="@+id/point_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/point_menu"
-            android:layout_toRightOf="@+id/body_text"
-            android:text="포인트"
-            />
-
     </RelativeLayout>
 
     <View
         android:background="#66bdbdbd"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="쇼핑"
-            />
-
-        <Button
-            android:id="@+id/qna_menu"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:background="@color/white"
-            android:textSize="20dp"
-            android:text="문의내역"
-            />
+            android:orientation="vertical"
+            >
 
-        <Button
-            android:id="@+id/goShop_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:textSize="20dp"
-            android:text="쇼핑하기"
-            />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="쇼핑"
+                />
 
-    <View
-        android:background="#66bdbdbd"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"/>
+            <Button
+                android:id="@+id/qna_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:background="#00ff0000"
+                android:textSize="20dp"
+                android:text="문의내역"
+                />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical"
-        >
+            <Button
+                android:id="@+id/goShop_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:textSize="20dp"
+                android:text="쇼핑하기"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="고객센터"
-            />
+            <View
+                android:background="#66bdbdbd"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                />
 
-        <Button
-            android:id="@+id/notice_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:textSize="20dp"
-            android:text="공지사항"
-            />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="고객센터"
+                />
 
+            <Button
+                android:id="@+id/notice_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:textSize="20dp"
+                android:text="공지사항"
+                />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

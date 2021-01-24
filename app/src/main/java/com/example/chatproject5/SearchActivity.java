@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import adapter.SearchListAdapter;
+
 /******************************************
                 코디네이터 검색
  ******************************************/
@@ -22,6 +25,8 @@ public class SearchActivity extends AppCompatActivity {
 
     ListView listview = null ;
     Intent intent;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,14 @@ public class SearchActivity extends AppCompatActivity {
         //정보 받기
         intent = getIntent();
         String userId_db = intent.getStringExtra("userId_db");
+        String workerContent_db = intent.getStringExtra("workerContent_db");
         ArrayList<String> workerId_db = intent.getStringArrayListExtra("strings");
+
+        Log.d("content", workerContent_db);
+
+//        SearchListAdapter adapter = new SearchListAdapter(workerId_db);
+        listview = findViewById(R.id.listView_search) ;
+        listview.setAdapter(adapter);
 
         //받은 코디네이터 정보 목록 파싱
         for(String s : workerId_db) {
@@ -44,8 +56,11 @@ public class SearchActivity extends AppCompatActivity {
 
             for(String item : str) {
                 adapter.add(item);
+//                adapter.addItem(item);
+//                Log.d("searchAct", item);
             }
         }
+
 
         //검색어 입력
         EditText editTextFilter = findViewById(R.id.editTextFilter) ;
@@ -99,8 +114,9 @@ public class SearchActivity extends AppCompatActivity {
                 intent = new Intent(getApplicationContext(), WorkerProfileActivity.class);
                 intent.putExtra("userId_db", userId_db);
                 intent.putExtra("workerId_db", clickedItem);
-
                 intent.putExtra("position", listview.getCheckedItemPosition());
+
+
 
                 startActivity(intent);
 

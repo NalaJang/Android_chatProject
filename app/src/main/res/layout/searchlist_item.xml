@@ -7,7 +7,7 @@
     android:background="?attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/image_listView"
+        android:id="@+id/image_searchList"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -20,22 +20,22 @@
         android:layout_marginLeft="16dp" />
 
     <TextView
-        android:id="@+id/id_listView"
+        android:id="@+id/id_searchList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@+id/content_listView"
+        app:layout_constraintBottom_toTopOf="@+id/content_searchList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_listView"
+        app:layout_constraintStart_toEndOf="@+id/image_searchList"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp" />
 
     <TextView
-        android:id="@+id/content_listView"
+        android:id="@+id/content_searchList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -43,8 +43,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/id_listView"
-        app:layout_constraintTop_toBottomOf="@+id/id_listView"
+        app:layout_constraintStart_toStartOf="@+id/id_searchList"
+        app:layout_constraintTop_toBottomOf="@+id/id_searchList"
         android:layout_marginRight="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
