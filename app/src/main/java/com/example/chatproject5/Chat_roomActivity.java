@@ -33,6 +33,7 @@ import adapter.MessageAdapter2;
 import adapter.MessageAdapter3;
 import chat.ChatConnThread;
 import chat.MsgUtils;
+import chat.Signals;
 import chat.ThreadUtils;
 import database.MessageHelper;
 import dto.Message;
@@ -42,11 +43,6 @@ public class Chat_roomActivity extends AppCompatActivity {
 
     private static final String TAG = Chat_roomActivity.class.getSimpleName();
 
-    String str1;
-    String ip = "192.168.0.17";
-    int port = 8888;
-    PrintWriter output;
-    Handler handler = new Handler();
 
     String userId_db;
     String roomName;
@@ -61,26 +57,31 @@ public class Chat_roomActivity extends AppCompatActivity {
     ArrayList<MessageData> messageItems = new ArrayList<>();
     MessageAdapter2 adapter;
 
+    Date today = new Date();
+    SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+
     //추가(21.01.23)
     MessageAdapter3 adapter3;
     ArrayList<Message> messageItems3 =new ArrayList<>();
 
-    Handler chatConnHandler;
-    ChatConnThread chatConnThread;
+    //추가(21.01.25)
+    ArrayList<MessageData> newMessage = new ArrayList<>();
+    MessageHelper msgHelper;
+    Message message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
         roomName = intent.getStringExtra("roomName");
 
         //추가
-        getSupportActionBar().setTitle(roomName);  // 방 이름
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(roomName);  // 방 이름
+
 
         //추가
         et = findViewById(R.id.et);
@@ -88,20 +89,19 @@ public class Chat_roomActivity extends AppCompatActivity {
         adapter = new MessageAdapter2(messageItems, getLayoutInflater(), userId_db);
         listView.setAdapter(adapter);
 
-        messageItems.add(new MessageData("dd", "sdf", "19:25"));
-        messageItems.add(new MessageData("12", "ㅏㅏㅏㅏㅏㅏㅓㅓㅓ", "19:29"));
-
         //추가(21.01.23)
         adapter3 = new MessageAdapter3(messageItems3, getLayoutInflater(), userId_db);
         listView.setAdapter(adapter3);
 
+        //추가(21.01.25)
+        MsgUtils.setContext(this);
+        MsgUtils.setCurrentRoom(roomName);
 
-
+        //추가(21.01.25)
+        msgHelper = new MessageHelper(this);
+        message = new Message();
 
         //////////////////////////채팅 관련
-//        Thread thread = new Thread(this);
-//        thread.start();
-
         //실제 배포시에는 적용 x
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads().detectDiskWrites().detectNetwork()
@@ -119,7 +119,7 @@ public class Chat_roomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-//                String msg = message_edit.getText().toString();
+
                 String msg = et.getText().toString();
 
                 if(msg.equals("")) {
@@ -127,25 +127,22 @@ public class Chat_roomActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "메세지를 입력하세요.", Toast.LENGTH_SHORT).show();
 
                 } else {
+                    Log.d(TAG, "sendButton 클릭");
 
-                    Date today = new Date();
-                    SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+
 
                     MessageData data = new MessageData();
 
                     //값 넣어주기*****
                     data.setUserId(userId_db);
-                    data.setMessage(msg);   //리스트에 목록이 추가되는 것처럼 대화가 추가되는 것
+                    data.setContent(msg);   //리스트에 목록이 추가되는 것처럼 대화가 추가되는 것
                     data.setTime(timeNow.format(today));
 
-
-//                    message_edit.setText("");
-//                    et.setText("");
 
                     //추가(21.01.23)
                     Message msgData = new Message();
                     msgData.setSignal("100");
-                    msgData.setToId(userId_db);
+                    msgData.setToId(roomName);
                     msgData.setFromId(userId_db);
                     msgData.setMessage(et.getText().toString());
                     msgData.setTime(timeNow.format(today));
@@ -154,16 +151,11 @@ public class Chat_roomActivity extends AppCompatActivity {
                     Log.d(TAG, "-------msg-------------------------> " + et.getText().toString()); //-> 100
 
                     messageItems3.add(msgData);
-                    MsgUtils.sendMsg(msgData);
+                    MsgUtils.sendMsg(msgData);  //*****
 
-//                    output.println(msg);
 
-                    Log.d(TAG, "sendButton 클릭");
+                    et.setText(""); //보낸 후 지우기
 
-//                    MsgUtils.sendMsg(100, userId_db, userId_db, et.getText().toString(), timeNow.format(today), roomName, "");
-
-                    et.setText("");
-//                    output.println(msg);    //메세지 출력
                     messageItems.add(data);//추가
                     adapter.notifyDataSetChanged();//새로고침
                     listView.setSelection(messageItems.size() -1);//리스트뷰의 마지막 위치로 스크롤 위치 이동
@@ -175,50 +167,14 @@ public class Chat_roomActivity extends AppCompatActivity {
     }   //end onCreate
 
 
-    //채팅 스레드 -> chatConnThread 에서 실행
+    //기존의 채팅 스레드 -> chatConnThread 에서 실행하기 때문에 여기에 쓰지않는다.
     /*
     @Override
     public void run() {
 
         try {
             Socket socket = new Socket(ip, port);
-
-            Log.d(TAG, "채팅 스레드 run 들어옴, 소켓 연결");
-
-            output = new PrintWriter
-                    (new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-
-            BufferedReader input = new BufferedReader
-                    (new InputStreamReader(socket.getInputStream()));
-
-            while(true) {
-                String msg = input.readLine();
-
-                Log.d(TAG, "채팅 스레드 while 들어옴==> " + msg);
-//                StringTokenizer st = new StringTokenizer(msg);
-                StringTokenizer st = new StringTokenizer(msg, "/");
-                String str = "";
-
-                while(st.hasMoreElements()) {
-                    str = st.nextToken();
-
-                    Log.d(TAG, "===========str=========" + str);
-                    //str = 메시지
-                    //message = 사용자 리스트
-
-                    if (0 != st.countTokens()) {
-
-//                        data.add(str);    //리스트에 유저 추가
-
-                    } else {
-                        str1 = str;
-                    }
-                }
-//                    println(str1);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+                    . . .
     }
 
      */
@@ -235,24 +191,27 @@ public class Chat_roomActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /* listView 로 값을 넣었기 때문에 없어도 됨.
-    public void println(String msg){
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-//                message_text.append(msg + "\n");
+    @Override   //대화 내용 저장
+    protected void onPause() {
+        super.onPause();
 
-                MessageData data = new MessageData();
+        MessageData data = new MessageData();
+        data.setUserId(userId_db);
+        data.setOtherId(roomName);
+        data.setRoomName(roomName);
+//        data.setContent(message_edit.getText().toString());   //-> NULL 에러
+        data.setContent("");
+        data.setTime(timeNow.format(today));
 
+        Boolean insert = msgHelper.insert(data);
 
-                data.setMessage(msg);
+        if(insert == true) {
+            Toast.makeText(getApplicationContext(), "onPause, 메세지 저장", Toast.LENGTH_SHORT).show();
+        }
 
-            }
-        });
-
-
+        message.setSignal(Signals.CHECK_OUT.getSignal() + "");
+        MsgUtils.sendMsg(message);
     }
-    */
 
 /*
     //대화내용저장

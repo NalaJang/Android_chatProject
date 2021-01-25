@@ -3,10 +3,12 @@ package com.example.chatproject5;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -23,7 +25,7 @@ import java.net.URL;
 public class WebViewActivity extends AppCompatActivity {
 
     private WebView webView;
-    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/daum.html";
+//    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/daum.html";
 
     class MyJavaScriptInterface {
 
@@ -46,7 +48,12 @@ public class WebViewActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);   //자바 스크립트 허용
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setSupportMultipleWindows(true);
 
+
+
+        /*
         //자바 스크립트 이벤트에 대응할 함수를 정의 한 클래스를 붙여준다.
         webView.addJavascriptInterface(new MyJavaScriptInterface(), "Android");
 
@@ -74,7 +81,33 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }).start();
 
+         */
+
     }
+/* ->                               찾아보기 !!
+
+ */
+    /*
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+
+        Uri uri = Uri.parse(view.getUrl()); //url을 uri로 변경
+
+        if (uri.getPath().contains("/test/page")) {  // 현재 uri의 path에 컨테인만 읽기
+
+            Intent intent = new Intent(MainActivity.this, TestActivity.class); // 새창을 여는 액티비티나, 팝업일때 이용하면 용이합니다.
+            intent.putExtra("url", view.getUrl());
+            startActivity(intent);
+
+            return true;
+        }
+
+//        return super.shouldOverrideUrlLoading(view, request);
+
+    }
+
+     */
+
 
     public void userPost(String urlStr) {
         StringBuilder output = new StringBuilder();

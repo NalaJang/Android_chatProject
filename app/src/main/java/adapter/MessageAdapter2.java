@@ -67,10 +67,10 @@ public class MessageAdapter2 extends BaseAdapter {
         TextView tvTime= itemView.findViewById(R.id.tv_time);
 
         tvName.setText(item.getUserId());
-        tvMsg.setText(item.getMessage());
+        tvMsg.setText(item.getContent());
         tvTime.setText(item.getTime());
 
-//        Glide.with(itemView).load(item.getPofileUrl()).into(iv);
+//        Glide.with(itemView).load(item.getProfileUrl()).into(iv);
 
         return itemView;
     }

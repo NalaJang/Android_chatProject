@@ -22,7 +22,9 @@ import java.util.Vector;
 import adapter.Chat_room_list_Adapter;
 import chat.ChatConnThread;
 import chat.MsgUtils;
+import chat.Signals;
 import chat.ThreadUtils;
+import dto.Message;
 import dto.RoomList;
 import dto.UserDto;
 
@@ -31,12 +33,14 @@ public class Chat_room_listFragment extends Fragment {
 
     private static final String TAG = Chat_room_listFragment.class.getSimpleName();
 
-    RecyclerView recyclerView;
-    Chat_room_list_Adapter adapter;
-    LinearLayoutManager layoutManager;
+    private RecyclerView recyclerView;
+    private Message message;
+    private Chat_room_list_Adapter adapter;
+    private LinearLayoutManager layoutManager;
 
-    String userId_db;
-    Button delete_button;
+
+    private String userId_db;
+    private Button delete_button;
 
 
     @Override
@@ -56,8 +60,8 @@ public class Chat_room_listFragment extends Fragment {
 
 
         Vector<RoomList> lists = new Vector<>();
-        lists.add(new RoomList(R.drawable.img, "상담사1", "안녕하세요", "12:40"));
-        lists.add(new RoomList(R.drawable.img, "상담사2", "[사진]", "13:02"));
+        lists.add(new RoomList(R.drawable.img, "상담사", "안녕하세요", "12:40"));
+        lists.add(new RoomList(R.drawable.img, "ddd", "[사진]", "13:02"));
 
 
         adapter = new Chat_room_list_Adapter(lists, getContext(), getActivity());
@@ -80,19 +84,17 @@ public class Chat_room_listFragment extends Fragment {
 
                 Toast.makeText(getContext(), "선택" + roomList.getRoom_name(), Toast.LENGTH_SHORT).show();
 
-//                Vector<RoomList> roomLists = new Vector<>();
 
-//                activity.onChangeFragment(0);
+                message = new Message();
+                message.setSignal(Signals.CHECK_IN.getSignal() + "");
+                message.setRoomId(roomList.getRoom_name());
+                message.setToId(userId_db);
+                message.setPhoto("");
 
+                MsgUtils.sendMsg(message);
 
-//                for(int i =0; i < roomLists.size(); i++) {
-//                    activity.onChangeFragment(i);
-//                }
-
-                //추가(21.01.23)
-                MsgUtils.setCurrentRoom(roomList.getRoom_name());
                 Log.d(TAG, "roomName ======> " + roomList.getRoom_name());
-
+                Log.d(TAG, "CHECK_IN ======> " + Signals.CHECK_IN.getSignal() + "");
 
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);
                 intent.putExtra("roomName", roomList.getRoom_name());

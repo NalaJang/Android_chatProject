@@ -27,7 +27,7 @@ public class MyBodyActivity extends AppCompatActivity {
     BodyHelper db;
     String userId_db;
     TextView shoulder_edit, weight_edit;
-    long mMemoId = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

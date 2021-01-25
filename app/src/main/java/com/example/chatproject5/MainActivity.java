@@ -33,7 +33,7 @@ import dto.CoordinatorDto;
 import dto.UserDto;
 
 /******************************************
-                    로그인
+                  로그인
  ******************************************/
 public class MainActivity extends AppCompatActivity {
 
@@ -189,6 +189,13 @@ public class MainActivity extends AppCompatActivity {
         Elements userProfilePhoto = doc.select("ol > li.profilePhoto");
         Elements userPoint = doc.select("ol > li.point");
 
+        Elements workerId = doc.select("ol > li.workerId");
+        Elements workerName = doc.select("ol > li.workerName");
+        Elements workerPw = doc.select("ol > li.workerPw");
+        Elements workerPhone = doc.select("ol > li.workerPhone");
+        Elements workerContent = doc.select("ol > li.workerContent");
+        Elements workerProfilePhoto = doc.select("ol > li.workerProfilePhoto");
+
         for(int i = 0; i < result.size(); i++) {
 
             //로그인 성공
@@ -204,6 +211,12 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("userProfilePhoto_db", userProfilePhoto.text());
                 intent.putExtra("userPoint_db", userPoint.text());
 
+                intent.putExtra("workerId_db", workerId.text());
+                intent.putExtra("workerName_db", workerName.text());
+                intent.putExtra("workerPw_db", workerPw.text());
+                intent.putExtra("workerPhone_db", workerPhone.text());
+                intent.putExtra("workerContent_db", workerContent.text());
+                intent.putExtra("workerProfilePhoto_db", workerProfilePhoto.text());
                 startActivity(intent);
                 finish();
 

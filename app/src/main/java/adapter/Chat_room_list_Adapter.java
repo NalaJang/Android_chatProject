@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatproject5.OnListItemClickListener;
 import com.example.chatproject5.R;
+
+import chat.MsgUtils;
+import dto.Message;
 import dto.RoomList;
 
 import java.util.Vector;
@@ -65,14 +68,8 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
 
     @Override
     public int getItemCount() {
-        int a;
 
-        if(lists != null && !lists.isEmpty()) {
-            a = lists.size();
-        } else {
-            a = 0;
-        }
-        return a;
+        return lists.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -99,6 +96,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
                     if(listener != null) {
 
                         listener.onItemClick(MyViewHolder.this, v, position);
+
                     }
 
                 }

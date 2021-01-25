@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +27,9 @@ import java.util.ArrayList;
 
 import chat.ChatConnThread;
 import chat.MsgUtils;
+import chat.Signals;
 import chat.ThreadUtils;
+import dto.Message;
 
 public class EntranceActivity extends AppCompatActivity{
 
@@ -71,6 +74,8 @@ public class EntranceActivity extends AppCompatActivity{
         String userProfilePhoto_db = intent.getStringExtra("userProfilePhoto_db");
         String userPoint_db = intent.getStringExtra("userPoint_db");
 
+
+
         intent.putExtra("userId_db", userId_db);
         Toast.makeText(getApplicationContext(), "userId =" + userId_db, Toast.LENGTH_SHORT).show();
 
@@ -86,7 +91,7 @@ public class EntranceActivity extends AppCompatActivity{
         bundle.putString("userPoint_db", userPoint_db);
 
 
-        //생성자
+        //생성자 -> 로그인 성공으로 들어오면 새로운 핸들러 생성할 수 있게 여기에만 만들어 준다.
         chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
         chatConnThread = new ChatConnThread(this, userId_db);
         //핸들러 객체에 넣기
@@ -94,11 +99,19 @@ public class EntranceActivity extends AppCompatActivity{
         MsgUtils.setConnThread(chatConnThread);
 
 
+        //추가(21.01.25)
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
 
         //첫 화면 고정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, chat_room_listActivity).commit();
         //정보 보내기
         chat_room_listActivity.setArguments(bundle);
+
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

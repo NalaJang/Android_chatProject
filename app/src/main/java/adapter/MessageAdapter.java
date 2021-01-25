@@ -108,12 +108,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         //뷰홀더의 아이템 뷰에 표시
         //상대방
         holder.userId_text.setText(message.getUserId());
-        holder.message_text.setText(message.getMessage());
+        holder.message_text.setText(message.getContent());
         holder.time_text.setText(message.getTime());
 
         //나
         holder.myId_text.setText(message.getUserId());
-        holder.myMessage_text.setText(message.getMessage());
+        holder.myMessage_text.setText(message.getContent());
         holder.myTime_text.setText(message.getTime());
 
         //보낸 사람이 "나"인 경우

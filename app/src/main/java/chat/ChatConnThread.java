@@ -68,17 +68,18 @@ public class ChatConnThread extends Thread{
         String sendMsg = "";
 
         int signal = Integer.parseInt(msg.getSignal());
-        Log.d(TAG, "===========sendMsg, signal =======> " + signal); //-> 100
-        Log.d(TAG, "===========sendMsg, msg =======> " + msg.getMessage()); //-> 100
+        Log.d(TAG, "===========sendMsg, signal =======> " + signal); // 110-> 100
+        Log.d(TAG, "===========sendMsg, msg ==========> " + msg.getMessage());
 
         dbHelper = new MessageHelper(context);
-        Log.d(TAG, "===========sendMsg, context ======> " + context.toString());
+        Log.d(TAG, "===========sendMsg, context =======> " + context.toString());
         database = dbHelper.getWritableDatabase();
+        Log.d(TAG, "===========sendMsg, database ======> " + database.toString());
 
         switch(Signals.getSignals(signal)) {
 
             //입장
-            case CHECK_IN :
+            case CHECK_IN : //-> 110
 //                sendMsg = msg.getSignal() + delim1
 //                        + msg.getRoomId() + delim2
 //                        + msg.getToId()   + delim2
@@ -92,10 +93,14 @@ public class ChatConnThread extends Thread{
 
                 roomId = msg.getRoomId();
                 toId = msg.getToId();
+
+                Log.d(TAG, "checkIn 의 roomId ====> " + roomId);
+                Log.d(TAG, "checkIn 의 toId ======> " + toId);
+
                 break;
 
             //퇴장
-            case CHECK_OUT :
+            case CHECK_OUT :    //-> 120
 //                sendMsg = msg.getSignal() + delim1;
 
                 sendMsg = Signals.CHECK_OUT.getSignal() + delim1;
@@ -112,19 +117,21 @@ public class ChatConnThread extends Thread{
                         + msg.getMessage();
 
 
-                try {
-                    checkConnSocket();
-                    output.println(sendMsg);
-                    output.flush();
-
-                    Log.d(TAG, "===========sendMsg, output.println(sendMsg)=======> " + sendMsg);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
                 break;
 
+        }   //end switch
+
+        try {
+            checkConnSocket();
+            output.println(sendMsg);
+//            output.flush();
+
+
+            Log.d(TAG, "===========sendMsg, switch 밖 =======> " + sendMsg);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }   //end sendMsg
@@ -137,9 +144,8 @@ public class ChatConnThread extends Thread{
         while(true) {
             try {
 
-                checkConnSocket();
+                checkConnSocket();  //소켓 연결 및 output, input 생성
                 Log.d(TAG, "while 문");
-
 
 
                 String line = input.readLine();
@@ -148,8 +154,11 @@ public class ChatConnThread extends Thread{
 
 
                 String[] splitData = StringSplit1(line);
+                splitData[0] = "100";
                 int signal = Integer.parseInt(splitData[0]);
+
                 Log.d(TAG, "run 의 while 문 안, signal =========> " + signal);
+
                 dbHelper = new MessageHelper(context);
                 database = dbHelper.getWritableDatabase();  //DB 가져오기
 
@@ -159,23 +168,23 @@ public class ChatConnThread extends Thread{
                     case MSG :
                         message = StringSplit(line, "msg");
 
-                        if(message.getRoomId().startsWith("GroupChatting:20")) {
-                            roomId = message.getRoomId();
 
-                        } else {
                             roomId = message.getFromId();
 
-                        //현재 액티비티가 채팅 보낸 친구의 채팅룸인지
-                        } if(roomId.equals(currentRoomId)) {
-                            Log.d(TAG, "컨텍스트 : " + context + " 룸아이디 : " + roomId + "메세지 : " + message.getMessage());
+
+                        if(roomId.equals(currentRoomId)) {
+                            Log.d(TAG, "룸아이디 : " + roomId + "메세지 : " + message.getMessage());
 
 
                         } else {
 
                         }
                         break;
+
                     case MSG_IMG :
                         break;
+
+
 
                 }
 
@@ -252,48 +261,63 @@ public class ChatConnThread extends Thread{
 
 
     public String[] StringSplit1(String data) {
+
+        Log.d(TAG, "======StringSplit1 data 1 ======> " + data);
+
         String[] result = new String[2];
+        Log.d(TAG, "======StringSplit1 result ======> " + result.toString());
 
-        Log.d(TAG, "======StringSplit1 result======>" + result);
-
-        Log.d(TAG, "======StringSplit1 data1======>" + data);
 
         String[] datas = data.split("\\,");
+
         data = "";
+        Log.d(TAG, "======StringSplit1 data='' ======> " + data);
 
         if(datas.length > 2) {
             data = datas[1];
 
             for(int i = 2; i < data.length(); i++) {
                 data += "," + datas[1];
+
+                Log.d(TAG, "======StringSplit1 for 문, data2 ======> " + data);
+
             }
 
         } else {
             data = datas[1];
+            Log.d(TAG, "======StringSplit1 else 문, data3 ======> " + data);
         }
-        Log.d(TAG, "======data2======" + data);
-        datas = data.split(delim1);
+
+        datas = data.split(delim1); //-> "/@"
+
+        Log.d(TAG, "======StringSplit1 else 문 밖의 data4 ======> " + data);
         String str = "";
 
         for(int i = 0; i < datas.length; i++) {
             str = datas[1];
 
-            Log.d( "======StringSplit1======" , str);
+            Log.d(TAG , "======StringSplit1 datas[0] ======> " + datas[0]);
+            Log.d(TAG , "======StringSplit1  datas[1] = str1 ======> " + str);
 
             if(i == 0) {
                 result[0] = str;
+                Log.d(TAG , "======StringSplit1 result[0] = str ======> " + result[0]);
 
             } else {
                 result[1] = str;
+                Log.d(TAG , "======StringSplit1 result[1] = str ======> " + result[1]);
             }
+
         }
+
         return result;
     }
+
 
     public Message StringSplit(String data, String type) {
         message = new Message();
 
-        String[] datas = data.split(delim2);
+        String[] datas = data.split(delim2);    //-> /&-
         String str = "";
 
         if(type.equals("msg")) {

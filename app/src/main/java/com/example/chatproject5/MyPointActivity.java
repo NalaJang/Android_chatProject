@@ -27,11 +27,14 @@ import dto.PointDto;
 
 public class MyPointActivity extends AppCompatActivity {
 
-    Intent intent;
-    ArrayList<PointDto> pointList =  new ArrayList<>();
+    private Intent intent;
+    private ArrayList<PointDto> pointList =  new ArrayList<>();
 
-    String userId_db;
-    TextView total_text;
+    private String userId_db;
+    private TextView total_text;
+
+    private RecyclerView recyclerView;
+    private PointAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +49,17 @@ public class MyPointActivity extends AppCompatActivity {
         userId_db = intent.getStringExtra("userId_db");
 
         total_text = findViewById(R.id.total_point);
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_point);
+        recyclerView = findViewById(R.id.recyclerView_point);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
 
-        PointAdapter adapter = new PointAdapter();
-        adapter.addItem(new PointDto("111", "스웨트셔츠",100,"2021-01-10"));
-        adapter.addItem(new PointDto("111", "스커트",100,"2021-01-10"));
-        recyclerView.setAdapter(adapter);
+        adapter = new PointAdapter();
+//        adapter.addItem(new PointDto("111", "스웨트셔츠",100,"2021-01-10"));
+//        adapter.addItem(new PointDto("111", "스커트",100,"2021-01-10"));
+//        recyclerView.setAdapter(adapter);
 
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/pointList.do";
 
@@ -110,19 +113,22 @@ public class MyPointActivity extends AppCompatActivity {
         }
         setPointList(output.toString());
         Log.d("setPointList", output.toString());
+//        recyclerView.setAdapter(adapter);
     }
 
     public void setPointList(String str) {
         Document doc = Jsoup.parse(str);
-        Elements result = doc.select("p.result");
+//        Elements result = doc.select("p.result");
         Elements product = doc.select("ol > li.product");
         Elements point = doc.select("ol > li.point");
         Elements indate = doc.select("ol > li.indate");
 
         int total = 0;
 
-        for(int i = 0; i < result.size(); i++) {
-            if(result.get(0).text().equals("내역있음")) {
+//        Log.d("resultSize  ===>", Integer.toString(result.size())); //-> 1
+
+//        for(int i = 0; i < result.size(); i++) {
+//            if(result.get(0).text().equals("내역있음")) {
                 for(int j = 0; j < indate.size(); j++) {
 
                     PointDto pointDto = new PointDto();
@@ -131,14 +137,19 @@ public class MyPointActivity extends AppCompatActivity {
                     pointDto.setPoint(Integer.parseInt(point.get(j).text()));
                     pointDto.setIndate(indate.get(j).text());
 
-                    pointList.add(pointDto);
+                    Log.d("========> ", pointDto.getProduct());
+//                    pointList.add(pointDto);
+                    adapter.addItem(pointDto);
 
+//                    adapter.addItem(new PointDto("111", "스웨트셔츠",100,"2021-01-10"));
                     total  += Integer.parseInt(point.get(j).text());
                     total_text.setText(Integer.toString(total) + " point");
                 }
 
-            }
-        }
+//            }
+//        }
+
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
