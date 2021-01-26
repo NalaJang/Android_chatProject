@@ -217,17 +217,22 @@ public class Chat_listFragment extends Fragment {
 
         }
         setWorkerList(output.toString());
+        System.out.println(output.toString());
     }   //end coordinatorList
 
     public void setWorkerList(String urlStr) {
 
         Document doc = Jsoup.parse(urlStr);
+        Elements workerNum_db = doc.select("ol > li.workerNum");
         Elements workerId_db = doc.select("ol > li.workerId");
         Elements workerContent_db = doc.select("ol > li.workerContent");
+
+        System.out.println("///////////" + workerNum_db);
 
                 for(int j = 0; j < workerId_db.size(); j++) {
 
                     ChatListDto chatListDto = new ChatListDto();
+                    chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
                     chatListDto.setWorkerId(workerId_db.get(j).text());
                     chatListDto.setContent(workerContent_db.get(j).text());
 

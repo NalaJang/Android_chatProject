@@ -2,14 +2,34 @@ package dto;
 
 public class ChatListDto {
 
+    private int num;
     private String workerId;
     private String content;
 
+    @Override
+    public String toString() {
+        return "ChatListDto{" +
+                "num=" + num +
+                ", workerId='" + workerId + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
+
     public ChatListDto(){}
 
-    public ChatListDto(String workerId, String content) {
+    public ChatListDto(int num, String workerId, String content) {
+        this.num = num;
         this.workerId = workerId;
         this.content = content;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public ChatListDto setNum(int num) {
+        this.num = num;
+        return this;
     }
 
     public String getWorkerId() {

@@ -67,10 +67,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
         private TextView workerContent;
         private Button deleteButton, chatButton;
 
-        private int position = getAdapterPosition();
+        private int position;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
 
             workerId = itemView.findViewById(R.id.workerId_list);
             workerContent = itemView.findViewById(R.id.workerContent_list);
@@ -82,10 +83,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                 @Override
                 public void onClick(View v) {
 
+                    position = getAdapterPosition();
+
+                    System.out.println(position);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setTitle(R.string.info);
                     builder.setMessage("삭제하시겠습니까?\n\n채팅내용은 유지되지만 해당 상담사와의 채팅은 더 이상 불가능합니다.");
+
+
 
                     if(position != RecyclerView.NO_POSITION) {
 
@@ -93,26 +99,25 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+                                
+                                System.out.println(items.get(position).toString());
+
+
+                                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/workerDelete.do";
+
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+
+                                        delete(urlStr, items.get(position).getNum());
+
+//                                    }
+//                                }).start();
+
 
                                 items.remove(position);
                                 notifyItemRemoved(position);
                                 notifyItemRangeChanged(position, items.size());
-
-                                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/workerDelete.do";
-
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        delete(urlStr);
-
-                                    }
-                                }).start();
-
-
-//                                items.remove(position);
-//                                notifyItemRemoved(position);
-//                                notifyItemRangeChanged(position, items.size());
 
 
                                 Toast.makeText(v.getContext(), "삭제되었습니다",
@@ -126,7 +131,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                 }
             }); //end deleteButton
 
-
+/*
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -141,6 +146,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
                 }
             });
+
+ */
 
             /*
             chatButton.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +176,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
 
 
-        public void delete(String urlStr) {
+        public void delete(String urlStr, int num) {
             StringBuilder output = new StringBuilder();
 
 
@@ -183,9 +190,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                     conn.setDoInput(true);
 
                     OutputStream outputStream = conn.getOutputStream();
-                    String params = "workerId=" + workerId;
+                    String params = "num=" + num;
 
-                    Log.d("workerId", workerId.getText().toString());
 
                     outputStream.write(params.getBytes());
 

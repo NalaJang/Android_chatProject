@@ -155,7 +155,8 @@ public class QnaCheckFragment extends Fragment {
 //                            .setIndate(indate.get(j).text());
 
 //                    qnaList.add(qna);
-                    adapter.add(qna);
+//                    adapter.add(qna);
+                    adapter.add(qna.getTitle());    //*****
 
                    println2();
                 }
