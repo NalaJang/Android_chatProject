@@ -3,14 +3,18 @@ package com.example.chatproject5;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,10 +27,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WebViewActivity extends AppCompatActivity {
-
+    private Handler handler = new Handler();
     private WebView webView;
-//    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/daum.html";
-
+    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/daum5.html";
+    TextView textView_address;
     class MyJavaScriptInterface {
 
         @JavascriptInterface
@@ -51,6 +55,9 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webView.getSettings().setSupportMultipleWindows(true);
 
+        textView_address  = findViewById(R.id.textView_address);
+
+        init_webView();
 
 
         /*
@@ -83,6 +90,40 @@ public class WebViewActivity extends AppCompatActivity {
 
          */
 
+    }   //end onCreate
+
+    public void init_webView() {
+
+        // JavaScript 허용
+        webView.getSettings().setJavaScriptEnabled(true);
+
+        // JavaScript의 window.open 허용
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+
+        // JavaScript이벤트에 대응할 함수를 정의 한 클래스를 붙여줌
+        webView.addJavascriptInterface(new AndroidBridge(), "TestApp");
+
+        // web client 를 chrome 으로 설정
+        webView.setWebChromeClient(new WebChromeClient());
+
+        // webview url load. php 파일 주소
+        webView.loadUrl(urlStr);
+    }
+
+    private class AndroidBridge {
+        @JavascriptInterface
+        public void setAddress(final String arg1, final String arg2, final String arg3) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    textView_address.setText(String.format("(%s) %s %s", arg1, arg2, arg3));
+
+                    // WebView를 초기화 하지않으면 재사용할 수 없음
+                    init_webView();
+                }
+            });
+        }
     }
 /* ->                               찾아보기 !!
 

@@ -33,12 +33,13 @@ import dto.QnaDto;
 
 public class QnaCheckFragment extends Fragment {
 
-    String userId_db;
-    ListView listview;
-    TextView textView;
+    private String userId_db;
+    private ListView listview;
+    private TextView textView;
 
-    Handler handler = new Handler();
-    ArrayList<QnaDto> qnaList;
+    private ArrayAdapter adapter;
+    private Handler handler = new Handler();
+    private ArrayList<QnaDto> qnaList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,9 +55,8 @@ public class QnaCheckFragment extends Fragment {
         textView = rootView.findViewById(R.id.textView_qna);
 
         qnaList = new ArrayList<>();
-//        qnaList.add("list");
-        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, qnaList);
-        listview.setAdapter(adapter);
+        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, qnaList);
+
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,8 +86,6 @@ public class QnaCheckFragment extends Fragment {
 
         StringBuilder output = new StringBuilder();
 
-//        Bundle bundle = this.getArguments();
-//        userId_db = bundle.getString("userId_db");
 
         try {
             URL url = new URL(urlStr);
@@ -156,10 +154,8 @@ public class QnaCheckFragment extends Fragment {
 //                            .setContent(content.get(j).text())
 //                            .setIndate(indate.get(j).text());
 
-                    qnaList.add(qna);
-
-
-                    Log.d("===", title.get(j).text());
+//                    qnaList.add(qna);
+                    adapter.add(qna);
 
                    println2();
                 }
@@ -183,6 +179,9 @@ public class QnaCheckFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
+
+                listview.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
                 listview.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.GONE);

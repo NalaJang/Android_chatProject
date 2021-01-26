@@ -2,6 +2,7 @@ package com.example.chatproject5;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.Toast;
 
 import java.util.Vector;
@@ -60,8 +62,10 @@ public class Chat_room_listFragment extends Fragment {
 
 
         Vector<RoomList> lists = new Vector<>();
-        lists.add(new RoomList(R.drawable.img, "상담사", "안녕하세요", "12:40"));
-        lists.add(new RoomList(R.drawable.img, "ddd", "[사진]", "13:02"));
+//        lists.add(new RoomList(R.drawable.img, "상담사", "안녕하세요", "12:40"));
+//        lists.add(new RoomList(R.drawable.img, "ddd", "[사진]", "13:02"));
+
+
 
 
         adapter = new Chat_room_list_Adapter(lists, getContext(), getActivity());
@@ -106,5 +110,24 @@ public class Chat_room_listFragment extends Fragment {
         });
 
         return rootView;
+    }   //end onCreate
+
+    private static class ChattingRoomListAdapter extends CursorAdapter {
+
+        public ChattingRoomListAdapter(Context context, Cursor cursor) {
+            super(context, cursor, false);
+        }
+
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return null;
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+
+        }
     }
+
 }

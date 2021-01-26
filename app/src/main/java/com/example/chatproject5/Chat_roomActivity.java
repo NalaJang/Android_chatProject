@@ -115,6 +115,9 @@ public class Chat_roomActivity extends AppCompatActivity {
         message_edit = findViewById(R.id.message_edit);
         send_button = findViewById(R.id.send_button_chat);
 
+
+
+
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +166,11 @@ public class Chat_roomActivity extends AppCompatActivity {
 
             }
         });
+
+        //DB 에서 사용자 채팅룸 리스트 가져오기
+
+
+
 
     }   //end onCreate
 

@@ -4,14 +4,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import adapter.OrderAdapter;
 import dto.OrderDto;
 
 public class MyOrderListActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private OrderAdapter adapter;
+
+    private String userId_db;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,17 +40,116 @@ public class MyOrderListActivity extends AppCompatActivity {
 
         setTitle("주문배송");
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_order);
+        //정보 받기
+        Intent intent = getIntent();
+        userId_db = intent.getStringExtra("userId_db");
+
+        recyclerView = findViewById(R.id.recyclerView_order);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
 
-        OrderAdapter adapter = new OrderAdapter();
-        adapter.addItem(new OrderDto(R.drawable.sweatshirt, "스웨이트셔츠", "핑크 스몰", 39000, 1, "1", "2021-01-17"));
-        recyclerView.setAdapter(adapter);
+        adapter = new OrderAdapter();
+//        adapter.addItem(new OrderDto(R.drawable.sweatshirt, "스웨이트셔츠", "핑크 스몰", 39000, 1, "1", "2021-01-17"));
+//        recyclerView.setAdapter(adapter);
+
+
+        //DB 에서 주문 목록가져오기
+        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/orderList.do";
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                myOrderList(urlStr);
+
+            }
+        }).start();
 
     }   //end onCreate
+
+    public void myOrderList(String urlStr) {
+        StringBuilder output = new StringBuilder();
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+
+                //값 넣어주기
+                String params = "id=" + userId_db;
+                Log.d("id", userId_db);
+                outputStream.write(params.getBytes());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line = null;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setOrderList(output.toString());
+    }
+
+    public void setOrderList(String str) {
+        Document doc = Jsoup.parse(str);
+        Elements pname = doc.select("ol > li.pname");
+        Elements image = doc.select("ol > li.image");
+        Elements quantity = doc.select("ol > li.quantity");
+        Elements content = doc.select("ol > li.content");
+        Elements price = doc.select("ol > li.price");
+        Elements result = doc.select("ol > li.result");
+        Elements indate = doc.select("ol > li.indate");
+
+        for(int i = 0; i < pname.size(); i++) {
+
+            OrderDto orderDto = new OrderDto();
+            orderDto.setPname(pname.get(i).text());
+            orderDto.setImage(image.get(i).text());
+            orderDto.setQuantity(Integer.parseInt(quantity.get(i).text()));
+            orderDto.setSizeAndColor(content.get(i).text());
+            orderDto.setPrice(Integer.parseInt(price.get(i).text()));
+            orderDto.setResult(result.get(i).text());
+            orderDto.setIndate(indate.get(i).text());
+
+            adapter.addItem(orderDto);
+
+        }
+
+        println();
+    }
+
+
+    public void println() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.setAdapter(adapter);
+//                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

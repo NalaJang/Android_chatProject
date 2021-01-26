@@ -35,14 +35,14 @@ public class EntranceActivity extends AppCompatActivity{
 
     private static final String TAG = EntranceActivity.class.getSimpleName();
 
-    Chat_listFragment chat_listFragment;
-    Chat_room_listFragment chat_room_listActivity;
-    MenuFragment menuFragment;
+    private Chat_listFragment chat_listFragment;
+    private Chat_room_listFragment chat_room_listActivity;
+    private MenuFragment menuFragment;
 
-    Intent intent;
-    String userId_db;
-    Handler chatConnHandler;
-    ChatConnThread chatConnThread;
+    private Intent intent;
+    private String userId_db;
+    private Handler chatConnHandler;
+    private ChatConnThread chatConnThread;
 
 
     //상단 메뉴 추가

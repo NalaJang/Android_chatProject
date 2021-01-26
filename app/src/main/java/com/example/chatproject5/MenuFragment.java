@@ -91,6 +91,8 @@ public class MenuFragment extends Fragment {
             public void onClick(View v) {
 
                 intent = new Intent(getContext(), MyOrderListActivity.class);
+                intent.putExtra("userId_db", userId_db);
+
                 startActivity(intent);
             }
         });

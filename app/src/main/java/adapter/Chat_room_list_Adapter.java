@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.chatproject5.OnListItemClickListener;
 import com.example.chatproject5.R;
 
-import chat.MsgUtils;
-import dto.Message;
 import dto.RoomList;
 
 import java.util.Vector;
@@ -41,6 +39,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
 
 //        E/RecyclerView: No layout manager attached; skipping layout
 //         : 에러 -> LayoutManager 를 설정하지 않아서 발생한 현상
+
 //        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
 //                .inflate(R.layout.item_room_list, parent, false);
 //        이렇게 고쳐줌 ↓

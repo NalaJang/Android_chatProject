@@ -2,7 +2,7 @@ package dto;
 
 public class OrderDto {
 
-    private int image;
+    private String image;
     private String pname;
     private String sizeAndColor;
     private int price;
@@ -10,8 +10,11 @@ public class OrderDto {
     private String result;
     private String indate;
 
+
+    public OrderDto() {}
+
     public OrderDto
-            ( int image, String pname, String sizeAndColor, int price, int quantity, String result, String indate) {
+            ( String image, String pname, String sizeAndColor, int price, int quantity, String result, String indate) {
 
         this.image = image;
         this.pname = pname;
@@ -23,11 +26,11 @@ public class OrderDto {
     }
 
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public OrderDto setImage(int image) {
+    public OrderDto setImage(String image) {
         this.image = image;
         return this;
     }

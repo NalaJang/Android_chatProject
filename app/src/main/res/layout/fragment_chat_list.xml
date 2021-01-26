@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="15dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/userProfile_chat_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp">
@@ -69,6 +69,7 @@
         android:textAlignment="center"
         android:text="최대 3명의 코디네이터를 등록 할 수 있습니다."
         />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_chatList"

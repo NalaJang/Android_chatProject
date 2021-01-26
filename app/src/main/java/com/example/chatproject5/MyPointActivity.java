@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -35,6 +36,8 @@ public class MyPointActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private PointAdapter adapter;
+
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +114,19 @@ public class MyPointActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         setPointList(output.toString());
-        Log.d("setPointList", output.toString());
 //        recyclerView.setAdapter(adapter);
-    }
+
+
+    }   //end point
+
+
 
     public void setPointList(String str) {
         Document doc = Jsoup.parse(str);
 //        Elements result = doc.select("p.result");
-        Elements product = doc.select("ol > li.product");
+        Elements product = doc.select("ol > li.pname");
         Elements point = doc.select("ol > li.point");
         Elements indate = doc.select("ol > li.indate");
 
@@ -137,11 +144,10 @@ public class MyPointActivity extends AppCompatActivity {
                     pointDto.setPoint(Integer.parseInt(point.get(j).text()));
                     pointDto.setIndate(indate.get(j).text());
 
-                    Log.d("========> ", pointDto.getProduct());
 //                    pointList.add(pointDto);
                     adapter.addItem(pointDto);
 
-//                    adapter.addItem(new PointDto("111", "스웨트셔츠",100,"2021-01-10"));
+
                     total  += Integer.parseInt(point.get(j).text());
                     total_text.setText(Integer.toString(total) + " point");
                 }
@@ -149,8 +155,22 @@ public class MyPointActivity extends AppCompatActivity {
 //            }
 //        }
 
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setAdapter(adapter);
+        println();
+
+
+    }   //end setPointList
+
+    public void println() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                recyclerView.setAdapter(adapter);
+            }
+        });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

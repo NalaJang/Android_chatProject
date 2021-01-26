@@ -89,7 +89,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                     break;
 
                 case "4" :
-                    status_text.setText("배송완료료");
+                    status_text.setText("배송완료");
                    break;
             }
         }

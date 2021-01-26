@@ -195,6 +195,7 @@ public class MyInfoActivity extends AppCompatActivity {
         }
     }   //end setUpdate
 
+
     //수정 실패시 실행 메소드
     public  void println() {
         handler.post(new Runnable() {
