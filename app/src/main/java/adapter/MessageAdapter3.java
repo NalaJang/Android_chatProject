@@ -16,11 +16,11 @@ import dto.MessageData;
 
 public class MessageAdapter3 extends BaseAdapter {
 
-    ArrayList<Message> messageItems;
+    ArrayList<MessageData> messageItems;
     LayoutInflater layoutInflater;
     String myId;
 
-    public MessageAdapter3(ArrayList<Message> messageItems, LayoutInflater layoutInflater, String myId) {
+    public MessageAdapter3(ArrayList<MessageData> messageItems, LayoutInflater layoutInflater, String myId) {
         this.messageItems = messageItems;
         this.layoutInflater = layoutInflater;
         this.myId = myId;
@@ -45,15 +45,17 @@ public class MessageAdapter3 extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
 
         //현재 보여줄 번째의(position)의 데이터로 뷰를 생성
-        Message item=messageItems.get(position);
+        MessageData item=messageItems.get(position);
 
         //재활용할 뷰는 사용하지 않음
         View itemView=null;
 
 
         //내가 보낸 메세지
-        if(item.getFromId().equals(myId)){
+        if(item.getUserId().equals(myId)){
             itemView= layoutInflater.inflate(R.layout.my_msgbox,viewGroup,false);
+
+        //상대방이 보낸 메세지
         }else{
             itemView= layoutInflater.inflate(R.layout.your_msgbox,viewGroup,false);
         }
@@ -64,8 +66,8 @@ public class MessageAdapter3 extends BaseAdapter {
         TextView tvMsg= itemView.findViewById(R.id.tv_msg);
         TextView tvTime= itemView.findViewById(R.id.tv_time);
 
-        tvName.setText(item.getFromId());
-        tvMsg.setText(item.getMessage());
+        tvName.setText(item.getUserId());
+        tvMsg.setText(item.getContent());
         tvTime.setText(item.getTime());
 
 //        Glide.with(itemView).load(item.getPofileUrl()).into(iv);

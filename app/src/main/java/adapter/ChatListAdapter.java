@@ -1,9 +1,8 @@
 package adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chatproject5.OnItemClickListener;
-import com.example.chatproject5.OnListItemClickListener;
+import com.example.chatproject5.Chat_roomActivity;
 import com.example.chatproject5.R;
 
 import java.io.BufferedReader;
@@ -24,20 +22,43 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import chat.MsgUtils;
+import chat.Signals;
+import database.ChattingRoomListHelper;
 import dto.ChatListDto;
+import dto.ChattingRoomListDto;
+import dto.Message;
 
-public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyViewHolder>
-        implements OnItemClickListener {
-
-    private TextView workerId;
+public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyViewHolder> {
 
 
-    private OnItemClickListener listener;
+    private final Context context;
+    private final String myId;
+
 
     private ArrayList<ChatListDto> items = new ArrayList<>();
+    private ChatListDto item;
 
+
+    private ChattingRoomListHelper roomListHelper;
+    private ChattingRoomListDto roomListDto;
+
+    private final Date today = new Date();
+    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+
+
+
+    public ChatListAdapter(ArrayList<ChatListDto> items, Context context, String myId) {
+
+        this.items = items;
+        this.context = context;
+        this.myId = myId;
+
+    }
 
 
     @NonNull
@@ -55,7 +76,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull ChatListAdapter.MyViewHolder holder, int position) {
 
-        ChatListDto item = items.get(position);
+        item = items.get(position);
         holder.setItem(item);
     }
 
@@ -64,7 +85,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView workerContent;
+        private TextView workerId, workerContent;
         private Button deleteButton, chatButton;
 
         private int position;
@@ -79,13 +100,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
             chatButton = itemView.findViewById(R.id.chatButton_list);
 
 
+            //삭제
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     position = getAdapterPosition();
 
-                    System.out.println(position);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setTitle(R.string.info);
@@ -95,34 +116,33 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
                     if(position != RecyclerView.NO_POSITION) {
 
-                        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                
-                                System.out.println(items.get(position).toString());
+                        builder.setPositiveButton("삭제", (dialog, which) -> {    //-> 람다식
 
 
-                                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/workerDelete.do";
+                            System.out.println(items.get(position).toString());
 
+
+                            final String urlStr = "http://192.168.0.17:8080/webapp/webServer/workerDelete.do";
+
+//                                ↓ thread 실행과 동시에 items.remove(position) 를 실행하면서 IndexOutOfException 이 발생
 //                                new Thread(new Runnable() {
 //                                    @Override
 //                                    public void run() {
 
-                                        delete(urlStr, items.get(position).getNum());
+//                                      ↓ 해당 position 의 DB 정보 가져오기
+                                    delete(urlStr, items.get(position).getNum());
 
 //                                    }
 //                                }).start();
 
 
-                                items.remove(position);
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, items.size());
+                            items.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, items.size());
 
 
-                                Toast.makeText(v.getContext(), "삭제되었습니다",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(v.getContext(), "삭제되었습니다",
+                                    Toast.LENGTH_SHORT).show();
                         });
                     }   //end if
 
@@ -131,38 +151,59 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                 }
             }); //end deleteButton
 
-/*
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
 
-                    int position = getAdapterPosition();
-                    if(listener != null) {
 
-                        listener.onItemClick(ChatListAdapter.MyViewHolder.this, v, position);
+            //채팅
+            chatButton.setOnClickListener(v -> {
+
+                position = getAdapterPosition();
+
+                if(position != RecyclerView.NO_POSITION) {
+
+                    System.out.println("채팅버튼 클릭" + items.get(position).getNum());
+
+
+                    roomListHelper = new ChattingRoomListHelper(context);
+
+                    roomListDto = roomListHelper.findRoom(roomListDto.getMyId(), roomListDto.getRoomName());
+
+                    //선택한 상담사와의 채팅방이 없을 경우
+                    if(roomListDto == null) {
+
+                        System.out.println("채팅방 없음");
+
+                        roomListDto = new ChattingRoomListDto().setRoomName(items.get(position).getWorkerId())
+                                                                .setMyId(myId)
+                                                                .setOtherId(items.get(position).getWorkerId())
+                                                                .setTime(timeNow.format(today));
+
+                        roomListHelper.insert(roomListDto);
+
+                    //채팅방이 이미 존재할 경우
+                    } else {
+
+                        System.out.println("이미 존재하는 채팅방");
 
                     }
 
+                    Message message = new Message();
+                    message.setSignal(Signals.CHECK_IN.getSignal() + "");
+                    message.setRoomId(items.get(position).getWorkerId());
+                    message.setToId(myId);
+                    message.setPhoto("");
+
+                    MsgUtils.sendMsg(message);      //서버에 신호 보내기
+
+
+                    Intent intent = new Intent(context, Chat_roomActivity.class);
+                    intent.putExtra("roomName", items.get(position).getWorkerId());
+                    intent.putExtra("userId_db", myId);
+
+                    context.startActivity(intent);  //채팅방으로 이동
                 }
-            });
 
- */
-
-            /*
-            chatButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    if(listener != null) {  //-> array index of 에러
-                        listener.onItemClick(MyViewHolder.this, v, position);
-                    }
-
-                }
-            });
-
-             */
+            }); //end chatButton
 
 
         }   //end myViewHolder
@@ -176,6 +217,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
 
 
+        //선택 항목 삭제 (-> DB 업데이트)
         public void delete(String urlStr, int num) {
             StringBuilder output = new StringBuilder();
 
@@ -227,26 +269,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
     public void addItem(ChatListDto item) {
         items.add(item);
-    }
-
-
-    public ChatListDto getItem(int position) {
-        return items.get(position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-
-    @Override
-    public void onItemClick(ChatListAdapter.MyViewHolder holder, View view, int position) {
-
-        if(listener != null) {
-
-            listener.onItemClick(holder, view, position);
-        }
-
     }
 
 }

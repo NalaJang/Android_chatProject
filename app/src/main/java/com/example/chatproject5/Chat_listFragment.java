@@ -104,54 +104,8 @@ public class Chat_listFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ChatListAdapter();
-
-
-        //상담사 클릭
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(ChatListAdapter.MyViewHolder holder, View view, int position) {
-
-                ChatListDto chatListDto = adapter.getItem(position);
-
-                Toast.makeText(getContext(), "선택" + chatListDto.getWorkerId(), Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(getContext(), Chat_roomActivity.class);
-                intent.putExtra("selectedWorkerId", chatListDto.getWorkerId());
-                intent.putExtra("selectedWorkerContent", chatListDto.getContent());
-
-
-
-                //채팅방 생성
-                roomListHelper = new ChattingRoomListHelper(getContext());
-                if(chatList == null) {
-
-                    roomListDto = new ChattingRoomListDto().setRoomName(chatListDto.getWorkerId())
-                                                            .setMyId(userId_db)
-                                                            .setOtherId(chatListDto.getWorkerId())
-                                                            .setTime(timeNow.format(today));
-
-                    roomListHelper.insert(roomListDto);
-
-
-
-                //이미 존재하는 채팅방일 경우
-                } else {
-                    Toast.makeText(getContext(), "존재하는 채팅방", Toast.LENGTH_SHORT).show();
-                }
-
-
-                message = new Message();
-                message.setSignal(Signals.CHECK_IN.getSignal() + "");
-                message.setRoomId(chatListDto.getWorkerId());
-                message.setToId(userId_db);
-                message.setPhoto("");
-
-                MsgUtils.sendMsg(message);
-
-                startActivity(intent);
-            }
-        });
+        //어댑터 설정
+        adapter = new ChatListAdapter(chatList, getContext(), userId_db);
 
 
 
@@ -169,8 +123,6 @@ public class Chat_listFragment extends Fragment {
 
 
         return rootView;
-
-
     }   //end onCreateView
 
 
@@ -217,8 +169,9 @@ public class Chat_listFragment extends Fragment {
 
         }
         setWorkerList(output.toString());
-        System.out.println(output.toString());
+
     }   //end coordinatorList
+
 
     public void setWorkerList(String urlStr) {
 
@@ -227,22 +180,18 @@ public class Chat_listFragment extends Fragment {
         Elements workerId_db = doc.select("ol > li.workerId");
         Elements workerContent_db = doc.select("ol > li.workerContent");
 
-        System.out.println("///////////" + workerNum_db);
-
-                for(int j = 0; j < workerId_db.size(); j++) {
-
-                    ChatListDto chatListDto = new ChatListDto();
-                    chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
-                    chatListDto.setWorkerId(workerId_db.get(j).text());
-                    chatListDto.setContent(workerContent_db.get(j).text());
-
-                    adapter.addItem(chatListDto);
-
-                    //chatList.add(0, chatListDto);   //첫번째 줄에 삽입
-                    //chatList.add(chatListDto);      //마지막 줄에 삽입
 
 
-                }
+        for(int j = 0; j < workerId_db.size(); j++) {
+
+            ChatListDto chatListDto = new ChatListDto();
+            chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
+            chatListDto.setWorkerId(workerId_db.get(j).text());
+            chatListDto.setContent(workerContent_db.get(j).text());
+
+            adapter.addItem(chatListDto);
+
+        }
 
 //        recyclerView.setAdapter(adapter);
                 println();

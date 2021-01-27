@@ -1,8 +1,6 @@
 package com.example.chatproject5;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -10,25 +8,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.Toast;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import adapter.Chat_room_list_Adapter;
-import chat.ChatConnThread;
 import chat.MsgUtils;
 import chat.Signals;
-import chat.ThreadUtils;
+import database.ChattingRoomListHelper;
+import dto.ChattingRoomListDto;
 import dto.Message;
-import dto.RoomList;
-import dto.UserDto;
 
 
 public class Chat_room_listFragment extends Fragment {
@@ -42,7 +35,7 @@ public class Chat_room_listFragment extends Fragment {
 
 
     private String userId_db;
-    private Button delete_button;
+    private ChattingRoomListHelper db;
 
 
     @Override
@@ -61,14 +54,17 @@ public class Chat_room_listFragment extends Fragment {
         userId_db = bundle.getString("userId_db");
 
 
-        Vector<RoomList> lists = new Vector<>();
-//        lists.add(new RoomList(R.drawable.img, "상담사", "안녕하세요", "12:40"));
-//        lists.add(new RoomList(R.drawable.img, "ddd", "[사진]", "13:02"));
+//        Vector<RoomList> lists = new Vector<>();
+//        lists.add(new RoomList(1, R.drawable.img, "상담사", "안녕하세요", "12:40"));
+//        lists.add(new RoomList(2, R.drawable.img, "ddd", "[사진]", "13:02"));
 
 
+        ChattingRoomListHelper db = new ChattingRoomListHelper(getContext());
+
+        ArrayList<ChattingRoomListDto> roomList = db.roomList(userId_db);
 
 
-        adapter = new Chat_room_list_Adapter(lists, getContext(), getActivity());
+        adapter = new Chat_room_list_Adapter(roomList, getContext(), getActivity());
 
         recyclerView = rootView.findViewById(R.id.recyclerView_room_list);
         layoutManager = new LinearLayoutManager(getContext());
@@ -79,55 +75,41 @@ public class Chat_room_listFragment extends Fragment {
 
         adapter.notifyDataSetChanged(); //새로고침
 
+
+
+
         //채팅방으로 들어가기
         adapter.setOnItemClickListener(new OnListItemClickListener() {
             @Override
             public void onItemClick(Chat_room_list_Adapter.MyViewHolder holder, View view, int position) {
 
-                RoomList roomList = adapter.getItem(position);
+                ChattingRoomListDto roomList = adapter.getItem(position);
 
-                Toast.makeText(getContext(), "선택" + roomList.getRoom_name(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "선택" + roomList.getRoomName(), Toast.LENGTH_SHORT).show();
 
 
                 message = new Message();
                 message.setSignal(Signals.CHECK_IN.getSignal() + "");
-                message.setRoomId(roomList.getRoom_name());
+                message.setRoomId(roomList.getRoomName());
                 message.setToId(userId_db);
                 message.setPhoto("");
 
-                MsgUtils.sendMsg(message);
+                MsgUtils.sendMsg(message);  //-> 서버에 입장 신호 보내기
 
-                Log.d(TAG, "roomName ======> " + roomList.getRoom_name());
+                Log.d(TAG, "roomName ======> " + roomList.getRoomName());
                 Log.d(TAG, "CHECK_IN ======> " + Signals.CHECK_IN.getSignal() + "");
 
+
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);
-                intent.putExtra("roomName", roomList.getRoom_name());
+                intent.putExtra("roomName", roomList.getRoomName());
                 intent.putExtra("userId_db", userId_db);
 
                 startActivity(intent);
 
             }
-        });
+        }); //end adapter onClick
 
         return rootView;
     }   //end onCreate
-
-    private static class ChattingRoomListAdapter extends CursorAdapter {
-
-        public ChattingRoomListAdapter(Context context, Cursor cursor) {
-            super(context, cursor, false);
-        }
-
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return null;
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-
-        }
-    }
 
 }

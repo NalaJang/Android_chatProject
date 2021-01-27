@@ -6,14 +6,6 @@ public class ChatListDto {
     private String workerId;
     private String content;
 
-    @Override
-    public String toString() {
-        return "ChatListDto{" +
-                "num=" + num +
-                ", workerId='" + workerId + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 
     public ChatListDto(){}
 

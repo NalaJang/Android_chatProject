@@ -2,33 +2,41 @@ package adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatproject5.OnListItemClickListener;
 import com.example.chatproject5.R;
 
+import database.ChattingRoomListHelper;
+import dto.ChattingRoomListDto;
 import dto.RoomList;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_Adapter.MyViewHolder>
         implements OnListItemClickListener {
 
-    private Vector<RoomList> lists;
+    private ArrayList<ChattingRoomListDto> lists;
     private Activity activity;
+    private Context context;
     private OnListItemClickListener listener;
 
-    public Chat_room_list_Adapter(Vector<RoomList> lists, Context context, Activity activity) {
+    public Chat_room_list_Adapter(ArrayList<ChattingRoomListDto> lists, Context context, Activity activity) {
 
         this.lists = lists;
+        this.context = context;
         this.activity = activity;
 
     }
@@ -56,12 +64,12 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         //위치에 맞는 아이템들을 가져온다.
-        RoomList list = lists.get(position);
+        ChattingRoomListDto list = lists.get(position);
 
-        holder.user_img.setImageResource(list.getUser_img());
-        holder.room_name.setText(list.getRoom_name());
-        holder.last_content.setText(list.getLast_content());
-        holder.last_time.setText(list.getLast_time());
+//        holder.user_img.setImageResource(Integer.parseInt(list.getProfileImage()));
+        holder.room_name.setText(list.getRoomName());
+        holder.last_content.setText(list.getLastContent());
+        holder.last_time.setText(list.getTime());
 
     }
 
@@ -75,6 +83,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
 
         ImageView user_img;
         TextView room_name, last_content, last_time;
+        Button deleteButton;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +92,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
             room_name = itemView.findViewById(R.id.room_name_item);
             last_content = itemView.findViewById(R.id.content_item);
             last_time = itemView.findViewById(R.id.time_item);
+            deleteButton = itemView.findViewById(R.id.delete_roomList);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -101,18 +111,54 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
                 }
             });
 
+            //나가기
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int position = getAdapterPosition();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle(R.string.info);
+                    builder.setMessage("삭제하시겠습니까?\n\n채팅내용은 저장되지 않습니다.");
+
+                    System.out.println(lists.get(position).getNum());
+
+                    if(position != RecyclerView.NO_POSITION) {
+                        builder.setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                ChattingRoomListHelper db = new ChattingRoomListHelper(context);
+
+                                db.deleteRoom(lists.get(position).getNum());
+
+                                lists.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, lists.size());
+
+                            }
+
+                        });
+                    }   //end if
+
+                    builder.setNegativeButton(R.string.close, null);
+                    builder.show();
+                }
+            });
+
 
         }
     }   //end MyViewHolder
 
-    public void addChat(RoomList roomList) {
+    public void addChat(ChattingRoomListDto roomList) {
         lists.add(roomList);
         notifyItemInserted(lists.size() -1);
 
     }
 
     //채팅방을 넘기기 위해 추가한 부분들 ~ onItemClick 까지
-    public RoomList getItem(int position) {
+    public ChattingRoomListDto getItem(int position) {
         return lists.get(position);
     }
 

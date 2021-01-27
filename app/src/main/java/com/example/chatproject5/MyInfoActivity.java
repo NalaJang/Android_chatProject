@@ -162,11 +162,16 @@ public class MyInfoActivity extends AppCompatActivity {
                 reader.close();
                 conn.disconnect();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "다시 시도해주세요", Toast.LENGTH_SHORT).show();
+
         }
 
         setUpdate(output.toString());
+        println();
+
         Log.d("======", output.toString());
     }
 
@@ -179,8 +184,9 @@ public class MyInfoActivity extends AppCompatActivity {
         Elements userPhone_db = doc.select("ol > li.phone");
 
         for(int i = 0; i < result.size(); i++) {
-            if(result.get(0).text().equals("수정성공")) {
+            if(result.get(0).text().equals("수정된정보")) {
 
+                userContent.setText(userContent_db.get(0).text());
 
 //                bundle = new Bundle();
 //                bundle.putString("userNewPW", userPw_db.text());
@@ -188,15 +194,11 @@ public class MyInfoActivity extends AppCompatActivity {
 //                bundle.putString("userNewPhone", userPhone_db.text());
 
 
-            } else if(result.get(0).text().equals("수정실패")) {
-
-                println();
             }
         }
     }   //end setUpdate
 
-
-    //수정 실패시 실행 메소드
+    //수정 성공시 실행 메소드
     public  void println() {
         handler.post(new Runnable() {
             @Override
@@ -205,17 +207,31 @@ public class MyInfoActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyInfoActivity.this);
 
                 builder.setTitle(R.string.info);
-                builder.setMessage("다시 시도해 주세요.");
-                builder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                builder.setMessage("수정이 완료되었습니다.");
+                builder.setPositiveButton(R.string.close, null);
                 builder.show();
             }
         });
     }
+
+/*
+    //수정 실패시 실행 메소드
+    public  void error() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyInfoActivity.this);
+
+                builder.setTitle(R.string.info);
+                builder.setMessage("다시 시도해 주세요.");
+                builder.setPositiveButton(R.string.close, null);
+                builder.show();
+            }
+        });
+    }
+
+ */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

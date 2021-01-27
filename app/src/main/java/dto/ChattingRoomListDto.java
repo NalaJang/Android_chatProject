@@ -2,6 +2,7 @@ package dto;
 
 public class ChattingRoomListDto {
 
+    private int num;
     private String roomName;
     private String myId;
     private String otherId;
@@ -9,15 +10,38 @@ public class ChattingRoomListDto {
     private String profileImage;
     private String time;
 
+    @Override
+    public String toString() {
+        return "ChattingRoomListDto{" +
+                "num=" + num +
+                ", roomName='" + roomName + '\'' +
+                ", myId='" + myId + '\'' +
+                ", otherId='" + otherId + '\'' +
+                ", lastContent='" + lastContent + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                ", time='" + time + '\'' +
+                '}';
+    }
+
     public ChattingRoomListDto() {}
 
-    public ChattingRoomListDto(String roomName, String myId, String otherId, String lastContent, String profileImage, String time) {
+    public ChattingRoomListDto(int num, String roomName, String myId, String otherId, String lastContent, String profileImage, String time) {
+        this.num = num;
         this.roomName = roomName;
         this.myId = myId;
         this.otherId = otherId;
         this.lastContent = lastContent;
         this.profileImage = profileImage;
         this.time = time;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public ChattingRoomListDto setNum(int num) {
+        this.num = num;
+        return this;
     }
 
     public String getRoomName() {

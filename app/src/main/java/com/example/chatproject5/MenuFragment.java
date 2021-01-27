@@ -23,6 +23,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import database.ChattingRoomListHelper;
+
 public class MenuFragment extends Fragment {
 
     Bundle bundle;
@@ -64,7 +66,6 @@ public class MenuFragment extends Fragment {
         Button myBodyButton = rootView.findViewById(R.id.body_menu);
         Button myPointButton = rootView.findViewById(R.id.point_menu);
         Button qnaButton = rootView.findViewById(R.id.qna_menu);
-
 
 
         /***************** 내 정보 *****************/
