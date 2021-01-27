@@ -91,10 +91,10 @@ public class EntranceActivity extends AppCompatActivity{
         bundle.putString("userPoint_db", userPoint_db);
 
 
-        //생성자 -> 로그인 성공으로 들어오면 새로운 핸들러 생성할 수 있게 여기에만 만들어 준다.
+        //생성자 -> 로그인 성공으로 들어오면 새로운 핸들러 생성과 동시에 스레드 시작
         chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
         chatConnThread = new ChatConnThread(this, userId_db);
-        //핸들러 객체에 넣기
+        //핸들러 객체에 넣기, 소켓 연결
         chatConnHandler.post(chatConnThread);
         MsgUtils.setConnThread(chatConnThread);
 

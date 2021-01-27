@@ -23,13 +23,6 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-//    SQLiteDatabase db = SQLiteDatabase.openDatabase(
-//            DB_NAME,
-//            MODE_PRIVATE,
-//            null
-//    );
-
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {

@@ -35,9 +35,12 @@ import chat.ChatConnThread;
 import chat.MsgUtils;
 import chat.Signals;
 import chat.ThreadUtils;
+import database.ChattingRoomListHelper;
 import database.MessageHelper;
+import dto.ChattingRoomListDto;
 import dto.Message;
 import dto.MessageData;
+import dto.RoomList;
 
 public class Chat_roomActivity extends AppCompatActivity {
     private static final String TAG = Chat_roomActivity.class.getSimpleName();
@@ -92,13 +95,13 @@ public class Chat_roomActivity extends AppCompatActivity {
         message = new Message();
 
 
-        
+
         //채팅 목록 가져오기
-        ArrayList<MessageData> messageList = msgHelper.messageList(roomName);
+        messageItems = msgHelper.messageList(roomName);
 
 
         //추가(21.01.23)
-        adapter3 = new MessageAdapter3(messageList, getLayoutInflater(), userId_db);
+        adapter3 = new MessageAdapter3(messageItems, getLayoutInflater(), userId_db);
         listView.setAdapter(adapter3);
 
         //추가(21.01.25)
@@ -146,6 +149,26 @@ public class Chat_roomActivity extends AppCompatActivity {
                 } else {
                     Log.e(TAG, "sendButton 클릭");
 
+                    ChattingRoomListHelper roomListHelper = new ChattingRoomListHelper(getApplicationContext());
+                    ChattingRoomListDto roomListDto = roomListHelper.findRoom(roomName, roomName);
+
+                    System.out.println("roomName =========> " + roomName);
+
+                    if(roomListDto == null) {
+
+                        System.out.println("채팅방 없음");
+
+                        roomListDto = new ChattingRoomListDto().setRoomName(roomName)
+                                                                .setMyId(roomName)
+                                                                .setOtherId(userId_db);
+
+                        roomListHelper.insert(roomListDto);
+
+                    } else {
+
+                        System.out.println("이미 존재하는 채팅방");
+
+                    }
 
 
                     MessageData data = new MessageData();

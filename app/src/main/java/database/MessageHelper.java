@@ -14,7 +14,7 @@ import dto.MessageData;
 
 public class MessageHelper extends SQLiteOpenHelper {
 
-    private static MessageHelper sInstance;
+
 
     private static final int DB_VERSION = 3;
     private static final String DB_NAME = "Message.db";
@@ -24,15 +24,6 @@ public class MessageHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-
-    public static synchronized MessageHelper getInstance(Context context) {
-        // 액티비티의 context가 메모리 릭(leak)을 발생할 수 있으므로
-        // application context를 사용하는 것이 좋다
-        if (sInstance == null) {
-            sInstance = new MessageHelper(context.getApplicationContext());
-        }
-        return sInstance;
-    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -113,6 +104,13 @@ public class MessageHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return messageList;
+    }
+
+    //채팅 내용 삭제
+    public int deleteMessage(String roomName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.delete("message", "_no=?",new String[]{roomName});
     }
 
 }

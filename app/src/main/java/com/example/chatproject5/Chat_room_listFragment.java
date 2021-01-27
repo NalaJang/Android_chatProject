@@ -35,7 +35,8 @@ public class Chat_room_listFragment extends Fragment {
 
 
     private String userId_db;
-    private ChattingRoomListHelper db;
+
+    
 
 
     @Override

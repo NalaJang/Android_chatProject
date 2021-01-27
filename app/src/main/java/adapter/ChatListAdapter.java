@@ -38,6 +38,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
     private final Context context;
     private final String myId;
+    private String roomName;
 
 
     private ArrayList<ChatListDto> items = new ArrayList<>();
@@ -166,7 +167,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
                     roomListHelper = new ChattingRoomListHelper(context);
 
-                    roomListDto = roomListHelper.findRoom(roomListDto.getMyId(), roomListDto.getRoomName());
+
+                    roomListDto = roomListHelper.findRoom(myId, items.get(position).getWorkerId());
 
                     //선택한 상담사와의 채팅방이 없을 경우
                     if(roomListDto == null) {

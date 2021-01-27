@@ -19,6 +19,7 @@ import com.example.chatproject5.OnListItemClickListener;
 import com.example.chatproject5.R;
 
 import database.ChattingRoomListHelper;
+import database.MessageHelper;
 import dto.ChattingRoomListDto;
 import dto.RoomList;
 
@@ -130,8 +131,12 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
                             public void onClick(DialogInterface dialog, int which) {
 
                                 ChattingRoomListHelper db = new ChattingRoomListHelper(context);
+                                MessageHelper msgHelper = new MessageHelper(context);
 
+
+                                msgHelper.deleteMessage(lists.get(position).getRoomName()); //-> 메세지도 삭제
                                 db.deleteRoom(lists.get(position).getNum());
+
 
                                 lists.remove(position);
                                 notifyItemRemoved(position);
