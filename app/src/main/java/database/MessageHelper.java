@@ -76,7 +76,6 @@ public class MessageHelper extends SQLiteOpenHelper {
 
         ArrayList<MessageData> messageList = new ArrayList<>();
 
-        System.out.println("roomName => " + roomName);
         try {
 
             SQLiteDatabase db = this.getReadableDatabase();
@@ -104,6 +103,7 @@ public class MessageHelper extends SQLiteOpenHelper {
         }
         return messageList;
     }
+
 
     //채팅 내용 삭제
     public int deleteMessage(String roomName) {

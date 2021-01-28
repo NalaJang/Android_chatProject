@@ -194,10 +194,6 @@ public class Chat_roomActivity extends AppCompatActivity {
 
  */
 
-
-
-
-
                     MessageData data = new MessageData();
 
                     //값 넣어주기*****

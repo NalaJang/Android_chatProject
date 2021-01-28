@@ -187,9 +187,10 @@ public class ChatConnThread extends Thread{
 
                             Intent intent = new Intent("broadcast_" + roomId);
                             context.sendBroadcast(intent);
-                        } else {
-                            //sql  에 저장
 
+                        } else {
+
+                            //메세지 저장
                             messageData = new MessageData();
                             messageData.setUnread(1);
                             messageData.setUserId(message.getToId());
@@ -198,28 +199,21 @@ public class ChatConnThread extends Thread{
                             messageData.setContent(message.getMessage());
                             messageData.setTime(timeNow.format(today));
 
+
                             dbHelper.insert(messageData);
+                            Log.d(TAG, "messageData.toString => " + messageData.toString());
 
-                            /*
-                            private String roomName;
-                            private String myId;
-                            private String otherId;
-                            private String lastContent;
-                            private String profileImage;
-                            private String time;
-                             */
-
-                            ChattingRoomListDto roomListDto = new ChattingRoomListDto();
-                            roomListDto.setRoomName(message.getFromId());
-                            roomListDto.setMyId(message.getToId());
-                            roomListDto.setOtherId(message.getFromId());
-                            roomListDto.setLastContent(message.getMessage());
-                            roomListDto.setProfileImage("");
-                            roomListDto.setTime(timeNow.format(today));
-
+                            //채팅룸 생성
                             ChattingRoomListHelper chattingRoomListHelper = new ChattingRoomListHelper(context);
-
                             if(chattingRoomListHelper.findRoom(message.getToId(), message.getFromId()) == null) {
+
+                                ChattingRoomListDto roomListDto = new ChattingRoomListDto();
+                                roomListDto.setRoomName(message.getFromId());
+                                roomListDto.setMyId(message.getToId());
+                                roomListDto.setOtherId(message.getFromId());
+                                roomListDto.setLastContent(message.getMessage());
+                                roomListDto.setProfileImage("");
+                                roomListDto.setTime(timeNow.format(today));
 
                                 chattingRoomListHelper.insert(roomListDto);
                             }
