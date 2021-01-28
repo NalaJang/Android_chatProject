@@ -28,7 +28,7 @@ public class WorkerProfileActivity extends AppCompatActivity {
     Handler handler = new Handler();
 
     Intent intent;
-    String userId_db, workerId_db;
+    String userId_db, workerId_db, workerContent_db;
     int num_db;
 
     @Override
@@ -43,7 +43,9 @@ public class WorkerProfileActivity extends AppCompatActivity {
         //정보 받기
         intent = getIntent();
         workerId_db = intent.getStringExtra("workerId_db");
+        workerContent_db = intent.getStringExtra("workerContent_db");
         workerId.setText(workerId_db);
+        workerContent.setText(workerContent_db);
 
 
         //등록 클릭
@@ -52,13 +54,13 @@ public class WorkerProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
+//                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
 
-                        addCoordinator(urlStr);
+//                        addCoordinator(urlStr);
 
                     }
                 }).start();

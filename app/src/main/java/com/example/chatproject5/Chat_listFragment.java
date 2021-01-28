@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -30,14 +28,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import adapter.ChatListAdapter;
-import adapter.Chat_room_list_Adapter;
-import chat.MsgUtils;
-import chat.Signals;
 import database.ChattingRoomListHelper;
 import dto.ChatListDto;
 import dto.ChattingRoomListDto;
 import dto.Message;
-import dto.RoomList;
 
 
 public class Chat_listFragment extends Fragment {
@@ -109,14 +103,14 @@ public class Chat_listFragment extends Fragment {
 
 
 
-        //DB 에서 코디네이터 목록 가져오기
+        //DB 에서 선택한 코디네이터 목록 가져오기
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectedWorkerList.do";
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                coordinatorList(urlStr);
+                selectedCoordinatorList(urlStr);
 
             }
         }).start();
@@ -127,7 +121,7 @@ public class Chat_listFragment extends Fragment {
 
 
 
-    public void coordinatorList(String urlStr) {
+    public void selectedCoordinatorList(String urlStr) {
 
         StringBuilder output = new StringBuilder();
 
@@ -173,9 +167,9 @@ public class Chat_listFragment extends Fragment {
     }   //end coordinatorList
 
 
-    public void setWorkerList(String urlStr) {
+    public void setWorkerList(String str) {
 
-        Document doc = Jsoup.parse(urlStr);
+        Document doc = Jsoup.parse(str);
         Elements workerNum_db = doc.select("ol > li.workerNum");
         Elements workerId_db = doc.select("ol > li.workerId");
         Elements workerContent_db = doc.select("ol > li.workerContent");

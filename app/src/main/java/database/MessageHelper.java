@@ -96,7 +96,6 @@ public class MessageHelper extends SQLiteOpenHelper {
                                                     .setTime(cursor.getString(6));
 
                 messageList.add(data);
-                System.out.println(data.toString());
             }
 
 
@@ -110,7 +109,7 @@ public class MessageHelper extends SQLiteOpenHelper {
     public int deleteMessage(String roomName) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        return db.delete("message", "_no=?",new String[]{roomName});
+        return db.delete("message", "roomName=?",new String[]{roomName});
     }
 
 }

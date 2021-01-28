@@ -170,6 +170,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
                     roomListDto = roomListHelper.findRoom(myId, items.get(position).getWorkerId());
 
+
                     //선택한 상담사와의 채팅방이 없을 경우
                     if(roomListDto == null) {
 
@@ -219,7 +220,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
 
 
-        //선택 항목 삭제 (-> DB 업데이트)
+        //선택 항목 삭제 (-> DB 데이터 삭제)
         public void delete(String urlStr, int num) {
             StringBuilder output = new StringBuilder();
 

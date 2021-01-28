@@ -11,7 +11,7 @@
         android:src="@mipmap/ic_launcher"
         android:layout_alignParentRight="true"/>
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/userId_msgBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="name"
@@ -20,11 +20,11 @@
         android:layout_marginRight="16dp"/>
 
     <TextView
-        android:id="@+id/tv_msg"
+        android:id="@+id/userMsg_msgBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello android"
-        android:layout_below="@+id/tv_name"
+        android:layout_below="@+id/userId_msgBox"
         android:layout_toLeftOf="@id/iv"
         android:layout_marginRight="16dp"
         android:padding="12dp"
@@ -33,12 +33,12 @@
         android:textColor="#ffffff"/>
 
     <TextView
-        android:id="@+id/tv_time"
+        android:id="@+id/time_msgBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="13:35"
         android:textSize="12sp"
-        android:layout_toLeftOf="@+id/tv_msg"
+        android:layout_toLeftOf="@+id/userMsg_msgBox"
         android:layout_marginRight="8dp"
-        android:layout_alignBottom="@id/tv_msg"/>
+        android:layout_alignBottom="@id/userMsg_msgBox"/>
 </RelativeLayout>

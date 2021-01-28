@@ -3,7 +3,10 @@ package com.example.chatproject5;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -44,6 +47,7 @@ public class EntranceActivity extends AppCompatActivity{
     private Handler chatConnHandler;
     private ChatConnThread chatConnThread;
 
+    private BroadcastReceiver receiver;
 
     //상단 메뉴 추가
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,6 +66,28 @@ public class EntranceActivity extends AppCompatActivity{
         chat_listFragment = new Chat_listFragment();
         chat_room_listActivity = new Chat_room_listFragment();
         menuFragment = new MenuFragment();
+
+
+
+        /**/
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("broadcast_entrance");
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String intentMsg = intent.getStringExtra("message");
+                Toast.makeText(getApplicationContext(), "브로드캐스트 받음" + intentMsg, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        registerReceiver(receiver, filter);
+        /**/
+
+
+
+
+
 
         //정보 받기*****
         intent = getIntent();
@@ -243,5 +269,14 @@ public class EntranceActivity extends AppCompatActivity{
             intent.putExtra("workerContent_db", workerContent_db.get(i).text());
 
         }
+    }
+
+    public void onDestroy() {
+        if(receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+
+        super.onDestroy();
     }
 }

@@ -53,24 +53,33 @@ public class MessageAdapter2 extends BaseAdapter {
         View itemView=null;
 
 
+        //만들어진 itemView 에 값들 설정
+        CircleImageView iv= itemView.findViewById(R.id.iv);
+        TextView userId_msgBox= itemView.findViewById(R.id.userId_msgBox);
+        TextView userMsg_msgBox= itemView.findViewById(R.id.userMsg_msgBox);
+        TextView time_msgBox= itemView.findViewById(R.id.time_msgBox);
+
+//        userId_msgBox.setText(item.getUserId());
+        userMsg_msgBox.setText(item.getContent());
+        time_msgBox.setText(item.getTime());
+
+//        Glide.with(itemView).load(item.getProfileUrl()).into(iv);
+
+
+
         //내가 보낸 메세지
         if(item.getUserId().equals(myId)){
             itemView= layoutInflater.inflate(R.layout.my_msgbox,viewGroup,false);
+
+            userId_msgBox.setText(item.getUserId());
+
         }else{
             itemView= layoutInflater.inflate(R.layout.your_msgbox,viewGroup,false);
+
+            userId_msgBox.setText(item.getOtherId());
         }
 
-        //만들어진 itemView 에 값들 설정
-        CircleImageView iv= itemView.findViewById(R.id.iv);
-        TextView tvName= itemView.findViewById(R.id.tv_name);
-        TextView tvMsg= itemView.findViewById(R.id.tv_msg);
-        TextView tvTime= itemView.findViewById(R.id.tv_time);
 
-        tvName.setText(item.getUserId());
-        tvMsg.setText(item.getContent());
-        tvTime.setText(item.getTime());
-
-//        Glide.with(itemView).load(item.getProfileUrl()).into(iv);
 
         return itemView;
     }

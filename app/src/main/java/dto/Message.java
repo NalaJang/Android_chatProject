@@ -84,4 +84,17 @@ public class Message {
         this.photo = photo;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "signal='" + signal + '\'' +
+                ", toId='" + toId + '\'' +
+                ", fromId='" + fromId + '\'' +
+                ", message='" + message + '\'' +
+                ", time='" + time + '\'' +
+                ", roomId='" + roomId + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
+    }
 }

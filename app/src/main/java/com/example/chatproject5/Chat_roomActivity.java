@@ -2,8 +2,11 @@ package com.example.chatproject5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,6 +72,8 @@ public class Chat_roomActivity extends AppCompatActivity {
     private MessageHelper msgHelper;
     private Message message;
 
+    private BroadcastReceiver receiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +86,9 @@ public class Chat_roomActivity extends AppCompatActivity {
 
 
         setTitle(roomName);  // 방 이름
+
+
+
 
 
         //추가
@@ -96,7 +104,7 @@ public class Chat_roomActivity extends AppCompatActivity {
 
 
 
-        //채팅 목록 가져오기
+        //DB 에서 채팅 목록 가져오기
         messageItems = msgHelper.messageList(roomName);
 
 
@@ -130,6 +138,20 @@ public class Chat_roomActivity extends AppCompatActivity {
         }
 
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("broadcast_entrance");
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                Intent intentMsg = intent.putExtra("message", et.getText().toString());
+                Log.d(TAG, "message => " + intentMsg);
+                String message = ("broadcast 보냄 " + intent.getAction());
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        registerReceiver(receiver, filter);
 
 
 
@@ -153,7 +175,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                     ChattingRoomListDto roomListDto = roomListHelper.findRoom(roomName, roomName);
 
                     System.out.println("roomName =========> " + roomName);
-
+/*
                     if(roomListDto == null) {
 
                         System.out.println("채팅방 없음");
@@ -169,6 +191,11 @@ public class Chat_roomActivity extends AppCompatActivity {
                         System.out.println("이미 존재하는 채팅방");
 
                     }
+
+ */
+
+
+
 
 
                     MessageData data = new MessageData();
@@ -195,6 +222,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                     msgData.setRoomId(roomName);
                     msgData.setPhoto("");
 
+                    Log.d(TAG, msgData.toString());
 
                     messageItems3.add(msgData);
                     MsgUtils.sendMsg(msgData);  //***** 서버에 신호 보내기
@@ -256,6 +284,14 @@ public class Chat_roomActivity extends AppCompatActivity {
         MsgUtils.sendMsg(message);
     }
 
+    public void onDestroy() {
+        if(receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+
+        super.onDestroy();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

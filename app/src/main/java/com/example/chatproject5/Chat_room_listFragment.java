@@ -1,6 +1,9 @@
 package com.example.chatproject5;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -33,10 +36,7 @@ public class Chat_room_listFragment extends Fragment {
     private Chat_room_list_Adapter adapter;
     private LinearLayoutManager layoutManager;
 
-
     private String userId_db;
-
-    
 
 
     @Override
@@ -60,8 +60,8 @@ public class Chat_room_listFragment extends Fragment {
 //        lists.add(new RoomList(2, R.drawable.img, "ddd", "[사진]", "13:02"));
 
 
+        //DB 에서 채팅목록 가져오기
         ChattingRoomListHelper db = new ChattingRoomListHelper(getContext());
-
         ArrayList<ChattingRoomListDto> roomList = db.roomList(userId_db);
 
 
@@ -78,7 +78,6 @@ public class Chat_room_listFragment extends Fragment {
 
 
 
-
         //채팅방으로 들어가기
         adapter.setOnItemClickListener(new OnListItemClickListener() {
             @Override
@@ -92,13 +91,17 @@ public class Chat_room_listFragment extends Fragment {
                 message = new Message();
                 message.setSignal(Signals.CHECK_IN.getSignal() + "");
                 message.setRoomId(roomList.getRoomName());
-                message.setToId(userId_db);
+                message.setToId(roomList.getRoomName());  //-> error
+//                message.setToId(userId_db);
                 message.setPhoto("");
+
 
                 MsgUtils.sendMsg(message);  //-> 서버에 입장 신호 보내기
 
                 Log.d(TAG, "roomName ======> " + roomList.getRoomName());
-                Log.d(TAG, "CHECK_IN ======> " + Signals.CHECK_IN.getSignal() + "");
+
+                Log.d(TAG, "userId_db ======> " + userId_db);
+                Log.d(TAG, "message.toString() ======> " + message.toString());
 
 
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);
@@ -107,8 +110,11 @@ public class Chat_room_listFragment extends Fragment {
 
                 startActivity(intent);
 
+
             }
         }); //end adapter onClick
+
+
 
         return rootView;
     }   //end onCreate
