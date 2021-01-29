@@ -38,6 +38,8 @@ public class Chat_room_listFragment extends Fragment {
 
     private String userId_db;
 
+    private BroadcastReceiver receiver;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,11 +55,6 @@ public class Chat_room_listFragment extends Fragment {
         //정보 받기
         Bundle bundle = this.getArguments();
         userId_db = bundle.getString("userId_db");
-
-
-//        Vector<RoomList> lists = new Vector<>();
-//        lists.add(new RoomList(1, R.drawable.img, "상담사", "안녕하세요", "12:40"));
-//        lists.add(new RoomList(2, R.drawable.img, "ddd", "[사진]", "13:02"));
 
 
         //DB 에서 채팅목록 가져오기
@@ -76,6 +73,46 @@ public class Chat_room_listFragment extends Fragment {
 
         adapter.notifyDataSetChanged(); //새로고침
 
+
+        /**/
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("broadcast_entrance");
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String message = intent.getStringExtra("message");
+                String fromId = intent.getStringExtra("fromId");
+                String time = intent.getStringExtra("time");
+
+                ChattingRoomListHelper roomListHelper = new ChattingRoomListHelper(context);
+                ChattingRoomListDto roomListDto = new ChattingRoomListDto();
+
+
+                roomListDto.setLastContent(message);
+                roomListDto.setOtherId(fromId);
+                roomListDto.setTime(time);
+
+
+                //상대방과의 채팅방이 존재할 때
+                if( roomListHelper.findRoom(userId_db) != null ) {
+
+                    boolean update = roomListHelper.update(roomListDto.setOtherId(fromId));
+
+                    if(!update) {
+                        Toast.makeText(getContext(), "갱신안됨", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+
+                    adapter.addChat(roomListDto);
+                    adapter.notifyDataSetChanged(); //새로고침
+                }
+            }
+        };
+
+        getContext().registerReceiver(receiver, filter);
+        /**/
 
 
         //채팅방으로 들어가기
@@ -99,7 +136,6 @@ public class Chat_room_listFragment extends Fragment {
                 MsgUtils.sendMsg(message);  //-> 서버에 입장 신호 보내기
 
                 Log.d(TAG, "roomName ======> " + roomList.getRoomName());
-
                 Log.d(TAG, "userId_db ======> " + userId_db);
                 Log.d(TAG, "message.toString() ======> " + message.toString());
 

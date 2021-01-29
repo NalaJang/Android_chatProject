@@ -38,10 +38,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
     private final Context context;
     private final String myId;
-    private String roomName;
 
 
-    private ArrayList<ChatListDto> items = new ArrayList<>();
+    private ArrayList<ChatListDto> items;
     private ChatListDto item;
 
 
@@ -163,13 +162,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                 if(position != RecyclerView.NO_POSITION) {
 
                     System.out.println("채팅버튼 클릭" + items.get(position).getNum());
-
+                    System.out.println("채팅버튼 클릭" + items.get(position).getWorkerId());
 
                     roomListHelper = new ChattingRoomListHelper(context);
 
 
-                    roomListDto = roomListHelper.findRoom(myId, items.get(position).getWorkerId());
-
+                    roomListDto = roomListHelper.findRoom(myId);
+//                    System.out.println("roomListDto.toString => " + roomListDto.toString());
 
                     //선택한 상담사와의 채팅방이 없을 경우
                     if(roomListDto == null) {
@@ -193,7 +192,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                     Message message = new Message();
                     message.setSignal(Signals.CHECK_IN.getSignal() + "");
                     message.setRoomId(items.get(position).getWorkerId());
-                    message.setToId(myId);
+                    message.setToId(items.get(position).getWorkerId());
                     message.setPhoto("");
 
                     MsgUtils.sendMsg(message);      //서버에 신호 보내기

@@ -74,11 +74,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
 
     }
 
-    @Override
-    public int getItemCount() {
 
-        return lists.size();
-    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -155,6 +151,12 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
 
         }
     }   //end MyViewHolder
+
+    @Override
+    public int getItemCount() {
+
+        return lists.size();
+    }
 
     public void addChat(ChattingRoomListDto roomList) {
         lists.add(roomList);

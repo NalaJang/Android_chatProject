@@ -89,8 +89,6 @@ public class Chat_roomActivity extends AppCompatActivity {
 
 
 
-
-
         //추가
         et = findViewById(R.id.et);
         listView = findViewById(R.id.listView_chat);
@@ -138,20 +136,40 @@ public class Chat_roomActivity extends AppCompatActivity {
         }
 
 
+
+
+        /**/
         IntentFilter filter = new IntentFilter();
-        filter.addAction("broadcast_entrance");
+        filter.addAction("broadcast_" + roomName);
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                Intent intentMsg = intent.putExtra("message", et.getText().toString());
-                Log.d(TAG, "message => " + intentMsg);
-                String message = ("broadcast 보냄 " + intent.getAction());
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+                String intentMsg = intent.getStringExtra("message");
+                String fromId = intent.getStringExtra("fromId");
+                String time = intent.getStringExtra("time");
+
+                messageData = new MessageData();
+                messageData.setUnread(0);
+                messageData.setUserId(fromId);
+                messageData.setOtherId(userId_db);
+                messageData.setRoomName(fromId);
+                messageData.setContent(intentMsg);
+                messageData.setTime(time);
+
+                newMessageList.add(messageData);
+                adapter3.addItem(messageData);
+                adapter3.notifyDataSetChanged();              //새로고침
+                listView.setSelection(messageItems.size() -1);//리스트뷰의 마지막 위치로 스크롤 위치 이동
+
+
+            Toast.makeText(getApplicationContext(), "ChatRoomAct => " + intentMsg, Toast.LENGTH_SHORT).show();
             }
         };
 
         registerReceiver(receiver, filter);
+        /**/
 
 
 
@@ -171,41 +189,19 @@ public class Chat_roomActivity extends AppCompatActivity {
                 } else {
                     Log.e(TAG, "sendButton 클릭");
 
-                    ChattingRoomListHelper roomListHelper = new ChattingRoomListHelper(getApplicationContext());
-                    ChattingRoomListDto roomListDto = roomListHelper.findRoom(roomName, roomName);
 
-                    System.out.println("roomName =========> " + roomName);
-/*
-                    if(roomListDto == null) {
-
-                        System.out.println("채팅방 없음");
-
-                        roomListDto = new ChattingRoomListDto().setRoomName(roomName)
-                                                                .setMyId(roomName)
-                                                                .setOtherId(userId_db);
-
-                        roomListHelper.insert(roomListDto);
-
-                    } else {
-
-                        System.out.println("이미 존재하는 채팅방");
-
-                    }
-
- */
-
-                    MessageData data = new MessageData();
+                    messageData = new MessageData();
 
                     //값 넣어주기*****
-                    data.setUnread(0);
-                    data.setUserId(userId_db);
-                    data.setOtherId(roomName);
-                    data.setRoomName(roomName);
-                    data.setContent(msg);   //리스트에 목록이 추가되는 것처럼 대화가 추가되는 것
-                    data.setTime(timeNow.format(today));
+                    messageData.setUnread(0);
+                    messageData.setUserId(userId_db);
+                    messageData.setOtherId(roomName);
+                    messageData.setRoomName(roomName);
+                    messageData.setContent(msg);   //리스트에 목록이 추가되는 것처럼 대화가 추가되는 것
+                    messageData.setTime(timeNow.format(today));
 
-                    newMessageList.add(data);
-                    messageItems.add(data); //추가
+                    newMessageList.add(messageData);
+                    messageItems.add(messageData); //추가
 
 
                     //추가(21.01.23)
@@ -280,6 +276,8 @@ public class Chat_roomActivity extends AppCompatActivity {
         MsgUtils.sendMsg(message);
     }
 
+
+    //broadcast 해지
     public void onDestroy() {
         if(receiver != null) {
             unregisterReceiver(receiver);
@@ -289,6 +287,8 @@ public class Chat_roomActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+    //뒤로 가기
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

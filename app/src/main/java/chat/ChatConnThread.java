@@ -29,6 +29,8 @@ public class ChatConnThread extends Thread{
 
     private SQLiteDatabase database;
     private MessageHelper dbHelper;
+    private ChattingRoomListHelper chattingRoomListHelper;
+    private ChattingRoomListDto roomListDto;
     private MessageData messageData;
     private Message message;
 
@@ -170,6 +172,8 @@ public class ChatConnThread extends Thread{
                 Log.d(TAG, "run 의 while 문 안, signal =========> " + signal);
 
                 dbHelper = new MessageHelper(context);
+                chattingRoomListHelper = new ChattingRoomListHelper(context);
+
                 database = dbHelper.getWritableDatabase();  //DB 가져오기
 
                 line = splitData[1];
@@ -182,48 +186,60 @@ public class ChatConnThread extends Thread{
                             roomId = message.getFromId();
 
 
+                         //현재 채팅중인 방에서 메세지를 받을 때
                         if(roomId.equals(currentRoomId)) {
+
                             Log.d(TAG, "룸아이디 : " + roomId + "메세지 : " + message.getMessage());
 
+
                             Intent intent = new Intent("broadcast_" + roomId);
-                            context.sendBroadcast(intent);
+                            intent.putExtra("message", message.getMessage());
+                            intent.putExtra("fromId", message.getFromId());
+                            intent.putExtra("time", timeNow.format(today));
+                            context.sendBroadcast(intent);  //-> chatRoomActivity 로 전달
+
 
                         } else {
 
                             //메세지 저장
-                            messageData = new MessageData();
-                            messageData.setUnread(1);
-                            messageData.setUserId(message.getToId());
-                            messageData.setOtherId(message.getFromId());
-                            messageData.setRoomName(message.getFromId());
-                            messageData.setContent(message.getMessage());
-                            messageData.setTime(timeNow.format(today));
+                            messageData = new MessageData().setNum(0)
+                                                            .setUnread(1)
+                                                            .setUserId(message.getToId())
+                                                            .setOtherId(message.getFromId())
+                                                            .setRoomName(message.getFromId())
+                                                            .setContent(message.getMessage())
+                                                            .setTime(timeNow.format(today));
 
 
                             dbHelper.insert(messageData);
-                            Log.d(TAG, "messageData.toString => " + messageData.toString());
+
 
                             //채팅룸 생성
-                            ChattingRoomListHelper chattingRoomListHelper = new ChattingRoomListHelper(context);
-                            if(chattingRoomListHelper.findRoom(message.getToId(), message.getFromId()) == null) {
+                            if(chattingRoomListHelper.findRoom(message.getToId()) == null) {
 
-                                ChattingRoomListDto roomListDto = new ChattingRoomListDto();
-                                roomListDto.setRoomName(message.getFromId());
-                                roomListDto.setMyId(message.getToId());
-                                roomListDto.setOtherId(message.getFromId());
-                                roomListDto.setLastContent(message.getMessage());
-                                roomListDto.setProfileImage("");
-                                roomListDto.setTime(timeNow.format(today));
+                                roomListDto = new ChattingRoomListDto().setRoomName(message.getFromId())
+                                                                        .setMyId(message.getToId())
+                                                                        .setOtherId(message.getFromId())
+                                                                        .setLastContent(message.getMessage())
+                                                                        .setProfileImage("")
+                                                                        .setTime(timeNow.format(today));
+
 
                                 chattingRoomListHelper.insert(roomListDto);
-                            }
 
+
+                            } else {
+                                Toast.makeText(context, "존재하는 채팅방" , Toast.LENGTH_SHORT).show();
+                            }
                         }
 
+                        //putExtra 로 값을 넘긴다.
                         Intent intent = new Intent("broadcast_entrance");
+                        intent.putExtra("message", message.getMessage());
+                        intent.putExtra("fromId", message.getFromId());
+                        intent.putExtra("time", message.getTime());
                         context.sendBroadcast(intent);
 
-                        Toast.makeText(context, "신호받음" + message.getMessage() , Toast.LENGTH_SHORT).show();
 
                         break;
 
@@ -312,7 +328,6 @@ public class ChatConnThread extends Thread{
         String[] datas = data.split("\\,");
 
         data = "";
-        Log.d(TAG, "======StringSplit1 data='' ======> " + data);
 
 //        if(datas.length > 2) {
 //            data = datas[1];
@@ -328,27 +343,22 @@ public class ChatConnThread extends Thread{
 
 //        else {
             data = datas[1];
-            Log.d(TAG, "======StringSplit1 else 문, data3 ======> " + data);
+
 //        }
 
         datas = data.split(delim1); //-> "/@"
 
-        Log.d(TAG, "======StringSplit1 else 문 밖의 data4 ======> " + data);
         String str = "";
 
         for(int i = 0; i < datas.length; i++) {
             str = datas[i]; //-> 수정
 
-            Log.d(TAG , "======StringSplit1 datas[0] ======> " + datas[0]);
-            Log.d(TAG , "======StringSplit1  datas[1] = str1 ======> " + str);
 
             if(i == 0) {
                 result[0] = str;
-                Log.d(TAG , "======StringSplit1 result[0] = str ======> " + result[0]);
 
             } else {
                 result[1] = str;
-                Log.d(TAG , "======StringSplit1 result[1] = str ======> " + result[1]);
             }
 
         }
@@ -366,7 +376,6 @@ public class ChatConnThread extends Thread{
         if(type.equals("msg")) {
             for(int i = 0; i < datas.length; i++) {
                 str = datas[i];
-                Log.d("===========stringSplit msg======", str +" i => " + i);
 
                 if(i == 0) {
                     message.setRoomId(str);
@@ -386,12 +395,9 @@ public class ChatConnThread extends Thread{
                     str = "";
 
                     for(int j = 0; j < datas2.length; j++) {
-                        Log.d("===========stringSplit datas2======", Integer.toString(datas2.length));
-                        Log.d("===========stringSplit datas2======", datas2[0]);
-//                        Log.d("===========stringSplit datas2======", datas2[1]);
+
                         if(j == 0) {
                             str += datas2[j];
-                            Log.d("===========stringSplit str++======", str);
 
                         } else {
                             str += "\n" + datas2[j];
@@ -399,11 +405,6 @@ public class ChatConnThread extends Thread{
                     }
                 }
                 message.setMessage(str);
-                Log.d("===========stringSplit message.setMessage(str)======", message.setMessage(str).toString());
-//                else if ( i == 0) {
-//                    message.setRoomId(str);
-//                    Log.d("===========stringSplit setRoomId======", message.setRoomId(str).toString());
-//                }
             }
         }
         return message;

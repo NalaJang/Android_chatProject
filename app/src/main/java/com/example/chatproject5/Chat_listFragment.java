@@ -183,8 +183,8 @@ public class Chat_listFragment extends Fragment {
             chatListDto.setWorkerId(workerId_db.get(j).text());
             chatListDto.setContent(workerContent_db.get(j).text());
 
-            adapter.addItem(chatListDto);
 
+            adapter.addItem(chatListDto);
         }
 
 //        recyclerView.setAdapter(adapter);

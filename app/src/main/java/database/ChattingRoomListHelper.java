@@ -84,21 +84,21 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
 
 
     //채팅방 찾기
-    public ChattingRoomListDto findRoom(String myId, String roomName) {
+    public ChattingRoomListDto findRoom(String myId) {
 
-        ChattingRoomListDto roomListDto = new ChattingRoomListDto();
+        //ChattingRoomListDto roomListDto = new ChattingRoomListDto(); -> 채팅방을 못 찾아서 수정
+        ChattingRoomListDto roomListDto = null;
 
         try {
             SQLiteDatabase db = this.getReadableDatabase();
 
             Cursor cursor = db.rawQuery
-                    ("Select * from chattingRoomList where myId = '" + myId +"' and roomName = '" + roomName + "'", new String[] {});
+                    ("Select roomName from chattingRoomList where myId = '" + myId +"'", new String[] {});
 
 
             if(cursor.moveToNext()) {
                 roomListDto = new ChattingRoomListDto();
-                roomListDto.setMyId(cursor.getString(0));
-                roomListDto.setRoomName(cursor.getString(1));
+                roomListDto.setRoomName(cursor.getString(0));
 
             }
 
@@ -142,6 +142,27 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return roomList;
+    }
+
+    //마지막 메세지, 시간 업데이트
+    public boolean update(ChattingRoomListDto roomListDto) {
+        boolean result = true;
+
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("lastContent", roomListDto.getLastContent());
+            contentValues.put("time", roomListDto.getTime());
+
+            result = db.update("chattingRoomList", contentValues, "roomName=?",
+                    new String[]{String.valueOf(  roomListDto.getRoomName()  )}) > 0;
+
+        } catch (Exception e) {
+            result = false;
+        }
+
+        return result;
     }
 
     //채팅방 나가기
