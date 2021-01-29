@@ -158,6 +158,7 @@
 
                 <!-- 팔 -->
                 <EditText
+                    android:id="@+id/arm_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -180,6 +181,7 @@
 
                 <!-- 가슴둘레 -->
                 <EditText
+                    android:id="@+id/bust_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -202,6 +204,7 @@
 
                 <!-- 허리둘레 -->
                 <EditText
+                    android:id="@+id/waist_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -224,6 +227,7 @@
 
                 <!-- 총 상체길이 -->
                 <EditText
+                    android:id="@+id/totalUpperBody_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -246,6 +250,7 @@
 
                 <!-- 엉덩이둘레 -->
                 <EditText
+                    android:id="@+id/hip_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -268,6 +273,7 @@
 
                 <!-- 허벅지둘레 -->
                 <EditText
+                    android:id="@+id/thigh_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -290,6 +296,7 @@
 
                 <!-- 발목둘레 -->
                 <EditText
+                    android:id="@+id/calf_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -312,6 +319,7 @@
 
                 <!-- 총 하체 길이 -->
                 <EditText
+                    android:id="@+id/totalLowerBody_edit"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"

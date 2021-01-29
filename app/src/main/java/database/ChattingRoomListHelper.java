@@ -84,7 +84,7 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
 
 
     //채팅방 찾기
-    public ChattingRoomListDto findRoom(String myId) {
+    public ChattingRoomListDto findRoom(String otherId) {
 
         //ChattingRoomListDto roomListDto = new ChattingRoomListDto(); -> 채팅방을 못 찾아서 수정
         ChattingRoomListDto roomListDto = null;
@@ -93,13 +93,14 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
 
             Cursor cursor = db.rawQuery
-                    ("Select roomName from chattingRoomList where myId = '" + myId +"'", new String[] {});
+                    ("Select roomName from chattingRoomList where otherId = '" + otherId +"'", new String[] {});
 
 
             if(cursor.moveToNext()) {
                 roomListDto = new ChattingRoomListDto();
                 roomListDto.setRoomName(cursor.getString(0));
 
+                System.out.println("if 문 들어옴======");
             }
 
         } catch (Exception e) {
@@ -145,25 +146,26 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
     }
 
     //마지막 메세지, 시간 업데이트
-    public boolean update(ChattingRoomListDto roomListDto) {
-        boolean result = true;
+    public boolean update(String lastContent, String time, String roomName) {
 
         try {
             SQLiteDatabase db = this.getReadableDatabase();
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put("lastContent", roomListDto.getLastContent());
-            contentValues.put("time", roomListDto.getTime());
+            contentValues.put("lastContent", lastContent);
+            contentValues.put("time", time);
+            contentValues.put("roomName", roomName);
 
-            result = db.update("chattingRoomList", contentValues, "roomName=?",
-                    new String[]{String.valueOf(  roomListDto.getRoomName()  )}) > 0;
+            db.update("chattingRoomList", contentValues, "roomName=?",
+                    new String[]{String.valueOf(  roomName  )});
 
         } catch (Exception e) {
-            result = false;
+            e.printStackTrace();
         }
 
-        return result;
+        return true;
     }
+
 
     //채팅방 나가기
     public int deleteRoom(int num) {

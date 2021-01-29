@@ -119,7 +119,6 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
                     builder.setTitle(R.string.info);
                     builder.setMessage("삭제하시겠습니까?\n\n채팅내용은 저장되지 않습니다.");
 
-                    System.out.println(lists.get(position).getNum());
 
                     if(position != RecyclerView.NO_POSITION) {
                         builder.setPositiveButton("나가기", new DialogInterface.OnClickListener() {

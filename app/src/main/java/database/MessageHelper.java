@@ -97,7 +97,6 @@ public class MessageHelper extends SQLiteOpenHelper {
                 messageList.add(data);
             }
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }

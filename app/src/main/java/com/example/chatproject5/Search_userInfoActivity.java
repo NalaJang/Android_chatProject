@@ -40,7 +40,7 @@ public class Search_userInfoActivity extends AppCompatActivity {
 
 
     final String urlStr = "http://192.168.0.17:8080/webapp/webServer/findId.do";    //아이디
-    final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/findPw.do";    //비밀번호
+    final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/findPw.do";   //비밀번호
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,6 @@ public class Search_userInfoActivity extends AppCompatActivity {
                             findPw(urlStr2);
                         }
                     }).start();
-
                 }
             }
         }); //end button2
@@ -181,6 +180,9 @@ public class Search_userInfoActivity extends AppCompatActivity {
                 validId(findId.get(0).text());
 
 
+                userName.setText("");
+                userPhone.setText("");
+
             } else if(result.get(0).text().equals("실패")){
 
                 invalid();
@@ -236,7 +238,7 @@ public class Search_userInfoActivity extends AppCompatActivity {
         Log.d("findPw", output.toString());
     }
 
-    //아이디 찾기
+    //비밀번호 찾기
     public void setFindPw(String str) {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
@@ -246,6 +248,9 @@ public class Search_userInfoActivity extends AppCompatActivity {
             if(result.get(0).text().equals("성공")) {
 
                 validPw(findPw.get(0).text());
+
+                userId.setText("");
+                userPhone2.setText("");
 
 
             } else if(result.get(0).text().equals("실패")){
@@ -281,6 +286,8 @@ public class Search_userInfoActivity extends AppCompatActivity {
                 builder.setNegativeButton(R.string.close, null);
                 builder.show();
             }
+
+
         });
     }
 

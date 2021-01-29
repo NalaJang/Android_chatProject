@@ -167,11 +167,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                     roomListHelper = new ChattingRoomListHelper(context);
 
 
-                    roomListDto = roomListHelper.findRoom(myId);
-//                    System.out.println("roomListDto.toString => " + roomListDto.toString());
+                    roomListDto = roomListHelper.findRoom(items.get(position).getWorkerId());
 
                     //선택한 상담사와의 채팅방이 없을 경우
-                    if(roomListDto == null) {
+                    if( roomListDto == null ) {
 
                         System.out.println("채팅방 없음");
 

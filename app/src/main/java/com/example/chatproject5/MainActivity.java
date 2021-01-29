@@ -57,18 +57,6 @@ public class MainActivity extends AppCompatActivity {
         TextView search_id = findViewById(R.id.search_id_login);
         TextView sign_up = findViewById(R.id.sign_up_login);
 
-        /*
-        //생성자
-        chatConnHandler = ThreadUtils.GetMultiHandler(TAG + "_Chat");
-        chatConnThread = new ChatConnThread(this, userId.getText().toString());
-
-        Log.d(TAG, "userId ====" + userId.getText().toString());
-
-        //핸들러 객체에 넣기
-        chatConnHandler.post(chatConnThread);
-        MsgUtils.setConnThread(chatConnThread);
-
-         */
 
 
         //로그인 버튼 클릭
@@ -189,12 +177,6 @@ public class MainActivity extends AppCompatActivity {
         Elements userProfilePhoto = doc.select("ol > li.profilePhoto");
         Elements userPoint = doc.select("ol > li.point");
 
-        Elements workerId = doc.select("ol > li.workerId");
-        Elements workerName = doc.select("ol > li.workerName");
-        Elements workerPw = doc.select("ol > li.workerPw");
-        Elements workerPhone = doc.select("ol > li.workerPhone");
-        Elements workerContent = doc.select("ol > li.workerContent");
-        Elements workerProfilePhoto = doc.select("ol > li.workerProfilePhoto");
 
         for(int i = 0; i < result.size(); i++) {
 
@@ -211,12 +193,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("userProfilePhoto_db", userProfilePhoto.text());
                 intent.putExtra("userPoint_db", userPoint.text());
 
-                intent.putExtra("workerId_db", workerId.text());
-                intent.putExtra("workerName_db", workerName.text());
-                intent.putExtra("workerPw_db", workerPw.text());
-                intent.putExtra("workerPhone_db", workerPhone.text());
-                intent.putExtra("workerContent_db", workerContent.text());
-                intent.putExtra("workerProfilePhoto_db", workerProfilePhoto.text());
                 startActivity(intent);
                 finish();
 
@@ -230,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     }   //end setLogin
 
     //출력 메소드
-    public  void println() {
+    public void println() {
         handler.post(new Runnable() {
             @Override
             public void run() {

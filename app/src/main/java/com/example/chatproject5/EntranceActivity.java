@@ -26,13 +26,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import chat.ChatConnThread;
 import chat.MsgUtils;
 import chat.Signals;
 import chat.ThreadUtils;
+import database.ChattingRoomListHelper;
+import dto.ChattingRoomListDto;
 import dto.Message;
+import dto.RoomList;
 
 public class EntranceActivity extends AppCompatActivity{
 
@@ -48,6 +53,9 @@ public class EntranceActivity extends AppCompatActivity{
     private ChatConnThread chatConnThread;
 
     private BroadcastReceiver receiver;
+
+    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+    private Date today = new Date();
 
     //상단 메뉴 추가
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,7 +77,7 @@ public class EntranceActivity extends AppCompatActivity{
 
 
 
-        /**/
+        //브로드캐스트
         IntentFilter filter = new IntentFilter();
         filter.addAction("broadcast_entrance");
 
@@ -77,16 +85,14 @@ public class EntranceActivity extends AppCompatActivity{
             @Override
             public void onReceive(Context context, Intent intent) {
                 String intentMsg = intent.getStringExtra("message");
+
                 Toast.makeText(getApplicationContext(), "브로드캐스트 받음" + intentMsg, Toast.LENGTH_SHORT).show();
+
             }
         };
 
+        //브로드캐스트 등록
         registerReceiver(receiver, filter);
-        /**/
-
-
-
-
 
 
         //정보 받기*****
@@ -104,6 +110,7 @@ public class EntranceActivity extends AppCompatActivity{
 
         intent.putExtra("userId_db", userId_db);
         Toast.makeText(getApplicationContext(), "userId =" + userId_db, Toast.LENGTH_SHORT).show();
+
 
         //프래그먼트로 정보 전달
         Bundle bundle = new Bundle();

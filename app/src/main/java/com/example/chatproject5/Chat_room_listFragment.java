@@ -95,19 +95,17 @@ public class Chat_room_listFragment extends Fragment {
 
 
                 //상대방과의 채팅방이 존재할 때
-                if( roomListHelper.findRoom(userId_db) != null ) {
+                if( roomListHelper.findRoom(fromId) != null ) {
 
-                    boolean update = roomListHelper.update(roomListDto.setOtherId(fromId));
-
-                    if(!update) {
-                        Toast.makeText(getContext(), "갱신안됨", Toast.LENGTH_SHORT).show();
-                    }
+                    roomListHelper.update(message, time, fromId);
 
                 } else {
 
                     adapter.addChat(roomListDto);
-                    adapter.notifyDataSetChanged(); //새로고침
+//                    adapter.notifyDataSetChanged(); //새로고침
                 }
+
+                adapter.notifyDataSetChanged(); //새로고침
             }
         };
 
@@ -128,16 +126,11 @@ public class Chat_room_listFragment extends Fragment {
                 message = new Message();
                 message.setSignal(Signals.CHECK_IN.getSignal() + "");
                 message.setRoomId(roomList.getRoomName());
-                message.setToId(roomList.getRoomName());  //-> error
-//                message.setToId(userId_db);
+                message.setToId(roomList.getRoomName());
                 message.setPhoto("");
 
 
                 MsgUtils.sendMsg(message);  //-> 서버에 입장 신호 보내기
-
-                Log.d(TAG, "roomName ======> " + roomList.getRoomName());
-                Log.d(TAG, "userId_db ======> " + userId_db);
-                Log.d(TAG, "message.toString() ======> " + message.toString());
 
 
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);

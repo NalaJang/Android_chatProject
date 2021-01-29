@@ -51,8 +51,7 @@ public class MessageAdapter3 extends BaseAdapter {
 
         //현재 보여줄 번째의(position)의 데이터로 뷰를 생성
         MessageData item = messageItems.get(position);
-        Message message = new Message();
-        message.getFromId();
+
 
         //재활용할 뷰는 사용하지 않음
         View itemView=null;
@@ -60,16 +59,19 @@ public class MessageAdapter3 extends BaseAdapter {
 
         //내가 보낸 메세지
         if(item.getUserId().equals(myId)){
+            System.out.println("myId => " + myId +  "msgAdapter ====> " + item.getContent());
 
-            System.out.println("messageAdapter userId=> " + item.getUserId());
+
             itemView= layoutInflater.inflate(R.layout.my_msgbox,viewGroup,false);
+
 
         //상대방이 보낸 메세지
         }else{
 
-            System.out.println("messageAdapter otherId=> " + item.getOtherId());
             itemView= layoutInflater.inflate(R.layout.your_msgbox,viewGroup,false);
         }
+
+
 
         //만들어진 itemView 에 값들 설정
         CircleImageView iv= itemView.findViewById(R.id.iv);
@@ -82,15 +84,6 @@ public class MessageAdapter3 extends BaseAdapter {
         time_msgBox.setText(item.getTime());
 
 //        Glide.with(itemView).load(item.getPofileUrl()).into(iv);
-
-
-//        if(item.getUserId().equals(myId)){
-//            userId_msgBox.setText(item.getUserId());
-//
-//        //상대방이 보낸 메세지
-//        }else{
-//            userId_msgBox.setText(item.getOtherId());
-//        }
 
         return itemView;
     }

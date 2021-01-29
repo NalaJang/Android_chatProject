@@ -105,9 +105,11 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                                 conn.setRequestMethod("POST");
                                 conn.setDoInput(true);
 
+//                                conn.setDoOutput();
+
                                 OutputStream outputStream = conn.getOutputStream();
                                 String params = "id=" + myId + "&workerId=" + workerId.getText().toString();
-
+//                                String params = "id=123&workerId=568";
                                 System.out.println("id = > " + myId + " & workerId = > " + workerId.getText().toString());
 
                                 outputStream.write(params.getBytes());

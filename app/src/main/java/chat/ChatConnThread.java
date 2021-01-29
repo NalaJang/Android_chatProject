@@ -199,13 +199,14 @@ public class ChatConnThread extends Thread{
                             context.sendBroadcast(intent);  //-> chatRoomActivity 로 전달
 
 
+                        //다른 메뉴화면에서 메세지를 받을 때
                         } else {
 
                             //메세지 저장
                             messageData = new MessageData().setNum(0)
                                                             .setUnread(1)
-                                                            .setUserId(message.getToId())
-                                                            .setOtherId(message.getFromId())
+                                                            .setUserId(message.getFromId())
+                                                            .setOtherId(message.getToId())
                                                             .setRoomName(message.getFromId())
                                                             .setContent(message.getMessage())
                                                             .setTime(timeNow.format(today));
@@ -213,9 +214,13 @@ public class ChatConnThread extends Thread{
 
                             dbHelper.insert(messageData);
 
+                            Log.d(TAG, "===============TO ID ===> " + message.getToId());//ddd
+                            Log.d(TAG, "===============FROM ID ===> " + message.getFromId());//12
+
+//                            roomListDto = chattingRoomListHelper.findRoom(message.getFromId());
 
                             //채팅룸 생성
-                            if(chattingRoomListHelper.findRoom(message.getToId()) == null) {
+                            if(chattingRoomListHelper.findRoom(message.getFromId()) == null ) {
 
                                 roomListDto = new ChattingRoomListDto().setRoomName(message.getFromId())
                                                                         .setMyId(message.getToId())
@@ -223,12 +228,12 @@ public class ChatConnThread extends Thread{
                                                                         .setLastContent(message.getMessage())
                                                                         .setProfileImage("")
                                                                         .setTime(timeNow.format(today));
-
-
+                                System.out.println("coonThread ============> " + roomListDto.toString());
                                 chattingRoomListHelper.insert(roomListDto);
 
 
                             } else {
+                                Log.d(TAG, "===============FROM ID ===> " + message.getFromId());
                                 Toast.makeText(context, "존재하는 채팅방" , Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -237,7 +242,7 @@ public class ChatConnThread extends Thread{
                         Intent intent = new Intent("broadcast_entrance");
                         intent.putExtra("message", message.getMessage());
                         intent.putExtra("fromId", message.getFromId());
-                        intent.putExtra("time", message.getTime());
+                        intent.putExtra("time", timeNow.format(today));
                         context.sendBroadcast(intent);
 
 

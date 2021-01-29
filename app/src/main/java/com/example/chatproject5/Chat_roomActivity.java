@@ -145,21 +145,22 @@ public class Chat_roomActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-
                 String intentMsg = intent.getStringExtra("message");
                 String fromId = intent.getStringExtra("fromId");
                 String time = intent.getStringExtra("time");
 
+
                 messageData = new MessageData();
                 messageData.setUnread(0);
-                messageData.setUserId(fromId);
-                messageData.setOtherId(userId_db);
+                messageData.setUserId(fromId);    //*****
+                messageData.setOtherId(userId_db);//*****
                 messageData.setRoomName(fromId);
                 messageData.setContent(intentMsg);
                 messageData.setTime(time);
 
                 newMessageList.add(messageData);
                 adapter3.addItem(messageData);
+
                 adapter3.notifyDataSetChanged();              //새로고침
                 listView.setSelection(messageItems.size() -1);//리스트뷰의 마지막 위치로 스크롤 위치 이동
 
@@ -255,8 +256,8 @@ public class Chat_roomActivity extends AppCompatActivity {
         for(int i = 0; i < newMessageList.size(); i++) {
 
             MessageData data = new MessageData().setUnread(0)
-                                                .setUserId(userId_db)
-                                                .setOtherId(roomName)
+                                                .setUserId(messageData.getUserId())
+                                                .setOtherId(messageData.getOtherId())
                                                 .setRoomName(roomName)
                                                 .setContent(newMessageList.get(i).getContent())
                                                 .setTime(timeNow.format(today));
@@ -274,6 +275,7 @@ public class Chat_roomActivity extends AppCompatActivity {
 
         message.setSignal(Signals.CHECK_OUT.getSignal() + "");
         MsgUtils.sendMsg(message);
+        MsgUtils.setCurrentRoom("");    //***** 현재 채팅방 다시 제로
     }
 
 

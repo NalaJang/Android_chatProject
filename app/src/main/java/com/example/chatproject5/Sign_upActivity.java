@@ -1,9 +1,12 @@
 package com.example.chatproject5;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +33,7 @@ public class Sign_upActivity extends AppCompatActivity {
     WorkerHelper workerHelper;
 
     Intent intent;
+    Handler handler = new Handler();
 
     EditText userName, userId, userPw, userEmail, userPhone;
 
@@ -165,11 +169,24 @@ public class Sign_upActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        setDialog();
+
         intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
     }
 
+
+    public void setDialog() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                Toast.makeText(getApplicationContext(), "가입되었습니다.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
