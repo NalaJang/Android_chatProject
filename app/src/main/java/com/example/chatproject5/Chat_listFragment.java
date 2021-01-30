@@ -102,7 +102,8 @@ public class Chat_listFragment extends Fragment {
 
         //어댑터 설정
         adapter = new ChatListAdapter(chatList, getContext(), userId_db);
-
+        recyclerView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
 
         //DB 에서 선택한 코디네이터 목록 가져오기
@@ -165,7 +166,6 @@ public class Chat_listFragment extends Fragment {
 
         }
         setWorkerList(output.toString());
-        System.out.println("chatListAdapter : " + output.toString());
 
     }   //end coordinatorList
 

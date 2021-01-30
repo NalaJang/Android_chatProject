@@ -15,8 +15,9 @@ import java.util.ArrayList;
 
 import dto.ListViewItem;
 
-public class CustomListViewAdapter extends ArrayAdapter implements View.OnClickListener {
+public class CustomListViewAdapter {
 
+    /*
     public interface ListBtnClickListener {
         void onListBtnClick(int position) ;
     }
@@ -46,8 +47,8 @@ public class CustomListViewAdapter extends ArrayAdapter implements View.OnClickL
         // 생성자로부터 저장된 resourceId(listView_btn_item)에 해당하는 Layout 을 inflate 하여 convertView 참조 획득.
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(this.resourceId/*R.layout.listView_btn_item*/, parent, false);
-        }
+            convertView = inflater.inflate(this.resourceId/*R.layout.listView_btn_item*//*, parent, false);*/
+  /*      }
 
         // 화면에 표시될 View(Layout 이 inflate 된)로부터 위젯에 대한 참조 획득
         final ImageView iconImageView = convertView.findViewById(R.id.imageView1);
@@ -60,14 +61,14 @@ public class CustomListViewAdapter extends ArrayAdapter implements View.OnClickL
         iconImageView.setImageDrawable(listViewItem.getIcon());
         textTextView.setText(listViewItem.getText());
 
-        /*
+
         // button1 클릭 시 TextView(textView1)의 내용 변경.
         Button button1 = convertView.findViewById(R.id.button1);
         button1.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 textTextView.setText(Integer.toString(pos + 1) + "번 아이템 선택.");
             }
-        });*/
+        });
 
         // button2의 TAG 에 position 값 지정. Adapter 를 click listener 로 지정.
         Button button2 = convertView.findViewById(R.id.button2);
@@ -85,5 +86,6 @@ public class CustomListViewAdapter extends ArrayAdapter implements View.OnClickL
         }
     }
 
+    */
 
 }

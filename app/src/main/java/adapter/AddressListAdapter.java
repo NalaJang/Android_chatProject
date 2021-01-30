@@ -1,6 +1,5 @@
 package adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,23 +9,29 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chatproject5.EditAddressFragment;
-import com.example.chatproject5.OnItemClickListener;
+import com.example.chatproject5.EditAddressActivity;
 import com.example.chatproject5.R;
 
 import java.util.ArrayList;
 
 import dto.AddressDto;
-import dto.ChattingRoomListDto;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.ViewHolder> {
 
-
+    private String myId;
+    private final Context context;
     private ArrayList<AddressDto> addressList = new ArrayList<>();
 
+
+    public AddressListAdapter(ArrayList<AddressDto> addressList, Context context, String myId) {
+        this.addressList = addressList;
+        this.context = context;
+        this.myId = myId;
+    }
 
 
     @NonNull
@@ -81,7 +86,18 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                 @Override
                 public void onClick(View v) {
 
+                    Intent intent = new Intent(context, EditAddressActivity.class);
+                    intent.putExtra("userId_db", myId);
+                    intent.putExtra("nickName_db", nickName.getText().toString());
+                    intent.putExtra("userName_db", userName.getText().toString());
+                    intent.putExtra("userPhone_db", userPhone.getText().toString());
+                    intent.putExtra("userAddress1_db", userAddress1.getText().toString());
+                    intent.putExtra("userAddress2e_db", userAddress2.getText().toString());
 
+                    //context.startActivity(intent);
+                    //에러 : FLAG_ACTIVITY_NEW_TASK flag -> ListView 의 "한 아이템을 클릭했을 경우, startActivity를 사용해 새로운 Activity를 생성하려 했을 때"
+                    //수정 ↓
+                    context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
                 }
             });
         }
@@ -94,6 +110,10 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             userAddress2.setText(address.getAddress2());
 
             switch (address.getResult()) {
+
+                case "0" :
+                    result.setText("");
+                    break;
 
                 case "1" :
                     result.setText("(기본 배송지)");

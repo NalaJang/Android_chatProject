@@ -14,7 +14,7 @@
         android:layout_marginBottom="20dp"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:text="배송지 추가하기"
+        android:text="배송지 수정"
         />
 
     <ScrollView
@@ -36,7 +36,7 @@
                 />
 
             <EditText
-                android:id="@+id/addressName_add"
+                android:id="@+id/nickName_editAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -53,7 +53,7 @@
                 />
 
             <EditText
-                android:id="@+id/name_add"
+                android:id="@+id/name_editAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -70,7 +70,7 @@
                 />
 
             <EditText
-                android:id="@+id/phone_add"
+                android:id="@+id/phone_editAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -83,11 +83,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="기본 주소"
+                android:text="우편번호"
                 />
 
             <EditText
-                android:id="@+id/address_add"
+                android:id="@+id/zip_num_editAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -100,11 +100,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:text="기본 주소"
+                />
+
+            <EditText
+                android:id="@+id/address1_editAddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"
+                android:hint="기본 주소"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="상세 주소"
                 />
 
             <EditText
-                android:id="@+id/userName_info"
+                android:id="@+id/address2_editAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -113,12 +130,13 @@
                 />
 
             <CheckBox
-                android:id="@+id/check_add"
+                android:id="@+id/check_editAddr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="기본 배송지로 설정"/>
 
             <Button
+                android:id="@+id/button_editAddr"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -126,7 +144,7 @@
                 android:background="@color/button"
                 android:textColor="@color/white"
                 android:textSize="17dp"
-                android:text="완료"
+                android:text="수정"
                 />
         </LinearLayout>
     </ScrollView>

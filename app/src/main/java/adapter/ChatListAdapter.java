@@ -47,8 +47,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
     private ChattingRoomListHelper roomListHelper;
     private ChattingRoomListDto roomListDto;
 
-    private final Date today = new Date();
-    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+//    private final Date today = new Date();
+//    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
 
 

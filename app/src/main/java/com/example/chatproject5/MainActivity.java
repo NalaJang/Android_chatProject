@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     Intent intent;
     Handler handler = new Handler();
-//    Handler chatConnHandler;
-//    ChatConnThread chatConnThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
         setLogin(output.toString());    //잘라줄 값
 
         String output2222 = output.toString();
-        Log.d("====output2222=====", output2222);
 
     }
 

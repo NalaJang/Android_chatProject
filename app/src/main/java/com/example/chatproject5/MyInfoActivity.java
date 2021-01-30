@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import adapter.AddressListAdapter;
 import dto.AddressDto;
@@ -41,6 +42,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AddressListAdapter adapter;
+    private ArrayList<AddressDto> addressList = new ArrayList<>();
 
 //    AddAddressFragment addressFragment;
 
@@ -139,7 +141,9 @@ public class MyInfoActivity extends AppCompatActivity {
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new AddressListAdapter();
+        adapter = new AddressListAdapter(addressList, getApplicationContext(), userId_db);
+        recyclerView.setAdapter(adapter);
+
 
         //DB 에서 배송지 목록가져오기
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/addressList.do";

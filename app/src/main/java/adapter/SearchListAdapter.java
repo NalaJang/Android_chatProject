@@ -30,7 +30,7 @@ import dto.SearchListDto;
 
 public class SearchListAdapter extends BaseAdapter implements Filterable {
 
-    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList. (원본 데이터 리스트)
+    // Adapter 에 추가된 데이터를 저장하기 위한 ArrayList. (원본 데이터 리스트)
     private ArrayList<SearchListDto> listViewItemList = new ArrayList<>() ;
     // 필터링된 결과 데이터를 저장하기 위한 ArrayList. 최초에는 전체 리스트 보유.
     private ArrayList<SearchListDto> filteredItemList = listViewItemList ;
@@ -83,6 +83,57 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         workerNum.setText(listViewItem.getWorkerNum());
         workerNum.setVisibility(View.GONE);
         workerContent.setText(listViewItem.getWorkerContent());
+
+        /*
+        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/checkList.do";
+        //이미 등록되어있는 상담사 구별하기
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder output = new StringBuilder();
+
+                try {
+                    URL url = new URL(urlStr);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    if(conn != null) {
+                        conn.setConnectTimeout(10000);
+                        conn.setRequestMethod("POST");
+                        conn.setDoInput(true);
+
+                        OutputStream outputStream = conn.getOutputStream();
+                        String params = "id=" + myId ;
+
+                        outputStream.write(params.getBytes());
+
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        String line = null;
+
+                        while(true) {
+                            line = reader.readLine();
+
+                            if(line == null) {
+                                break;
+                            }
+
+                            output.append(line + "\n");
+
+                        }
+                        reader.close();
+                        conn.disconnect();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+                setCheckList(output.toString());
+            }
+        }).start();
+
+         */
+
+
 
         //코디네이터 등록
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -144,49 +195,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         return convertView;
     }   //end getView
 
-//
-//    //코디네이터 등록
-//    public void checkList(String urlStr) {
-//
-//        StringBuilder output = new StringBuilder();
-//
-//        try {
-//            URL url = new URL(urlStr);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//
-//            if(conn != null) {
-//                conn.setConnectTimeout(10000);
-//                conn.setRequestMethod("POST");
-//                conn.setDoInput(true);
-//
-//                OutputStream outputStream = conn.getOutputStream();
-//                String params = "id=" + myId;
-//
-//                outputStream.write(params.getBytes());
-//
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                String line = null;
-//
-//                while(true) {
-//                    line = reader.readLine();
-//
-//                    if(line == null) {
-//                        break;
-//                    }
-//
-//                    output.append(line + "\n");
-//
-//                }
-//                reader.close();
-//                conn.disconnect();
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        setCheckList(output.toString());
-//    }
-
+/*
     public void setCheckList(String str) {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
@@ -194,10 +203,13 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         for(int i = 0, size = result.size(); i < size; i++) {
             if(result.get(0).text().equals("이미선택한상담사")) {
 
-                println2();
+//                println2();
+
             }
        }
     }
+
+ */
 
     //출력 메소드
     public  void println(String str) {
@@ -210,6 +222,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         });
     }
 
+    /*
     //출력 메소드
     public  void println2() {
         handler.post(new Runnable() {
@@ -220,6 +233,8 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
             }
         });
     }
+
+     */
 
 
     @Override
