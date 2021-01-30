@@ -11,6 +11,19 @@ public class OrderDto {
     private String indate;
 
 
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "image='" + image + '\'' +
+                ", pname='" + pname + '\'' +
+                ", sizeAndColor='" + sizeAndColor + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", result='" + result + '\'' +
+                ", indate='" + indate + '\'' +
+                '}';
+    }
+
     public OrderDto() {}
 
     public OrderDto

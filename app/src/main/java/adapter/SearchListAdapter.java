@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import com.example.chatproject5.R;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -80,18 +84,17 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         workerNum.setVisibility(View.GONE);
         workerContent.setText(listViewItem.getWorkerContent());
 
-        //코디네이터 선택
+        //코디네이터 등록
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
 
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-
-//                        addCoordinator(urlStr);
 
                         StringBuilder output = new StringBuilder();
 
@@ -108,8 +111,6 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                                 String params = "id=" + myId
                                         + "&workerNum=" + workerNum.getText().toString()
                                         + "&workerId=" + workerId.getText().toString();
-
-//                                String params = "id=123&workerId=568";
 
                                 outputStream.write(params.getBytes());
 
@@ -143,51 +144,60 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         return convertView;
     }   //end getView
 
-    /*
-    //코디네이터 등록
-    public void addCoordinator(String urlStr) {
+//
+//    //코디네이터 등록
+//    public void checkList(String urlStr) {
+//
+//        StringBuilder output = new StringBuilder();
+//
+//        try {
+//            URL url = new URL(urlStr);
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//
+//            if(conn != null) {
+//                conn.setConnectTimeout(10000);
+//                conn.setRequestMethod("POST");
+//                conn.setDoInput(true);
+//
+//                OutputStream outputStream = conn.getOutputStream();
+//                String params = "id=" + myId;
+//
+//                outputStream.write(params.getBytes());
+//
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//                String line = null;
+//
+//                while(true) {
+//                    line = reader.readLine();
+//
+//                    if(line == null) {
+//                        break;
+//                    }
+//
+//                    output.append(line + "\n");
+//
+//                }
+//                reader.close();
+//                conn.disconnect();
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        setCheckList(output.toString());
+//    }
 
-        StringBuilder output = new StringBuilder();
+    public void setCheckList(String str) {
+        Document doc = Jsoup.parse(str);
+        Elements result = doc.select("p.result");
 
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        for(int i = 0, size = result.size(); i < size; i++) {
+            if(result.get(0).text().equals("이미선택한상담사")) {
 
-            if(conn != null) {
-                conn.setConnectTimeout(10000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-
-                OutputStream outputStream = conn.getOutputStream();
-                String params = "id=" + myId + "&workerId=" + workerId.getText().toString();
-                System.out.println("id = > " + myId + "workerId = > " + workerId.getText().toString());
-                outputStream.write(params.getBytes());
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
-
-                while(true) {
-                    line = reader.readLine();
-
-                    if(line == null) {
-                        break;
-                    }
-
-                    output.append(line + "\n");
-
-                }
-                reader.close();
-                conn.disconnect();
+                println2();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        println(output.toString());
+       }
     }
-
-     */
 
     //출력 메소드
     public  void println(String str) {
@@ -196,6 +206,17 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
             public void run() {
 
                 Toast.makeText(context, "등록성공", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //출력 메소드
+    public  void println2() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                Toast.makeText(context, "이미 등록되어있는 상담사 입니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

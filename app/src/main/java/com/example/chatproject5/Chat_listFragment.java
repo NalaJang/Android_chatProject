@@ -74,6 +74,8 @@ public class Chat_listFragment extends Fragment {
         userId.setText(userId_db);
         content.setText(userContent_db);
 
+
+
         //자신의 프로필 클릭
         RelativeLayout relativeLayout = rootView.findViewById(R.id.userProfile_chat_list);
         relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +165,7 @@ public class Chat_listFragment extends Fragment {
 
         }
         setWorkerList(output.toString());
+        System.out.println("chatListAdapter : " + output.toString());
 
     }   //end coordinatorList
 
@@ -182,7 +185,6 @@ public class Chat_listFragment extends Fragment {
             chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
             chatListDto.setWorkerId(workerId_db.get(j).text());
             chatListDto.setContent(workerContent_db.get(j).text());
-
 
             adapter.addItem(chatListDto);
         }

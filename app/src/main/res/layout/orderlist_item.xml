@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,6 +17,8 @@
             android:id="@+id/indate_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:textSize="20dp"
             android:text="2021.01.12"
             />
@@ -25,7 +27,9 @@
             android:id="@+id/status_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="20dp"
+            android:textColor="@color/teal_700"
             android:text="배송 중"
             />
 
@@ -39,7 +43,7 @@
                 android:id="@+id/image_order"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="25dp"
                 android:src="@drawable/sweatshirt"
                 />
 
@@ -86,6 +90,7 @@
                 android:id="@+id/price_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_below="@+id/quantity_order"
                 android:layout_toRightOf="@+id/image_order"
                 android:textSize="20dp"

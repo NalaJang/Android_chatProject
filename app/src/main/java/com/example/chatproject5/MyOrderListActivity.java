@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,17 +23,23 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import adapter.OrderAdapter;
 import dto.OrderDto;
 
+/******************************************
+                   주문배송
+ ******************************************/
 public class MyOrderListActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+
     private OrderAdapter adapter;
+    private RecyclerView recyclerView;
 
     private String userId_db;
     private Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +53,17 @@ public class MyOrderListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
 
+        adapter = new OrderAdapter(getApplicationContext());
+
         recyclerView = findViewById(R.id.recyclerView_order);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new OrderAdapter();
-//        adapter.addItem(new OrderDto(R.drawable.sweatshirt, "스웨이트셔츠", "핑크 스몰", 39000, 1, "1", "2021-01-17"));
-//        recyclerView.setAdapter(adapter);
-
+        // E/RecyclerView: No adapter attached; skipping layout 에러
+        //  ↓ println() 에도 넣었지만 여기에도 선언
+        recyclerView.setAdapter(adapter);
 
         //DB 에서 주문 목록가져오기
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/orderList.do";
@@ -109,10 +119,12 @@ public class MyOrderListActivity extends AppCompatActivity {
         }
 
         setOrderList(output.toString());
+        System.out.println("orderList > " + output.toString());
     }
 
     public void setOrderList(String str) {
         Document doc = Jsoup.parse(str);
+        Elements order = doc.select("p.result");
         Elements pname = doc.select("ol > li.pname");
         Elements image = doc.select("ol > li.image");
         Elements quantity = doc.select("ol > li.quantity");
@@ -120,6 +132,7 @@ public class MyOrderListActivity extends AppCompatActivity {
         Elements price = doc.select("ol > li.price");
         Elements result = doc.select("ol > li.result");
         Elements indate = doc.select("ol > li.indate");
+
 
         for(int i = 0; i < pname.size(); i++) {
 
@@ -134,9 +147,8 @@ public class MyOrderListActivity extends AppCompatActivity {
 
             adapter.addItem(orderDto);
 
+            println();
         }
-
-        println();
     }
 
 
@@ -145,7 +157,8 @@ public class MyOrderListActivity extends AppCompatActivity {
             @Override
             public void run() {
                 recyclerView.setAdapter(adapter);
-//                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+
             }
         });
     }

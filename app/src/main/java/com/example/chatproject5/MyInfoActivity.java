@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -92,14 +93,20 @@ public class MyInfoActivity extends AppCompatActivity {
 
                 if(!password.isEmpty() || !email.isEmpty()) {
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
 
-                            update(urlStr);
+                    InfoUpdate infoUpdate = new InfoUpdate();
 
-                        }
-                    }).start();
+                    infoUpdate.execute();
+
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            update(urlStr);
+//
+//
+//                        }
+//                    }).start();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "모두 입력해 주세요.", Toast.LENGTH_SHORT).show();
@@ -161,6 +168,28 @@ public class MyInfoActivity extends AppCompatActivity {
         });
     }   //end onCreate
 
+//    public void infoUpdate(View view) {
+//        new InfoUpdate().execute();
+//    }
+
+    class InfoUpdate extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected Void doInBackground(Void ... voids) {
+
+            update(urlStr);
+
+            try {
+                Thread.sleep(100);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+    }
+
 
 
     //DB 회원 정보 업데이트
@@ -213,8 +242,6 @@ public class MyInfoActivity extends AppCompatActivity {
 
         setUpdate(output.toString());
         println();
-
-        Log.d("======", output.toString());
     }
 
     public void setUpdate(String outputStr) {

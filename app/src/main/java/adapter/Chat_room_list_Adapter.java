@@ -34,10 +34,6 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
     private Context context;
     private OnListItemClickListener listener;
 
-    public Chat_room_list_Adapter(Context context){
-
-        this.context = context;
-    }
 
     public Chat_room_list_Adapter(ArrayList<ChattingRoomListDto> lists, Context context, Activity activity) {
 
@@ -162,9 +158,6 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
         return lists.size();
     }
 
-//    public int getItemPosition(Object object) {
-//        return POSITION_NONE;
-//    }
 
     public void addChat(ChattingRoomListDto roomList) {
         lists.add(roomList);

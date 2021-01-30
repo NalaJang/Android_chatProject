@@ -9,41 +9,48 @@
     tools:context=".MyPointActivity">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:textSize="20dp"
-        android:text="보유 포인트"
-        />
 
-    <TextView
-        android:id="@+id/total_point"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:textSize="20dp"
-        android:text="2,180원"
-        />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:textSize="20dp"
-        android:text="적립 내역"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="20dp"
+            android:text="보유 포인트"
+            />
+
+        <TextView
+            android:id="@+id/total_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="20dp"
+            android:text="0 원"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="20dp"
+            android:text="적립 내역"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_point"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

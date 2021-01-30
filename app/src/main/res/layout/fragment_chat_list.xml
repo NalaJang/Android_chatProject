@@ -53,9 +53,9 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="10dp"/>
 
-    <Button
+    <!--Button
         android:id="@+id/button_chat_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="최대 3명의 코디네이터를 등록 할 수 있습니다."
-        />
+        / -->
 
 
     <androidx.recyclerview.widget.RecyclerView

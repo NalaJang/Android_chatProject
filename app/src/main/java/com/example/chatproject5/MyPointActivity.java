@@ -7,13 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
@@ -60,9 +58,7 @@ public class MyPointActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new PointAdapter();
-//        adapter.addItem(new PointDto("111", "스웨트셔츠",100,"2021-01-10"));
-//        adapter.addItem(new PointDto("111", "스커트",100,"2021-01-10"));
-//        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/pointList.do";
 

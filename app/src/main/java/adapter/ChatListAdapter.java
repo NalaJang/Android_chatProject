@@ -169,6 +169,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
                     roomListDto = roomListHelper.findRoom(items.get(position).getWorkerId());
 
+                    /*
                     //선택한 상담사와의 채팅방이 없을 경우
                     if( roomListDto == null ) {
 
@@ -187,6 +188,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                         System.out.println("이미 존재하는 채팅방");
 
                     }
+
+                     */
 
                     Message message = new Message();
                     message.setSignal(Signals.CHECK_IN.getSignal() + "");

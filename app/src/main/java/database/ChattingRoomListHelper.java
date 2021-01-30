@@ -143,6 +143,7 @@ public class ChattingRoomListHelper extends SQLiteOpenHelper {
         return roomList;
     }
 
+
     //마지막 메세지, 시간 업데이트
     public boolean update(String lastContent, String time, String roomName) {
 

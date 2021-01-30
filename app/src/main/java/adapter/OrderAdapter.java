@@ -1,5 +1,6 @@
 package adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,23 @@ import dto.OrderDto;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
-    ArrayList<OrderDto> items = new ArrayList<>();
+    private Context context;
+    private ArrayList<OrderDto> items = new ArrayList<>();
+
+
+
+    public OrderAdapter(Context context) {
+
+        this.context = context;
+    }
+
+
 
     @NonNull
     @Override
     public OrderAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.orderlist_item, parent, false);
 
         return new ViewHolder(itemView);

@@ -24,7 +24,9 @@ import java.util.Date;
 import adapter.MessageAdapter3;
 import chat.MsgUtils;
 import chat.Signals;
+import database.ChattingRoomListHelper;
 import database.MessageHelper;
+import dto.ChattingRoomListDto;
 import dto.Message;
 import dto.MessageData;
 
@@ -53,6 +55,8 @@ public class Chat_roomActivity extends AppCompatActivity {
     private MessageData messageData;
     private MessageHelper msgHelper;
     private Message message;
+
+    private ChattingRoomListHelper roomListHelper;
 
     private BroadcastReceiver receiver;
 
@@ -163,6 +167,31 @@ public class Chat_roomActivity extends AppCompatActivity {
                     Log.e(TAG, "sendButton 클릭");
 
 
+                    roomListHelper = new ChattingRoomListHelper(getApplicationContext());
+                    ChattingRoomListDto roomListDto;
+
+                    roomListDto = roomListHelper.findRoom(roomName);
+                    //선택한 상담사와의 채팅방이 없을 경우
+                    if( roomListDto == null ) {
+
+                        System.out.println("채팅방 없음");
+
+                        roomListDto = new ChattingRoomListDto().setRoomName(roomName)
+                                                                .setMyId(userId_db)
+                                                                .setOtherId(roomName)
+                                                                .setTime(timeNow.format(today));
+
+                        roomListHelper.insert(roomListDto);
+
+
+                        //채팅방이 이미 존재할 경우
+                    } else {
+
+                        System.out.println("이미 존재하는 채팅방");
+
+                    }
+
+
                     messageData = new MessageData();
 
                     //값 넣어주기*****
@@ -191,6 +220,12 @@ public class Chat_roomActivity extends AppCompatActivity {
 
                     messageItems3.add(msgData);
                     MsgUtils.sendMsg(msgData);  //***** 서버에 신호 보내기
+
+
+                    /**/
+                    roomListHelper.update(msg, timeNow.format(today), roomName);    //업데이트
+                    /**/
+
 
 
                     et.setText("");             //메세지 보낸 후 비우기

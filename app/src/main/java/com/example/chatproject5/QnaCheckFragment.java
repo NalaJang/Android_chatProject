@@ -40,6 +40,7 @@ public class QnaCheckFragment extends Fragment {
     private ArrayAdapter adapter;
     private Handler handler = new Handler();
     private ArrayList<QnaDto> qnaList;
+    private QnaDto qnaDto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +56,7 @@ public class QnaCheckFragment extends Fragment {
         textView = rootView.findViewById(R.id.textView_qna);
 
         qnaList = new ArrayList<>();
+        qnaDto = new QnaDto();
         adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, qnaList);
 
 
@@ -62,7 +64,12 @@ public class QnaCheckFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(getContext(), "이벤트", Toast.LENGTH_SHORT).show();
+                String clickedItem = (String)parent.getAdapter().getItem(position);
+
+                Toast.makeText(getContext(), "이벤트" + clickedItem + position, Toast.LENGTH_SHORT).show();
+
+
+
             }
         });
 

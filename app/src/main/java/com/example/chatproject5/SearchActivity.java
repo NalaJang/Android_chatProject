@@ -63,23 +63,9 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
             }
         }).start();
+
+
 /*
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1) ;
-        listview = findViewById(R.id.listView_search) ;
-        listview.setAdapter(adapter);
-
-        //정보 받기
-        intent = getIntent();
-        String userId_db = intent.getStringExtra("userId_db");
-        String workerContent_db = intent.getStringExtra("workerContent_db");
-        ArrayList<String> workerId_db = intent.getStringArrayListExtra("strings");
-
-        Log.d("content", workerContent_db);
-
-//        SearchListAdapter adapter = new SearchListAdapter(workerId_db);
-        listview = findViewById(R.id.listView_search) ;
-        listview.setAdapter(adapter);
-
         //받은 코디네이터 정보 목록 파싱
         for(String s : workerId_db) {
             String[] str = s.split("/,");   //딜림 이렇게 넣어주기
@@ -117,24 +103,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
-/*
-        //코디네이터 선택
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-/*
-                for(String s : workerId_db) {
-                    String[] str = s.split("/,");   //딜림 이렇게 넣어주기
 
-                    for(String item : str) {
-                        adapter.add(item);
-                        Toast.makeText(getApplicationContext(), "클릭된 아이디 : " + item + position, Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-
- */
         /*
                 //선택한 아이디
                 String clickedItem = (String)parent.getAdapter().getItem(position);
@@ -147,8 +117,6 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
                 intent.putExtra("workerId_db", clickedItem);
                 intent.putExtra("workerContent_db", workerContent_db);
                 intent.putExtra("position", listview.getCheckedItemPosition());
-
-
 
                 startActivity(intent);
 

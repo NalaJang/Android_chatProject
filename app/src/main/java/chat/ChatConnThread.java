@@ -213,8 +213,6 @@ public class ChatConnThread extends Thread{
 
                             dbHelper.insert(messageData);
 
-                            Log.d(TAG, "===============TO ID ===> " + message.getToId());//ddd
-                            Log.d(TAG, "===============FROM ID ===> " + message.getFromId());//12
 
 //                            roomListDto = chattingRoomListHelper.findRoom(message.getFromId());
 
@@ -228,7 +226,7 @@ public class ChatConnThread extends Thread{
                                                                         .setLastContent(message.getMessage())
                                                                         .setProfileImage("")
                                                                         .setTime(timeNow.format(today));
-                                System.out.println("coonThread ============> " + roomListDto.toString());
+
                                 chattingRoomListHelper.insert(roomListDto);
 
 
