@@ -32,8 +32,6 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
     private ArrayList<SearchListDto> filteredItemList = listViewItemList ;
 
     private Context context;
-//    private TextView workerId;
-
     private Handler handler = new Handler();
     private Filter listFilter;
     private String myId;
@@ -70,21 +68,22 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         ImageView workerProfile = convertView.findViewById(R.id.image_searchList);
         TextView workerId = convertView.findViewById(R.id.id_searchList);
         TextView workerContent = convertView.findViewById(R.id.content_searchList);
+        TextView workerNum = convertView.findViewById(R.id.num_searchList);
         Button addButton = convertView.findViewById(R.id.addButton_searchList);
 
-        // Data Set(filteredItemList)에서 position에 위치한 데이터 참조 획득
+        // Data Set(filteredItemList)에서 position 에 위치한 데이터 참조 획득
         SearchListDto listViewItem = filteredItemList.get(position);
 
 
         workerId.setText(listViewItem.getWorkerId());
+        workerNum.setText(listViewItem.getWorkerNum());
+        workerNum.setVisibility(View.GONE);
         workerContent.setText(listViewItem.getWorkerContent());
 
         //코디네이터 선택
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(context, workerId.getText().toString() + "선택", Toast.LENGTH_SHORT).show();
 
                 final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
 
@@ -105,12 +104,12 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                                 conn.setRequestMethod("POST");
                                 conn.setDoInput(true);
 
-//                                conn.setDoOutput();
-
                                 OutputStream outputStream = conn.getOutputStream();
-                                String params = "id=" + myId + "&workerId=" + workerId.getText().toString();
+                                String params = "id=" + myId
+                                        + "&workerNum=" + workerNum.getText().toString()
+                                        + "&workerId=" + workerId.getText().toString();
+
 //                                String params = "id=123&workerId=568";
-                                System.out.println("id = > " + myId + " & workerId = > " + workerId.getText().toString());
 
                                 outputStream.write(params.getBytes());
 

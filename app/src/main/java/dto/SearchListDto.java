@@ -6,6 +6,15 @@ public class SearchListDto {
     private String workerId;
     private String workerContent;
 
+    @Override
+    public String toString() {
+        return "SearchListDto{" +
+                "workerNum='" + workerNum + '\'' +
+                ", workerId='" + workerId + '\'' +
+                ", workerContent='" + workerContent + '\'' +
+                '}';
+    }
+
     public SearchListDto() {}
 
     public SearchListDto(String workerNum, String workerId, String workerContent) {

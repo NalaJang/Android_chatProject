@@ -14,7 +14,6 @@ import com.example.chatproject5.R;
 import java.util.ArrayList;
 
 import dto.OrderDto;
-import dto.PointDto;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 

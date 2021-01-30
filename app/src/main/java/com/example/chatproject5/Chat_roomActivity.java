@@ -3,13 +3,10 @@ package com.example.chatproject5;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,33 +14,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
-import adapter.MessageAdapter2;
 import adapter.MessageAdapter3;
-import chat.ChatConnThread;
 import chat.MsgUtils;
 import chat.Signals;
-import chat.ThreadUtils;
-import database.ChattingRoomListHelper;
 import database.MessageHelper;
-import dto.ChattingRoomListDto;
 import dto.Message;
 import dto.MessageData;
-import dto.RoomList;
 
 public class Chat_roomActivity extends AppCompatActivity {
     private static final String TAG = Chat_roomActivity.class.getSimpleName();
@@ -53,7 +36,6 @@ public class Chat_roomActivity extends AppCompatActivity {
     private String roomName;
 
 
-    //추가
     private EditText et;
     private ListView listView;
     private ArrayList<MessageData> messageItems = new ArrayList<>();
@@ -62,11 +44,11 @@ public class Chat_roomActivity extends AppCompatActivity {
     private Date today = new Date();
     private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
-    //추가(21.01.23)
+    //추가
     private MessageAdapter3 adapter3;
     private ArrayList<Message> messageItems3 =new ArrayList<>();
 
-    //추가(21.01.25)
+
     private ArrayList<MessageData> newMessageList = new ArrayList<>();
     private MessageData messageData;
     private MessageHelper msgHelper;
@@ -85,33 +67,25 @@ public class Chat_roomActivity extends AppCompatActivity {
         roomName = intent.getStringExtra("roomName");
 
 
-        setTitle(roomName);  // 방 이름
+        setTitle(roomName);
 
 
-
-        //추가
         et = findViewById(R.id.et);
         listView = findViewById(R.id.listView_chat);
-//        adapter = new MessageAdapter2(messageItems, getLayoutInflater(), userId_db);
-//        listView.setAdapter(adapter);
 
 
-        //추가(21.01.25)
         msgHelper = new MessageHelper(this);
         message = new Message();
-
-
 
         //DB 에서 채팅 목록 가져오기
         messageItems = msgHelper.messageList(roomName);
 
 
-        //추가(21.01.23)
         adapter3 = new MessageAdapter3(messageItems, getLayoutInflater(), userId_db);
         listView.setAdapter(adapter3);
 
-        //추가(21.01.25)
-        MsgUtils.setContext(this);
+        //현재 위치 서버에 알리기
+//        MsgUtils.setContext(this);
         MsgUtils.setCurrentRoom(roomName);
 
 
@@ -129,13 +103,11 @@ public class Chat_roomActivity extends AppCompatActivity {
 
          */
 
-        //추가(21.01.27)
+        //추가
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
-
 
 
         /**/
@@ -174,7 +146,7 @@ public class Chat_roomActivity extends AppCompatActivity {
 
 
 
-        //전송 버튼
+        //메세지 전송 버튼
         Button send_button = findViewById(R.id.send_button_chat);
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +177,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                     messageItems.add(messageData); //추가
 
 
-                    //추가(21.01.23)
+
                     Message msgData = new Message();
                     msgData.setSignal("100");
                     msgData.setToId(roomName);
@@ -275,11 +247,11 @@ public class Chat_roomActivity extends AppCompatActivity {
 
         message.setSignal(Signals.CHECK_OUT.getSignal() + "");
         MsgUtils.sendMsg(message);
-        MsgUtils.setCurrentRoom("");    //***** 현재 채팅방 다시 제로
+        MsgUtils.setCurrentRoom("");    //***** 현재 채팅방 신호 다시 제로
     }
 
 
-    //broadcast 해지
+    //broadcast 해제
     public void onDestroy() {
         if(receiver != null) {
             unregisterReceiver(receiver);

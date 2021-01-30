@@ -6,5 +6,5 @@ import adapter.ChatListAdapter;
 
 
 public interface OnItemClickListener {
-    void onItemClick(ChatListAdapter.MyViewHolder holder, View view, int position);
+    void onItemClick(String value);
 }

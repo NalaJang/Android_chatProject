@@ -39,6 +39,17 @@
             android:text="TextView"
             />
 
+        <TextView
+            android:id="@+id/num_searchList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/addButton_searchList"
+            android:layout_below="@+id/id_searchList"
+            android:text="TextView"
+            />
+
         <Button
             android:id="@+id/addButton_searchList"
             android:layout_width="wrap_content"

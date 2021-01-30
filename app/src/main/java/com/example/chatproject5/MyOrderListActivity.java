@@ -85,7 +85,7 @@ public class MyOrderListActivity extends AppCompatActivity {
 
                 //값 넣어주기
                 String params = "id=" + userId_db;
-                Log.d("id", userId_db);
+
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));

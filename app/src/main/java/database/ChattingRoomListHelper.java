@@ -9,8 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 import dto.ChattingRoomListDto;
-import dto.MessageData;
-import dto.RoomList;
 
 public class ChattingRoomListHelper extends SQLiteOpenHelper {
 

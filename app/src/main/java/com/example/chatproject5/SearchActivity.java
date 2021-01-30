@@ -224,6 +224,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         for(int i = 0, size = workerNum_db.size(); i < size; i++) {
 
             SearchListDto searchListDto = new SearchListDto();
+            searchListDto.setWorkerNum(workerNum_db.get(i).text());
             searchListDto.setWorkerId(workerId_db.get(i).text());
             searchListDto.setWorkerContent(workerContent_db.get(i).text());
 

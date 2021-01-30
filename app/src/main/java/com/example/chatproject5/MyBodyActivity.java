@@ -22,7 +22,7 @@ import dto.BodyDto;
 
 public class MyBodyActivity extends AppCompatActivity {
 
-    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/mybodyInsert.do";
+    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/myBodyUpdate.do";
 
     private BodyHelper db;
 
@@ -58,7 +58,6 @@ public class MyBodyActivity extends AppCompatActivity {
         weight_db = intent.getStringExtra("weight_db");
         foot_db = intent.getStringExtra("foot_db");
 
-        System.out.println("MYBODY, SHOULDER => " + shoulder_db);
 
         shoulder_edit = findViewById(R.id.shoulder_edit);
         arm_edit = findViewById(R.id.arm_edit);
@@ -73,7 +72,7 @@ public class MyBodyActivity extends AppCompatActivity {
         weight_edit = findViewById(R.id.weight_body);
         foot_edit = findViewById(R.id.foot_body);
 
-
+        //값 넣어주기
         shoulder_edit.setText(shoulder_db);
         arm_edit.setText(arm_db);
         bust_edit.setText(bust_db);
@@ -113,7 +112,17 @@ public class MyBodyActivity extends AppCompatActivity {
         StringBuilder output = new StringBuilder();
 
         shoulder_db = shoulder_edit.getText().toString();
-        String weight = weight_edit.getText().toString();
+        arm_db = arm_edit.getText().toString();
+        bust_db = bust_edit.getText().toString();
+        waist_db = waist_edit.getText().toString();
+        totalUpperBody_db = totalUpperBody_edit.getText().toString();
+        hip_db = hip_edit.getText().toString();
+        thigh_db = thigh_edit.getText().toString();
+        calf_db = calf_edit.getText().toString();
+        totalLowerBody_db =  totalLowerBody_edit.getText().toString();
+        height_db = height_edit.getText().toString();
+        weight_db = weight_edit.getText().toString();
+        foot_db = foot_edit.getText().toString();
 
 
         try {
@@ -127,8 +136,19 @@ public class MyBodyActivity extends AppCompatActivity {
 
                 OutputStream outputStream = conn.getOutputStream();
 
-                //값 넣어주기
-                String params = "id=" + userId_db + "&shoulder=" + shoulder_db + "&weight=" + weight;
+                String params = "id=" + userId_db
+                                + "&shoulder=" + shoulder_db
+                                + "&arm=" + arm_db
+                                + "&bust=" + bust_db
+                                + "&waist=" + waist_db
+                                + "&totalUpperBody=" + totalUpperBody_db
+                                + "&hip=" + hip_db
+                                + "&thigh=" + thigh_db
+                                + "&calf=" + calf_db
+                                + "&totalLowerBody=" + totalLowerBody_db
+                                + "&height=" + height_db
+                                + "&weight=" + weight_db
+                                + "&foot=" + foot_db;
 
                 outputStream.write(params.getBytes());
 

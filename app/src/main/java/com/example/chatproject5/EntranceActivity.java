@@ -2,6 +2,7 @@ package com.example.chatproject5;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,16 +31,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import adapter.Chat_room_list_Adapter;
 import chat.ChatConnThread;
 import chat.MsgUtils;
-import chat.Signals;
 import chat.ThreadUtils;
-import database.ChattingRoomListHelper;
-import dto.ChattingRoomListDto;
-import dto.Message;
-import dto.RoomList;
 
-public class EntranceActivity extends AppCompatActivity{
+import static androidx.viewpager.widget.PagerAdapter.POSITION_NONE;
+
+public class EntranceActivity extends AppCompatActivity {
+
+    //implements ViewPager.OnPageChangeListener
 
     private static final String TAG = EntranceActivity.class.getSimpleName();
 
@@ -54,8 +55,6 @@ public class EntranceActivity extends AppCompatActivity{
 
     private BroadcastReceiver receiver;
 
-    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
-    private Date today = new Date();
 
     //상단 메뉴 추가
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,7 +68,6 @@ public class EntranceActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrance);
-
 
         chat_listFragment = new Chat_listFragment();
         chat_room_listActivity = new Chat_room_listFragment();
@@ -132,7 +130,7 @@ public class EntranceActivity extends AppCompatActivity{
         MsgUtils.setConnThread(chatConnThread);
 
 
-        //추가(21.01.25)
+        //추가
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -143,6 +141,10 @@ public class EntranceActivity extends AppCompatActivity{
         getSupportFragmentManager().beginTransaction().replace(R.id.container, chat_room_listActivity).commit();
         //정보 보내기
         chat_room_listActivity.setArguments(bundle);
+
+//        Chat_room_listFragment.adapter.notifyDataSetChanged();//-> null
+
+
 
 
 
@@ -278,6 +280,7 @@ public class EntranceActivity extends AppCompatActivity{
         }
     }
 
+    //broadcast 해제
     public void onDestroy() {
         if(receiver != null) {
             unregisterReceiver(receiver);
@@ -286,4 +289,27 @@ public class EntranceActivity extends AppCompatActivity{
 
         super.onDestroy();
     }
+/*
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        switch (position) {
+            case 1 :
+                Chat_room_listFragment.adapter.notifyDataSetChanged();
+                break;
+        }
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+ */
 }

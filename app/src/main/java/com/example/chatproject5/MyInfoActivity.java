@@ -2,6 +2,8 @@ package com.example.chatproject5;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -24,15 +27,21 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import adapter.AddressListAdapter;
+import dto.AddressDto;
+
 public class MyInfoActivity extends AppCompatActivity {
 
-    Intent intent;
-    Handler handler = new Handler();
+    private Intent intent;
+    private Handler handler = new Handler();
 
-    String userId_db;
-    EditText userContent, userName, userId, userPw, userEmail, userPhone;
-    MenuFragment menuFragment;
-    AddAddressFragment addressFragment;
+    private String userId_db;
+    private EditText userContent, userName, userId, userPw, userEmail, userPhone;
+
+    private RecyclerView recyclerView;
+    private AddressListAdapter adapter;
+
+//    AddAddressFragment addressFragment;
 
     final String urlStr = "http://192.168.0.17:8080/webapp/webServer/userInfoUpdate.do";
     static final int REQUEST_CODE_UPDATE = 1000;
@@ -61,7 +70,6 @@ public class MyInfoActivity extends AppCompatActivity {
         userPw = findViewById(R.id.userPw_info);
         userEmail = findViewById(R.id.userEmail_info);
         userPhone = findViewById(R.id.userPhone_info);
-        menuFragment = new MenuFragment();
 
         userContent.setText(userContent_db);
         userName.setText(userName_db);
@@ -90,11 +98,6 @@ public class MyInfoActivity extends AppCompatActivity {
 
                             update(urlStr);
 
-//                            menuFragment.setArguments(bundle);
-//                            setResult(RESULT_OK);
-//                            intent = new Intent(getApplicationContext(), menuFragment)
-//                            startActivityForResult(intent);
-
                         }
                     }).start();
 
@@ -102,9 +105,46 @@ public class MyInfoActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "모두 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 }
 
+//                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        synchronized (this) {
+//
+//                            try {
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                });
+
             }
         }); //end editButton onClick
 
+
+        /***************** 배송지 목록 *****************/
+        recyclerView = findViewById(R.id.recyclerView_address);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new AddressListAdapter();
+
+        //DB 에서 배송지 목록가져오기
+        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/addressList.do";
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                myAddressList(urlStr);
+
+            }
+        }).start();
 
 
 
@@ -119,7 +159,9 @@ public class MyInfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+    }   //end onCreate
+
+
 
     //DB 회원 정보 업데이트
     public void update(String urlStr) {
@@ -214,25 +256,94 @@ public class MyInfoActivity extends AppCompatActivity {
         });
     }
 
-/*
-    //수정 실패시 실행 메소드
-    public  void error() {
+
+    //DB 배송지 목록
+    public void myAddressList(String urlStr) {
+        StringBuilder output = new StringBuilder();
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+
+                //값 넣어주기
+                String params = "id=" + userId_db;
+
+                outputStream.write(params.getBytes());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line = null;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setAddressList(output.toString());
+    }
+
+    public void setAddressList(String str) {
+        Document doc = Jsoup.parse(str);
+        Elements nickName_db = doc.select("ol > li.nickName");
+        Elements userName_db = doc.select("ol > li.userName");
+        Elements id_db = doc.select("ol > li.id");
+        Elements phone_db = doc.select("ol > li.phone");
+        Elements zip_num_db = doc.select("ol > li.zip_num");
+        Elements address1_db = doc.select("ol > li.address1");
+        Elements address2_db = doc.select("ol > li.address2");
+        Elements result_db = doc.select("ol > li.result");
+
+        for(int i = 0, size = id_db.size(); i < size; i++) {
+
+            AddressDto addressDto = new AddressDto();
+            addressDto.setNickName(nickName_db.get(i).text());
+            addressDto.setUserName(userName_db.get(i).text());
+            addressDto.setId(id_db.get(i).text());
+            addressDto.setPhone(phone_db.get(i).text());
+            addressDto.setZip_num(zip_num_db.get(i).text());
+            addressDto.setAddress1(address1_db.get(i).text());
+            addressDto.setAddress2(address2_db.get(i).text());
+            addressDto.setResult(result_db.get(i).text());
+
+            adapter.addItem(addressDto);
+        }
+
+        println2();
+//        recyclerView.setAdapter(adapter);
+    }
+
+    public void println2() {
         handler.post(new Runnable() {
             @Override
             public void run() {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(MyInfoActivity.this);
+                recyclerView.setAdapter(adapter);
+//                adapter.notifyDataSetChanged();
 
-                builder.setTitle(R.string.info);
-                builder.setMessage("다시 시도해 주세요.");
-                builder.setPositiveButton(R.string.close, null);
-                builder.show();
             }
         });
     }
 
- */
 
+    //뒤로 가기
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

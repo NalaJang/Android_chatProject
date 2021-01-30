@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +28,9 @@ import dto.Message;
 
 public class Chat_room_listFragment extends Fragment {
 
-    private static final String TAG = Chat_room_listFragment.class.getSimpleName();
-
     private RecyclerView recyclerView;
     private Message message;
-    private Chat_room_list_Adapter adapter;
+    static Chat_room_list_Adapter adapter;
     private LinearLayoutManager layoutManager;
 
     private String userId_db;
@@ -41,11 +38,13 @@ public class Chat_room_listFragment extends Fragment {
     private BroadcastReceiver receiver;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_chat_room_list, container, false);
+
 
         //타이틀 변경
         ActionBar actionBar = ((EntranceActivity)getActivity()).getSupportActionBar();
@@ -99,10 +98,11 @@ public class Chat_room_listFragment extends Fragment {
 
                     roomListHelper.update(message, time, fromId);
 
+
+                //상대방과의 채팅방이 없으면 생성
                 } else {
 
                     adapter.addChat(roomListDto);
-//                    adapter.notifyDataSetChanged(); //새로고침
                 }
 
                 adapter.notifyDataSetChanged(); //새로고침

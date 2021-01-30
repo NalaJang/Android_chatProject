@@ -88,6 +88,7 @@ public class MenuFragment extends Fragment {
             }
         });
 
+
         /***************** 주문 배송 *****************/
         myOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,7 @@ public class MenuFragment extends Fragment {
 
                 intent = new Intent(getContext(), MyBodyActivity.class);
                 intent.putExtra("userId_db", userId_db);
-                startActivity(intent);
+//                startActivity(intent);
 
                 final String urlStr = "http://192.168.0.17:8080/webapp/webServer/mybodyList.do";
 
@@ -120,7 +121,6 @@ public class MenuFragment extends Fragment {
                         myBodyList(urlStr);
                     }
                 }).start();
-
 
             }
         });

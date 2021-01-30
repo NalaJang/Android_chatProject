@@ -3,7 +3,6 @@ package chat;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
@@ -220,6 +219,7 @@ public class ChatConnThread extends Thread{
 //                            roomListDto = chattingRoomListHelper.findRoom(message.getFromId());
 
                             //채팅룸 생성
+                            //메세지를 보낸 사람과의 채팅룸이 없다면,
                             if(chattingRoomListHelper.findRoom(message.getFromId()) == null ) {
 
                                 roomListDto = new ChattingRoomListDto().setRoomName(message.getFromId())
@@ -233,7 +233,7 @@ public class ChatConnThread extends Thread{
 
 
                             } else {
-                                Log.d(TAG, "===============FROM ID ===> " + message.getFromId());
+
                                 Toast.makeText(context, "존재하는 채팅방" , Toast.LENGTH_SHORT).show();
                             }
                         }
