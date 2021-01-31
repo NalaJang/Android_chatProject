@@ -189,8 +189,15 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         Elements workerId_db = doc.select("ol > li.id");
         Elements workerContent_db = doc.select("ol > li.content");
 
+        System.out.println("=====hashSet : " + EntranceActivity.hashSet.toString());
+
         for(int i = 0, size = workerNum_db.size(); i < size; i++) {
 
+            if(EntranceActivity.hashSet.contains(workerId_db.get(i).text())) {
+
+                System.out.println("===================");
+                continue;   //-> adapter 에 등록하지 않고(↓실행않고) for 문을 넘어감
+            }
             SearchListDto searchListDto = new SearchListDto();
             searchListDto.setWorkerNum(workerNum_db.get(i).text());
             searchListDto.setWorkerId(workerId_db.get(i).text());

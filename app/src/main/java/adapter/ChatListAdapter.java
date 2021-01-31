@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatproject5.Chat_roomActivity;
+import com.example.chatproject5.EntranceActivity;
 import com.example.chatproject5.R;
 
 import java.io.BufferedReader;
@@ -140,6 +141,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, items.size());
 
+                            //hashSet 에서도 삭제해야함
+                            EntranceActivity.hashSet.remove(items.get(position).getWorkerId());
 
                             Toast.makeText(v.getContext(), "삭제되었습니다",
                                     Toast.LENGTH_SHORT).show();

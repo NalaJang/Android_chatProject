@@ -2,20 +2,32 @@ package dto;
 
 public class QnaDto {
 
+    private String num;
     private String email;
     private String subject;
     private String title;
     private String content;
     private String indate;
+    private String result;
 
     public QnaDto() {}
 
-    public QnaDto(String email, String subject, String title, String content, String indate) {
+    public QnaDto(String num, String email, String subject, String title, String content, String indate, String result) {
         this.email = email;
         this.subject = subject;
         this.title = title;
         this.content = content;
         this.indate = indate;
+        this.result = result;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public QnaDto setNum(String num) {
+        this.num = num;
+        return this;
     }
 
     public String getEmail() {
@@ -60,6 +72,15 @@ public class QnaDto {
 
     public QnaDto setIndate(String indate) {
         this.indate = indate;
+        return this;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public QnaDto setResult(String result) {
+        this.result = result;
         return this;
     }
 }

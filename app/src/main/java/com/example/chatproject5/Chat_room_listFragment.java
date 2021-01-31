@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,14 +31,21 @@ public class Chat_room_listFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Message message;
-    static Chat_room_list_Adapter adapter;
+    public static Chat_room_list_Adapter adapter;
     private LinearLayoutManager layoutManager;
 
     private String userId_db;
 
+    private Chat_room_listFragment chat_room_listFragment;
+
     private BroadcastReceiver receiver;
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +62,8 @@ public class Chat_room_listFragment extends Fragment {
         //정보 받기
         Bundle bundle = this.getArguments();
         userId_db = bundle.getString("userId_db");
+
+        chat_room_listFragment = new Chat_room_listFragment();
 
 
         //DB 에서 채팅목록 가져오기
@@ -103,9 +113,17 @@ public class Chat_room_listFragment extends Fragment {
                 } else {
 
                     adapter.addChat(roomListDto);
+
+
+//                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                    ft.detach(chat_room_listFragment).attach(chat_room_listFragment).commit();
                 }
 
+                refresh();
+
                 adapter.notifyDataSetChanged(); //새로고침
+
+
             }
         };
 
@@ -143,9 +161,13 @@ public class Chat_room_listFragment extends Fragment {
             }
         }); //end adapter onClick
 
-
-
         return rootView;
     }   //end onCreate
+
+    //**********
+    private void refresh() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
 
 }

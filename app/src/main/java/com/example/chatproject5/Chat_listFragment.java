@@ -26,6 +26,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import adapter.ChatListAdapter;
 import database.ChattingRoomListHelper;
@@ -39,8 +41,8 @@ public class Chat_listFragment extends Fragment {
     private String userId_db;
     private String userContent_db;
 
-    private Date today = new Date();
-    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+//    private Date today = new Date();
+//    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
 
     private ArrayList<ChatListDto> chatList = new ArrayList<>();
@@ -100,10 +102,11 @@ public class Chat_listFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
 
+
         //어댑터 설정
+        chatList.clear();   // chatList 값이 계속 불러와져서 clear 항목 추가 *****
         adapter = new ChatListAdapter(chatList, getContext(), userId_db);
         recyclerView.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
 
 
         //DB 에서 선택한 코디네이터 목록 가져오기
@@ -169,6 +172,7 @@ public class Chat_listFragment extends Fragment {
 
     }   //end coordinatorList
 
+//    private HashSet<String> hashSet = new HashSet<>(); //중복 값 제거
 
     public void setWorkerList(String str) {
 
@@ -177,7 +181,7 @@ public class Chat_listFragment extends Fragment {
         Elements workerId_db = doc.select("ol > li.workerId");
         Elements workerContent_db = doc.select("ol > li.workerContent");
 
-
+        EntranceActivity.hashSet.clear();//추가
 
         for(int j = 0; j < workerId_db.size(); j++) {
 
@@ -185,6 +189,8 @@ public class Chat_listFragment extends Fragment {
             chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
             chatListDto.setWorkerId(workerId_db.get(j).text());
             chatListDto.setContent(workerContent_db.get(j).text());
+
+            EntranceActivity.hashSet.add(chatListDto.getWorkerId());//-> 내가 등록한 상담사 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
 
             adapter.addItem(chatListDto);
         }

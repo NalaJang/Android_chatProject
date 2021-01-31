@@ -75,7 +75,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         TextView workerNum = convertView.findViewById(R.id.num_searchList);
         Button addButton = convertView.findViewById(R.id.addButton_searchList);
 
-        // Data Set(filteredItemList)에서 position 에 위치한 데이터 참조 획득
+        // filteredItemList 에서 position 에 위치한 데이터 참조 획득
         SearchListDto listViewItem = filteredItemList.get(position);
 
 
@@ -84,54 +84,10 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         workerNum.setVisibility(View.GONE);
         workerContent.setText(listViewItem.getWorkerContent());
 
-        /*
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/checkList.do";
-        //이미 등록되어있는 상담사 구별하기
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                StringBuilder output = new StringBuilder();
 
-                try {
-                    URL url = new URL(urlStr);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                    if(conn != null) {
-                        conn.setConnectTimeout(10000);
-                        conn.setRequestMethod("POST");
-                        conn.setDoInput(true);
 
-                        OutputStream outputStream = conn.getOutputStream();
-                        String params = "id=" + myId ;
 
-                        outputStream.write(params.getBytes());
-
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        String line = null;
-
-                        while(true) {
-                            line = reader.readLine();
-
-                            if(line == null) {
-                                break;
-                            }
-
-                            output.append(line + "\n");
-
-                        }
-                        reader.close();
-                        conn.disconnect();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                }
-                setCheckList(output.toString());
-            }
-        }).start();
-
-         */
 
 
 
@@ -139,10 +95,58 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
+                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/checkList.do";
+                //이미 등록되어있는 상담사 구별하기
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        StringBuilder output = new StringBuilder();
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
+                        try {
+                            URL url = new URL(urlStr);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                            if(conn != null) {
+                                conn.setConnectTimeout(10000);
+                                conn.setRequestMethod("POST");
+                                conn.setDoInput(true);
+
+                                OutputStream outputStream = conn.getOutputStream();
+                                String params = "id=" + myId + "&workerId=" + workerId.getText().toString();
 
 
+                                outputStream.write(params.getBytes());
+
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                String line = null;
+
+                                while(true) {
+                                    line = reader.readLine();
+
+                                    if(line == null) {
+                                        break;
+                                    }
+
+                                    output.append(line + "\n");
+
+                                }
+                                reader.close();
+                                conn.disconnect();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+
+                        }
+                        setCheckList(output.toString());
+                    }
+                }).start();
+*/
+
+                final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
+
+                //상담사 등록
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -150,7 +154,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                         StringBuilder output = new StringBuilder();
 
                         try {
-                            URL url = new URL(urlStr);
+                            URL url = new URL(urlStr2);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                             if(conn != null) {
@@ -195,7 +199,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         return convertView;
     }   //end getView
 
-/*
+
     public void setCheckList(String str) {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
@@ -203,13 +207,13 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         for(int i = 0, size = result.size(); i < size; i++) {
             if(result.get(0).text().equals("이미선택한상담사")) {
 
-//                println2();
+                println2();
 
             }
        }
     }
 
- */
+
 
     //출력 메소드
     public  void println(String str) {
@@ -222,7 +226,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         });
     }
 
-    /*
+
     //출력 메소드
     public  void println2() {
         handler.post(new Runnable() {
@@ -234,7 +238,6 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         });
     }
 
-     */
 
 
     @Override

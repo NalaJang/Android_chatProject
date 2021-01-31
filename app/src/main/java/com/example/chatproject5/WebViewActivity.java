@@ -29,8 +29,8 @@ import java.net.URL;
 public class WebViewActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private WebView webView;
-    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/daum5.html";
-    TextView textView_address;
+    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/daum.html";
+
     class MyJavaScriptInterface {
 
         @JavascriptInterface
@@ -55,12 +55,12 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webView.getSettings().setSupportMultipleWindows(true);
 
-        textView_address  = findViewById(R.id.textView_address);
+//        textView_address  = findViewById(R.id.textView_address);
 
-        init_webView();
+//        init_webView();
 
 
-        /*
+
         //자바 스크립트 이벤트에 대응할 함수를 정의 한 클래스를 붙여준다.
         webView.addJavascriptInterface(new MyJavaScriptInterface(), "Android");
 
@@ -79,19 +79,19 @@ public class WebViewActivity extends AppCompatActivity {
 
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+////                userPost(urlStr);
+//
+//            }
+//        }).start();
 
-//                userPost(urlStr);
 
-            }
-        }).start();
-
-         */
 
     }   //end onCreate
-
+/*
     public void init_webView() {
 
         // JavaScript 허용

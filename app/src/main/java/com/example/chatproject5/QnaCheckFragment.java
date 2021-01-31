@@ -1,9 +1,8 @@
 package com.example.chatproject5;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -28,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import adapter.QnaCheckAdapter;
 import dto.QnaDto;
 
 
@@ -37,7 +37,8 @@ public class QnaCheckFragment extends Fragment {
     private ListView listview;
     private TextView textView;
 
-    private ArrayAdapter adapter;
+//    private ArrayAdapter adapter;
+    private QnaCheckAdapter adapter2;
     private Handler handler = new Handler();
     private ArrayList<QnaDto> qnaList;
     private QnaDto qnaDto;
@@ -57,9 +58,11 @@ public class QnaCheckFragment extends Fragment {
 
         qnaList = new ArrayList<>();
         qnaDto = new QnaDto();
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, qnaList);
+//        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, qnaList);
 
+        adapter2 = new QnaCheckAdapter(qnaList, getContext());
 
+        /*
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -68,10 +71,10 @@ public class QnaCheckFragment extends Fragment {
 
                 Toast.makeText(getContext(), "이벤트" + clickedItem + position, Toast.LENGTH_SHORT).show();
 
-
-
             }
         });
+
+         */
 
 
         //문의 내역 가져오기
@@ -137,11 +140,13 @@ public class QnaCheckFragment extends Fragment {
 
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
+        Elements num = doc.select("ol > li.num");
         Elements email = doc.select("ol > li.email");
         Elements subject = doc.select("ol > li.subject");
         Elements title = doc.select("ol > li.title");
         Elements content = doc.select("ol > li.content");
         Elements indate = doc.select("ol > li.indate");
+        Elements replyResult = doc.select("ol > li.replyResult");
 
         for(int i = 0; i < result.size(); i++) {
 
@@ -152,18 +157,22 @@ public class QnaCheckFragment extends Fragment {
 
             } else if(result.get(0).text().equals("문의있음")) {
 
-                for(int j = 0; j < title.size(); j++) {
+                for(int j = 0; j < num.size(); j++) {
 
                     QnaDto qna = new QnaDto()
+                            .setNum(num.get(j).text())
 //                            .setEmail(email.get(j).text())
 //                            .setSubject(subject.get(j).text())
-                            .setTitle(title.get(j).text());
+                            .setTitle(title.get(j).text())
 //                            .setContent(content.get(j).text())
-//                            .setIndate(indate.get(j).text());
+                            .setIndate(indate.get(j).text())
+                            .setResult(replyResult.get(j).text());
 
 //                    qnaList.add(qna);
 //                    adapter.add(qna);
-                    adapter.add(qna.getTitle());    //*****
+                    System.out.println("qnaCheckt, num : " + num.get(j).text());
+                    adapter2.addItem(qna);    //*****
+
 
                    println2();
                 }
@@ -188,8 +197,8 @@ public class QnaCheckFragment extends Fragment {
             @Override
             public void run() {
 
-                listview.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                listview.setAdapter(adapter2);
+                adapter2.notifyDataSetChanged();
 
                 listview.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.GONE);

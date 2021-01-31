@@ -245,6 +245,7 @@ public class MyInfoActivity extends AppCompatActivity {
         }
 
         setUpdate(output.toString());
+        System.out.println(output.toString());
         println();
     }
 
@@ -259,12 +260,21 @@ public class MyInfoActivity extends AppCompatActivity {
         for(int i = 0; i < result.size(); i++) {
             if(result.get(0).text().equals("수정된정보")) {
 
-                userContent.setText(userContent_db.get(0).text());
 
-//                bundle = new Bundle();
+                Intent intent = new Intent(this, MyInfoActivity.class);
+                intent.putExtra("userPhone_db", userPhone_db.text());
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+
+
+                System.out.println("phone : " + userPhone_db.text());
+
+//                Bundle bundle = new Bundle();
 //                bundle.putString("userNewPW", userPw_db.text());
 //                bundle.putString("userNewEmail", userEmail_db.text());
 //                bundle.putString("userNewPhone", userPhone_db.text());
+
+//                bundle.putString("userPhone_db", userPhone_db.text());
 
 
             }

@@ -157,13 +157,11 @@ public class MainActivity extends AppCompatActivity {
 
         setLogin(output.toString());    //잘라줄 값
 
-        String output2222 = output.toString();
-
     }
 
-    public void setLogin(String urlStr) {
+    public void setLogin(String str) {
 
-        Document doc = Jsoup.parse(urlStr);
+        Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
         Elements userId = doc.select("ol > li.id");
         Elements userName = doc.select("ol > li.name");

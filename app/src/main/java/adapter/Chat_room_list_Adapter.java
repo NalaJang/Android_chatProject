@@ -161,7 +161,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
 
     public void addChat(ChattingRoomListDto roomList) {
         lists.add(roomList);
-        notifyItemInserted(lists.size() -1);
+//        notifyItemInserted(lists.size() -1);
 
     }
 

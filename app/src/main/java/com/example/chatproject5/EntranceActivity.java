@@ -30,6 +30,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import adapter.Chat_room_list_Adapter;
 import chat.ChatConnThread;
@@ -43,6 +44,8 @@ public class EntranceActivity extends AppCompatActivity {
     //implements ViewPager.OnPageChangeListener
 
     private static final String TAG = EntranceActivity.class.getSimpleName();
+
+    public static HashSet<String> hashSet = new HashSet<>();
 
     private Chat_listFragment chat_listFragment;
     private Chat_room_listFragment chat_room_listActivity;
@@ -279,6 +282,7 @@ public class EntranceActivity extends AppCompatActivity {
 
         }
     }
+
 
     //broadcast 해제
     public void onDestroy() {
