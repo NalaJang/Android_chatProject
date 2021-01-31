@@ -85,76 +85,22 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         workerContent.setText(listViewItem.getWorkerContent());
 
 
-
-
-
-
-
-
         //코디네이터 등록
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/checkList.do";
-                //이미 등록되어있는 상담사 구별하기
+
+                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
+
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+
                         StringBuilder output = new StringBuilder();
 
                         try {
                             URL url = new URL(urlStr);
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-                            if(conn != null) {
-                                conn.setConnectTimeout(10000);
-                                conn.setRequestMethod("POST");
-                                conn.setDoInput(true);
-
-                                OutputStream outputStream = conn.getOutputStream();
-                                String params = "id=" + myId + "&workerId=" + workerId.getText().toString();
-
-
-                                outputStream.write(params.getBytes());
-
-                                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                                String line = null;
-
-                                while(true) {
-                                    line = reader.readLine();
-
-                                    if(line == null) {
-                                        break;
-                                    }
-
-                                    output.append(line + "\n");
-
-                                }
-                                reader.close();
-                                conn.disconnect();
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                        }
-                        setCheckList(output.toString());
-                    }
-                }).start();
-*/
-
-                final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
-
-                //상담사 등록
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        StringBuilder output = new StringBuilder();
-
-                        try {
-                            URL url = new URL(urlStr2);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                             if(conn != null) {

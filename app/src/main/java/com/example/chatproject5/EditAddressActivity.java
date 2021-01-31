@@ -109,7 +109,6 @@ public class EditAddressActivity extends AppCompatActivity {
                         + "&address2=" + address2_db
                         + "&result=" + result;
 
-                System.out.println("update Address result => " + result);
 
                 outputStream.write(params.getBytes());
 

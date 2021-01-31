@@ -35,16 +35,16 @@ import java.net.URL;
  ******************************************/
 public class QnaAddFragment extends Fragment {
 
-    Spinner spinner;
-    CheckBox check;
-    EditText title_edit, content_edit, email_edit;
-    Button cancelButton, insertButton;
+    private Spinner spinner;
+    private CheckBox check;
+    private EditText title_edit, content_edit, email_edit;
+    private Button cancelButton, insertButton;
 
-    String userId_db;
-    String[] subjects = {"일반문의", "계정문의", "환불문의"};
-    String subject_db;
+    private String userId_db;
+    private String[] subjects = {"일반문의", "계정문의", "환불문의"};
+    private String subject_db;
 
-    Handler handler = new Handler();
+    private Handler handler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

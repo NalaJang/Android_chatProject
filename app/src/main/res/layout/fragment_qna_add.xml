@@ -29,6 +29,7 @@
                 android:layout_height="50dp"
                 android:scrollbars="vertical"
                 android:background="@drawable/round2_border"
+                android:paddingLeft="5dp"
                 android:hint="  제목"
                 />
 
@@ -42,6 +43,7 @@
                 android:layout_height="250dp"
                 android:scrollbars="vertical"
                 android:background="@drawable/round2_border"
+                android:paddingLeft="5dp"
                 android:hint="  문의 내용"
                 />
 

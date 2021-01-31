@@ -142,7 +142,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                             notifyItemRangeChanged(position, items.size());
 
                             //hashSet 에서도 삭제해야함
-                            EntranceActivity.hashSet.remove(items.get(position).getWorkerId());
+                            //에러 : IndexOutOfBoundsException
+                            //for 문에 넣어줌
+                            for(int i = 0; i < position; i++ ) {
+                                EntranceActivity.hashSet.remove(items.get(i).getWorkerId());
+                            }
+
 
                             Toast.makeText(v.getContext(), "삭제되었습니다",
                                     Toast.LENGTH_SHORT).show();

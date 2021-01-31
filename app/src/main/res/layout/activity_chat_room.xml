@@ -6,43 +6,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/listView_chat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:divider="#ffffff"
-        android:dividerHeight="0dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center_vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et"
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/listView_chat"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="메세지를 입력해 주세요."
-            android:inputType="textMultiLine"
-            android:padding="10dp"
-            android:maxLines="3"
-            android:background="@drawable/back_et_name"/>
+            android:divider="#ffffff"
+            android:dividerHeight="0dp"/>
 
-        <Button
-            android:id="@+id/send_button_chat"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="17dp"
-            android:text="전송"
-            android:backgroundTint="#ff8800"
-            android:layout_marginLeft="8dp"/>
+            android:orientation="horizontal"
+            android:padding="4dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <EditText
+                android:id="@+id/et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="메세지를 입력해 주세요."
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:maxLines="3"
+                android:background="@drawable/back_et_name"/>
+
+            <Button
+                android:id="@+id/send_button_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="17dp"
+                android:text="전송"
+                android:backgroundTint="#ff8800"
+                android:layout_marginLeft="8dp"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,10 +47,10 @@ public class Chat_listFragment extends Fragment {
 
 
     private ArrayList<ChatListDto> chatList = new ArrayList<>();
-    private ChattingRoomListDto roomListDto;
-    private Message message;
-
-    private ChattingRoomListHelper roomListHelper;
+//    private ChattingRoomListDto roomListDto;
+//    private Message message;
+//
+//    private ChattingRoomListHelper roomListHelper;
 
     private Handler handler = new Handler();
     private RecyclerView recyclerView;
@@ -104,9 +105,10 @@ public class Chat_listFragment extends Fragment {
 
 
         //어댑터 설정
-        chatList.clear();   // chatList 값이 계속 불러와져서 clear 항목 추가 *****
+        chatList.clear();   // chatList 값이 계속 불러와져서 clear() 추가 *****
         adapter = new ChatListAdapter(chatList, getContext(), userId_db);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
         //DB 에서 선택한 코디네이터 목록 가져오기
@@ -195,7 +197,6 @@ public class Chat_listFragment extends Fragment {
             adapter.addItem(chatListDto);
         }
 
-//        recyclerView.setAdapter(adapter);
                 println();
 
     }   //end setWorkerList

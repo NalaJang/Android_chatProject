@@ -66,6 +66,8 @@ public class Chat_roomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_room);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
         roomName = intent.getStringExtra("roomName");
@@ -140,8 +142,6 @@ public class Chat_roomActivity extends AppCompatActivity {
                 adapter3.notifyDataSetChanged();              //새로고침
                 listView.setSelection(messageItems.size() -1);//리스트뷰의 마지막 위치로 스크롤 위치 이동
 
-
-            Toast.makeText(getApplicationContext(), "ChatRoomAct => " + intentMsg, Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -184,7 +184,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                         roomListHelper.insert(roomListDto);
 
 
-                        //채팅방이 이미 존재할 경우
+                    //채팅방이 이미 존재할 경우
                     } else {
 
                         System.out.println("이미 존재하는 채팅방");

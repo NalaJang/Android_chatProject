@@ -41,7 +41,7 @@ public class QnaCheckFragment extends Fragment {
     private QnaCheckAdapter adapter2;
     private Handler handler = new Handler();
     private ArrayList<QnaDto> qnaList;
-    private QnaDto qnaDto;
+//    private QnaDto qnaDto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +57,7 @@ public class QnaCheckFragment extends Fragment {
         textView = rootView.findViewById(R.id.textView_qna);
 
         qnaList = new ArrayList<>();
-        qnaDto = new QnaDto();
+//        qnaDto = new QnaDto();
 //        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, qnaList);
 
         adapter2 = new QnaCheckAdapter(qnaList, getContext());
@@ -141,10 +141,7 @@ public class QnaCheckFragment extends Fragment {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
         Elements num = doc.select("ol > li.num");
-        Elements email = doc.select("ol > li.email");
-        Elements subject = doc.select("ol > li.subject");
         Elements title = doc.select("ol > li.title");
-        Elements content = doc.select("ol > li.content");
         Elements indate = doc.select("ol > li.indate");
         Elements replyResult = doc.select("ol > li.replyResult");
 
@@ -161,20 +158,17 @@ public class QnaCheckFragment extends Fragment {
 
                     QnaDto qna = new QnaDto()
                             .setNum(num.get(j).text())
-//                            .setEmail(email.get(j).text())
-//                            .setSubject(subject.get(j).text())
                             .setTitle(title.get(j).text())
-//                            .setContent(content.get(j).text())
                             .setIndate(indate.get(j).text())
                             .setResult(replyResult.get(j).text());
 
-//                    qnaList.add(qna);
-//                    adapter.add(qna);
-                    System.out.println("qnaCheckt, num : " + num.get(j).text());
+                    //qnaList.add(qna);
+                    //adapter.add(qna);
+                    System.out.println("qnaCheck, num : " + num.get(j).text());
                     adapter2.addItem(qna);    //*****
 
+                    println2();
 
-                   println2();
                 }
             }
         }

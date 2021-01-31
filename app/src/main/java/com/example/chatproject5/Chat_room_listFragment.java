@@ -36,16 +36,16 @@ public class Chat_room_listFragment extends Fragment {
 
     private String userId_db;
 
-    private Chat_room_listFragment chat_room_listFragment;
+//    private Chat_room_listFragment chat_room_listFragment;
 
     private BroadcastReceiver receiver;
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        adapter.notifyDataSetChanged();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        adapter.notifyDataSetChanged();
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +63,6 @@ public class Chat_room_listFragment extends Fragment {
         Bundle bundle = this.getArguments();
         userId_db = bundle.getString("userId_db");
 
-        chat_room_listFragment = new Chat_room_listFragment();
 
 
         //DB 에서 채팅목록 가져오기
@@ -121,8 +120,7 @@ public class Chat_room_listFragment extends Fragment {
 
                 refresh();
 
-                adapter.notifyDataSetChanged(); //새로고침
-
+//                adapter.notifyDataSetChanged(); //새로고침
 
             }
         };
@@ -157,17 +155,20 @@ public class Chat_room_listFragment extends Fragment {
 
                 startActivity(intent);
 
-
             }
         }); //end adapter onClick
 
         return rootView;
     }   //end onCreate
 
-    //**********
+
+
+    // 채팅방 바로 갱신 시키기 ! **********
     private void refresh() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
+        //ft.detach(this).attach(this).commit();
+        //에러 : Can not perform this action after onSaveInstanceState -> 같은 채팅방에서 메세지를 주고 받을 때 발생
+        ft.detach(this).attach(this).commitAllowingStateLoss();
     }
 
 }

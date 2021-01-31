@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EditAddressActivity"></activity>
+        <activity
+            android:name=".QnaContentActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditAddressActivity" />
         <activity android:name=".WebViewActivity" />
         <activity android:name=".AlbumActivity" />
         <activity

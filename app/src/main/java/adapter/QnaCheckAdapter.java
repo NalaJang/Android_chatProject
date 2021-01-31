@@ -2,12 +2,14 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.chatproject5.QnaContentActivity;
 import com.example.chatproject5.R;
 
 import org.jsoup.Jsoup;
@@ -77,6 +79,8 @@ public class QnaCheckAdapter extends BaseAdapter {
         num.setVisibility(View.GONE);
         result.setText(qnaDto.getResult());
 
+
+
         switch (qnaDto.getResult()) {
             case "1" :
                 result.setText("답변 준비중");
@@ -84,14 +88,16 @@ public class QnaCheckAdapter extends BaseAdapter {
 
             case "2" :
                 result.setText("답변 완료");
+                result.setTextColor(Color.parseColor("#FF018786"));
                 break;
         }
 
+        //문의내역 질문 클릭
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectWorker.do";
+                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/qnaContent.do";
 
                 new Thread(new Runnable() {
                     @Override
@@ -109,7 +115,7 @@ public class QnaCheckAdapter extends BaseAdapter {
                                 conn.setDoInput(true);
 
                                 OutputStream outputStream = conn.getOutputStream();
-                                String params = "num=" + num.getText().toString();//-> int 로 고쳐주기
+                                String params = "num=" + Integer.parseInt(num.getText().toString());//-> int 로 고쳐주기
                                 System.out.println("num= " + num.getText().toString());
 
                                 outputStream.write(params.getBytes());
@@ -153,9 +159,15 @@ public class QnaCheckAdapter extends BaseAdapter {
         Elements indate = doc.select("ol > li.indate");
         Elements result = doc.select("ol > li.result");
 
-        Intent intent = new Intent();
-        intent.putExtra("email", email.text());
 
-        System.out.println("email.text : " + email.text());
+        Intent intent = new Intent(context, QnaContentActivity.class);
+        intent.putExtra("email", email.text());
+        intent.putExtra("subject", subject.text());
+        intent.putExtra("title", title.text());
+        intent.putExtra("content", content.text());
+        intent.putExtra("indate", indate.text());
+        intent.putExtra("result", result.text());
+
+        context.startActivity(intent);
     }
 }

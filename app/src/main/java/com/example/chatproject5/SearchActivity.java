@@ -19,8 +19,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import adapter.SearchListAdapter;
+import dto.ChatListDto;
 import dto.SearchListDto;
 
 /******************************************
@@ -31,6 +33,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
     private ListView listview = null ;
     private Intent intent;
 
+
+    private String userId_db;
     private SearchListAdapter adapter;
     private Handler handler = new Handler();
 
@@ -44,12 +48,21 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
         //정보 받기
         intent = getIntent();
-        String userId_db = intent.getStringExtra("userId_db");
+        userId_db = intent.getStringExtra("userId_db");
 
         adapter = new SearchListAdapter(getApplicationContext(), userId_db) ;
 
         listview = findViewById(R.id.listView_search);
         listview.setAdapter(adapter);
+
+        final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/selectedWorkerList.do";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                selectedCoordinatorList(urlStr2);
+            }
+        }).start();
 
 
         //DB 에서 코디네이터 목록 가져오기
@@ -183,17 +196,21 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         setWorkerList(output.toString());
     }
 
+    static HashSet<String> hashSet = new HashSet<>();
+
+
+
     public void setWorkerList(String str) {
         Document doc = Jsoup.parse(str);
         Elements workerNum_db = doc.select("ol > li.num");
         Elements workerId_db = doc.select("ol > li.id");
         Elements workerContent_db = doc.select("ol > li.content");
 
-        System.out.println("=====hashSet : " + EntranceActivity.hashSet.toString());
+//        System.out.println("=====hashSet : " + EntranceActivity.hashSet.toString());
 
         for(int i = 0, size = workerNum_db.size(); i < size; i++) {
 
-            if(EntranceActivity.hashSet.contains(workerId_db.get(i).text())) {
+            if(hashSet.contains(workerId_db.get(i).text())) {
 
                 System.out.println("===================");
                 continue;   //-> adapter 에 등록하지 않고(↓실행않고) for 문을 넘어감
@@ -218,5 +235,69 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
                 listview.setAdapter(adapter);
             }
         });
+    }
+
+    public void selectedCoordinatorList(String urlStr) {
+
+        StringBuilder output = new StringBuilder();
+
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+                String params = "id=" + userId_db;
+                outputStream.write(params.getBytes());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line = null;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        setMyWorkerList(output.toString());
+    }
+
+    public void setMyWorkerList(String str) {
+
+        Document doc = Jsoup.parse(str);
+        Elements workerNum_db = doc.select("ol > li.workerNum");
+        Elements workerId_db = doc.select("ol > li.workerId");
+        Elements workerContent_db = doc.select("ol > li.workerContent");
+
+        hashSet.clear();//추가
+
+        for(int j = 0; j < workerId_db.size(); j++) {
+
+            ChatListDto chatListDto = new ChatListDto();
+            chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
+            chatListDto.setWorkerId(workerId_db.get(j).text());
+            chatListDto.setContent(workerContent_db.get(j).text());
+
+            hashSet.add(chatListDto.getWorkerId());//-> 내가 등록한 상담사 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+
+//            adapter.addItem(chatListDto);
+        }
     }
 }

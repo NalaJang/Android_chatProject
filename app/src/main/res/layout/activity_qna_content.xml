@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    tools:context=".QnaContentActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="23dp"
+        android:text="문의 상세"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        >
+
+        <TextView
+            android:id="@+id/result_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="17dp"
+            android:text="답변현황"
+            />
+
+        <TextView
+            android:id="@+id/indate_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:text="시간"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/subject_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="5dp"
+        android:background="@drawable/round2_border"
+        android:textSize="17dp"
+        android:text="주제"
+        />
+
+    <TextView
+        android:id="@+id/title_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/round2_border"
+        android:paddingLeft="5dp"
+        android:textSize="17dp"
+        android:text="제목"
+        />
+
+    <TextView
+        android:id="@+id/content_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round2_border"
+        android:paddingLeft="5dp"
+        android:textSize="17dp"
+        android:text="내용"
+        />
+</LinearLayout>

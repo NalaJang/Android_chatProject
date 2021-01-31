@@ -96,19 +96,15 @@ public class MyInfoActivity extends AppCompatActivity {
                 if(!password.isEmpty() || !email.isEmpty()) {
 
 
-                    InfoUpdate infoUpdate = new InfoUpdate();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    infoUpdate.execute();
+                            update(urlStr);
 
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            update(urlStr);
-//
-//
-//                        }
-//                    }).start();
+
+                        }
+                    }).start();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "모두 입력해 주세요.", Toast.LENGTH_SHORT).show();
@@ -116,20 +112,6 @@ public class MyInfoActivity extends AppCompatActivity {
 
 //                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        synchronized (this) {
-//
-//                            try {
-//
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                });
 
             }
         }); //end editButton onClick
@@ -172,27 +154,6 @@ public class MyInfoActivity extends AppCompatActivity {
         });
     }   //end onCreate
 
-//    public void infoUpdate(View view) {
-//        new InfoUpdate().execute();
-//    }
-
-    class InfoUpdate extends AsyncTask<Void, Integer, Void> {
-        @Override
-        protected Void doInBackground(Void ... voids) {
-
-            update(urlStr);
-
-            try {
-                Thread.sleep(100);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-    }
 
 
 
@@ -261,24 +222,28 @@ public class MyInfoActivity extends AppCompatActivity {
             if(result.get(0).text().equals("수정된정보")) {
 
 
-                Intent intent = new Intent(this, MyInfoActivity.class);
-                intent.putExtra("userPhone_db", userPhone_db.text());
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+//                Intent intent = new Intent(this, MyInfoActivity.class);
+//                intent.putExtra("userPhone_db", userPhone_db.text());
+////                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);
+//                finish();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("userId_db", userId_db);
+                bundle.putString("userPhone_db", userPhone_db.text());
+                bundle.putString("userContent_db", userContent_db.text());
 
 
-                System.out.println("phone : " + userPhone_db.text());
-
-//                Bundle bundle = new Bundle();
-//                bundle.putString("userNewPW", userPw_db.text());
-//                bundle.putString("userNewEmail", userEmail_db.text());
-//                bundle.putString("userNewPhone", userPhone_db.text());
-
-//                bundle.putString("userPhone_db", userPhone_db.text());
-
+                MenuFragment menuFragment = new MenuFragment();
+                menuFragment.setArguments(bundle);
 
             }
         }
+
+//        final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/login.do";
+//        myInfo(urlStr2);
+
+
     }   //end setUpdate
 
     //수정 성공시 실행 메소드
@@ -341,6 +306,7 @@ public class MyInfoActivity extends AppCompatActivity {
         setAddressList(output.toString());
     }
 
+    //DB 에서 가져온 배송지 목록
     public void setAddressList(String str) {
         Document doc = Jsoup.parse(str);
         Elements nickName_db = doc.select("ol > li.nickName");
@@ -354,21 +320,19 @@ public class MyInfoActivity extends AppCompatActivity {
 
         for(int i = 0, size = id_db.size(); i < size; i++) {
 
-            AddressDto addressDto = new AddressDto();
-            addressDto.setNickName(nickName_db.get(i).text());
-            addressDto.setUserName(userName_db.get(i).text());
-            addressDto.setId(id_db.get(i).text());
-            addressDto.setPhone(phone_db.get(i).text());
-            addressDto.setZip_num(zip_num_db.get(i).text());
-            addressDto.setAddress1(address1_db.get(i).text());
-            addressDto.setAddress2(address2_db.get(i).text());
-            addressDto.setResult(result_db.get(i).text());
+            AddressDto addressDto = new AddressDto().setNickName(nickName_db.get(i).text())
+                                                    .setUserName(userName_db.get(i).text())
+                                                    .setId(id_db.get(i).text())
+                                                    .setPhone(phone_db.get(i).text())
+                                                    .setZip_num(zip_num_db.get(i).text())
+                                                    .setAddress1(address1_db.get(i).text())
+                                                    .setAddress2(address2_db.get(i).text())
+                                                    .setResult(result_db.get(i).text());
 
             adapter.addItem(addressDto);
         }
 
         println2();
-//        recyclerView.setAdapter(adapter);
     }
 
     public void println2() {
@@ -377,7 +341,6 @@ public class MyInfoActivity extends AppCompatActivity {
             public void run() {
 
                 recyclerView.setAdapter(adapter);
-//                adapter.notifyDataSetChanged();
 
             }
         });
@@ -395,6 +358,97 @@ public class MyInfoActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void myInfo(String urlStr) {
+        StringBuilder output = new StringBuilder();
+
+        String id = userId.getText().toString();
+        String pw = userPw.getText().toString();
+
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+
+                //값 넣어주기
+                String params = "id=" + id + "&pw=" + pw;
+
+                outputStream.write(params.getBytes());
+
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line = null;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setUpdatedMyInfo(output.toString());    //잘라줄 값
+
+    }
+
+    public void setUpdatedMyInfo(String str) {
+
+        Document doc = Jsoup.parse(str);
+        Elements result = doc.select("p.result");
+        Elements id = doc.select("ol > li.id");
+        Elements userName = doc.select("ol > li.name");
+        Elements userPw = doc.select("ol > li.pw");
+        Elements userEmail = doc.select("ol > li.email");
+        Elements userPhone = doc.select("ol > li.phone");
+        Elements userContent = doc.select("ol > li.content");
+        Elements userProfilePhoto = doc.select("ol > li.profilePhoto");
+
+
+        for(int i = 0; i < result.size(); i++) {
+
+            if(result.get(0).text().equals("로그인 성공")) {
+
+
+                //프래그먼트로 정보 전달
+                Bundle bundle = new Bundle();
+                bundle.putString("userId_db", userId_db);
+                bundle.putString("userPhone_db", userPhone.text());
+                bundle.putString("userContent_db", userContent.text());
+
+
+//                intent = new Intent(this, MyInfoActivity.class);
+//                intent.putExtra("userId_db", id.text());
+//                intent.putExtra("userName_db", userName.text());
+//                intent.putExtra("userPw_db", userPw.text());
+//                intent.putExtra("userEmail_db", userEmail.text());
+//                intent.putExtra("userPhone_db", userPhone.text());
+//                intent.putExtra("userContent_db", userContent.text());
+//                intent.putExtra("userProfilePhoto_db", userProfilePhoto.text());
+//
+//                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);
+//                finish();
+
+            }
+        }
     }
 
 }

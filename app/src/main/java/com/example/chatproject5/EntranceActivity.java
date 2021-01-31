@@ -110,7 +110,7 @@ public class EntranceActivity extends AppCompatActivity {
 
 
         intent.putExtra("userId_db", userId_db);
-        Toast.makeText(getApplicationContext(), "userId =" + userId_db, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "userId =" + userId_db, Toast.LENGTH_SHORT).show();
 
 
         //프래그먼트로 정보 전달
@@ -144,9 +144,6 @@ public class EntranceActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, chat_room_listActivity).commit();
         //정보 보내기
         chat_room_listActivity.setArguments(bundle);
-
-//        Chat_room_listFragment.adapter.notifyDataSetChanged();//-> null
-
 
 
 
@@ -206,7 +203,7 @@ public class EntranceActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        search(urlStr);
+//                        search(urlStr);
                         startActivity(intent);  //정보를 넘긴 후 startActivity 적어주기
                     }
                 }).start();
@@ -255,7 +252,7 @@ public class EntranceActivity extends AppCompatActivity {
 
         }
         setSearchWorker(output.toString());
-        Log.d("workeroutput", output.toString());
+//        Log.d("workeroutput", output.toString());
     }
 
 
@@ -272,13 +269,13 @@ public class EntranceActivity extends AppCompatActivity {
 
             //num, content 추가
 //            items.add(workerNum_db.get(i).text());
-            items.add(workerId_db.get(i).text());
-//            items.add(workerContent_db.get(i).text());
-
-            intent.putStringArrayListExtra("strings", items);
-            intent.putExtra("workerNum_db", workerNum_db.get(i).text());
-//            intent.putExtra("workerId_db", workerId_db.get(i).text());
-            intent.putExtra("workerContent_db", workerContent_db.get(i).text());
+//            items.add(workerId_db.get(i).text());
+////            items.add(workerContent_db.get(i).text());
+//
+//            intent.putStringArrayListExtra("strings", items);
+//            intent.putExtra("workerNum_db", workerNum_db.get(i).text());
+////            intent.putExtra("workerId_db", workerId_db.get(i).text());
+//            intent.putExtra("workerContent_db", workerContent_db.get(i).text());
 
         }
     }
@@ -293,27 +290,4 @@ public class EntranceActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
-/*
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
-        switch (position) {
-            case 1 :
-                Chat_room_listFragment.adapter.notifyDataSetChanged();
-                break;
-        }
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
- */
 }
