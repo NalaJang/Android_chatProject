@@ -77,11 +77,11 @@ public class MenuFragment extends Fragment {
 
                 intent = new Intent(getContext(), MyInfoActivity.class);
                 intent.putExtra("userId_db", userId_db);
-                intent.putExtra("userContent_db", userContent_db);
-                intent.putExtra("userName_db", userName_db);
+//                intent.putExtra("userContent_db", userContent_db);
+//                intent.putExtra("userName_db", userName_db);
                 intent.putExtra("userPw_db", userPw_db);
-                intent.putExtra("userEmail_db", userEmail_db);
-                intent.putExtra("userPhone_db", userPhone_db);
+//                intent.putExtra("userEmail_db", userEmail_db);
+//                intent.putExtra("userPhone_db", userPhone_db);
 
                 startActivity(intent);
 
@@ -110,7 +110,7 @@ public class MenuFragment extends Fragment {
 
                 intent = new Intent(getContext(), MyBodyActivity.class);
                 intent.putExtra("userId_db", userId_db);
-//                startActivity(intent);
+                startActivity(intent);
 
                 final String urlStr = "http://192.168.0.17:8080/webapp/webServer/mybodyList.do";
 
@@ -118,7 +118,7 @@ public class MenuFragment extends Fragment {
                     @Override
                     public void run() {
 
-                        myBodyList(urlStr);
+//                        myBodyList(urlStr);
                     }
                 }).start();
 

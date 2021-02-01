@@ -37,8 +37,9 @@ public class MyInfoActivity extends AppCompatActivity {
     private Intent intent;
     private Handler handler = new Handler();
 
-    private String userId_db;
-    private EditText userContent, userName, userId, userPw, userEmail, userPhone;
+    private String userId_db, userPw_db;
+    private String userId, userPw, userContent, userName, userEmail, userPhone;
+    private EditText userContent_edit, userName_edit, userId_edit, userPw_edit, userEmail_edit, userPhone_edit;
 
     private RecyclerView recyclerView;
     private AddressListAdapter adapter;
@@ -46,8 +47,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
 //    AddAddressFragment addressFragment;
 
-    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/userInfoUpdate.do";
-    static final int REQUEST_CODE_UPDATE = 1000;
+//    static final int REQUEST_CODE_UPDATE = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,27 +60,38 @@ public class MyInfoActivity extends AppCompatActivity {
         //정보 받기
         intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
-        String userContent_db = intent.getStringExtra("userContent_db");
-        String userName_db = intent.getStringExtra("userName_db");
-        String userPw_db = intent.getStringExtra("userPw_db");
-        String userEmail_db = intent.getStringExtra("userEmail_db");
-        String userPhone_db = intent.getStringExtra("userPhone_db");
+//        String userContent_db = intent.getStringExtra("userContent_db");
+//        String userName_db = intent.getStringExtra("userName_db");
+        userPw_db = intent.getStringExtra("userPw_db");
+//        String userEmail_db = intent.getStringExtra("userEmail_db");
+//        String userPhone_db = intent.getStringExtra("userPhone_db");
 
 
-        userContent = findViewById(R.id.userContent_info);
-        userName = findViewById(R.id.userName_info);
-        userId = findViewById(R.id.userId_info);
-        userPw = findViewById(R.id.userPw_info);
-        userEmail = findViewById(R.id.userEmail_info);
-        userPhone = findViewById(R.id.userPhone_info);
+        userContent_edit = findViewById(R.id.userContent_info);
+        userName_edit = findViewById(R.id.userName_info);
+        userId_edit = findViewById(R.id.userId_info);
+        userPw_edit = findViewById(R.id.userPw_info);
+        userEmail_edit = findViewById(R.id.userEmail_info);
+        userPhone_edit = findViewById(R.id.userPhone_info);
 
-        userContent.setText(userContent_db);
-        userName.setText(userName_db);
-        userId.setText(userId_db);
-        userPw.setText(userPw_db);
-        userEmail.setText(userEmail_db);
-        userPhone.setText(userPhone_db);
+//        userContent.setText(userContent_db);
+//        userName.setText(userName_db);
+//        userId.setText(userId_db);
+//        userPw.setText(userPw_db);
+//        userEmail.setText(userEmail_db);
+//        userPhone.setText(userPhone_db);
 
+        //기존 사용자 정보
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/login.do";
+
+                myInfo(urlStr2);
+
+            }
+        }).start();
 
 
 
@@ -90,8 +101,8 @@ public class MyInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String password = userPw.getText().toString().trim();
-                String email = userEmail.getText().toString().trim();
+                String password = userPw_edit.getText().toString().trim();
+                String email = userEmail_edit.getText().toString().trim();
 
                 if(!password.isEmpty() || !email.isEmpty()) {
 
@@ -99,6 +110,7 @@ public class MyInfoActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            final String urlStr = "http://192.168.0.17:8080/webapp/webServer/userInfoUpdate.do";
 
                             update(urlStr);
 
@@ -156,15 +168,12 @@ public class MyInfoActivity extends AppCompatActivity {
 
 
 
-
-    //DB 회원 정보 업데이트
-    public void update(String urlStr) {
+    //기존 정보
+    public void myInfo(String urlStr) {
         StringBuilder output = new StringBuilder();
 
-        String pw = userPw.getText().toString();
-        String content = userContent.getText().toString();
-        String email = userEmail.getText().toString();
-        String phone = userPhone.getText().toString();
+//        String id = userId.getText().toString();
+//        String pw = userPw.getText().toString();
 
 
         try {
@@ -179,7 +188,102 @@ public class MyInfoActivity extends AppCompatActivity {
                 OutputStream outputStream = conn.getOutputStream();
 
                 //값 넣어주기
-                String params = "id=" + userId_db + "&content=" + content + "&pw=" + pw + "&email=" + email + "&phone=" + phone;
+                String params = "id=" + userId_db + "&pw=" + userPw_db;
+
+                outputStream.write(params.getBytes());
+
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line = null;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setUpdatedMyInfo(output.toString());    //잘라줄 값
+        System.out.println("기존 정보 : " + output.toString());
+
+    }
+
+    public void setUpdatedMyInfo(String str) {
+
+        Document doc = Jsoup.parse(str);
+        Elements result = doc.select("p.result");
+        Elements id_db = doc.select("ol > li.id");
+        Elements userName_db = doc.select("ol > li.name");
+        Elements userPw_db = doc.select("ol > li.pw");
+        Elements userEmail_db = doc.select("ol > li.email");
+        Elements userPhone_db = doc.select("ol > li.phone");
+        Elements userContent_db = doc.select("ol > li.content");
+        Elements userProfilePhoto_db = doc.select("ol > li.profilePhoto");
+
+
+        for(int i = 0; i < result.size(); i++) {
+
+            if(result.get(0).text().equals("로그인 성공")) {
+
+//                userId = id_db.text();
+                userContent = userContent_db.text();
+                userName = userName_db.text();
+//                userPw = userPw_db.text();
+                userEmail = userEmail_db.text();
+                userPhone = userPhone_db.text();
+            }
+        }
+        println3();
+    }
+    public void println3() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                //userContent_edit, userName_edit, userId_edit, userPw_edit, userEmail_edit, userPhone_edit
+                userId_edit.setText(userId_db);
+                userContent_edit.setText(userContent);
+                userName_edit.setText(userName);
+                userPw_edit.setText(userPw_db);
+                userEmail_edit.setText(userEmail);
+                userPhone_edit.setText(userPhone);
+            }
+        });
+    }
+
+
+    //DB 회원 정보 업데이트
+    public void update(String urlStr) {
+        StringBuilder output = new StringBuilder();
+
+        userPw = userPw_edit.getText().toString();
+        userContent = userContent_edit.getText().toString();
+        userEmail = userEmail_edit.getText().toString();
+        userPhone = userPhone_edit.getText().toString();
+
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+
+                //값 넣어주기
+                String params = "id=" + userId_db + "&content=" + userContent + "&pw=" + userPw + "&email=" + userEmail + "&phone=" + userPhone;
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -207,7 +311,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
         setUpdate(output.toString());
         System.out.println(output.toString());
-        println();
+
     }
 
     public void setUpdate(String outputStr) {
@@ -221,30 +325,18 @@ public class MyInfoActivity extends AppCompatActivity {
         for(int i = 0; i < result.size(); i++) {
             if(result.get(0).text().equals("수정된정보")) {
 
-
-//                Intent intent = new Intent(this, MyInfoActivity.class);
-//                intent.putExtra("userPhone_db", userPhone_db.text());
-////                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startActivity(intent);
-//                finish();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("userId_db", userId_db);
-                bundle.putString("userPhone_db", userPhone_db.text());
-                bundle.putString("userContent_db", userContent_db.text());
-
-
-                MenuFragment menuFragment = new MenuFragment();
-                menuFragment.setArguments(bundle);
+                userContent = userContent_db.text();
+                userPw = userPw_db.text();
+                userEmail = userEmail_db.text();
+                userPhone = userPhone_db.text();
 
             }
         }
 
-//        final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/login.do";
-//        myInfo(urlStr2);
-
+        println();
 
     }   //end setUpdate
+
 
     //수정 성공시 실행 메소드
     public  void println() {
@@ -258,6 +350,11 @@ public class MyInfoActivity extends AppCompatActivity {
                 builder.setMessage("수정이 완료되었습니다.");
                 builder.setPositiveButton(R.string.close, null);
                 builder.show();
+
+                userContent_edit.setText(userContent);
+                userPw_edit.setText(userPw);
+                userEmail_edit.setText(userEmail);
+                userPhone_edit.setText(userPhone);
             }
         });
     }
@@ -361,94 +458,5 @@ public class MyInfoActivity extends AppCompatActivity {
     }
 
 
-    public void myInfo(String urlStr) {
-        StringBuilder output = new StringBuilder();
-
-        String id = userId.getText().toString();
-        String pw = userPw.getText().toString();
-
-
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            if(conn != null) {
-                conn.setConnectTimeout(10000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-
-                OutputStream outputStream = conn.getOutputStream();
-
-                //값 넣어주기
-                String params = "id=" + id + "&pw=" + pw;
-
-                outputStream.write(params.getBytes());
-
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
-
-                while(true) {
-                    line = reader.readLine();
-
-                    if(line == null) {
-                        break;
-                    }
-
-                    output.append(line + "\n");
-
-                }
-                reader.close();
-                conn.disconnect();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        setUpdatedMyInfo(output.toString());    //잘라줄 값
-
-    }
-
-    public void setUpdatedMyInfo(String str) {
-
-        Document doc = Jsoup.parse(str);
-        Elements result = doc.select("p.result");
-        Elements id = doc.select("ol > li.id");
-        Elements userName = doc.select("ol > li.name");
-        Elements userPw = doc.select("ol > li.pw");
-        Elements userEmail = doc.select("ol > li.email");
-        Elements userPhone = doc.select("ol > li.phone");
-        Elements userContent = doc.select("ol > li.content");
-        Elements userProfilePhoto = doc.select("ol > li.profilePhoto");
-
-
-        for(int i = 0; i < result.size(); i++) {
-
-            if(result.get(0).text().equals("로그인 성공")) {
-
-
-                //프래그먼트로 정보 전달
-                Bundle bundle = new Bundle();
-                bundle.putString("userId_db", userId_db);
-                bundle.putString("userPhone_db", userPhone.text());
-                bundle.putString("userContent_db", userContent.text());
-
-
-//                intent = new Intent(this, MyInfoActivity.class);
-//                intent.putExtra("userId_db", id.text());
-//                intent.putExtra("userName_db", userName.text());
-//                intent.putExtra("userPw_db", userPw.text());
-//                intent.putExtra("userEmail_db", userEmail.text());
-//                intent.putExtra("userPhone_db", userPhone.text());
-//                intent.putExtra("userContent_db", userContent.text());
-//                intent.putExtra("userProfilePhoto_db", userProfilePhoto.text());
-//
-//                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startActivity(intent);
-//                finish();
-
-            }
-        }
-    }
 
 }

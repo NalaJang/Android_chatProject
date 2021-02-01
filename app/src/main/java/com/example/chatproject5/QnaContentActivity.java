@@ -37,6 +37,21 @@ public class QnaContentActivity extends AppCompatActivity {
         content_text.setText(content);
         result_text.setText(result);
 
+        switch (subject) {
+            case "1" :
+                subject_text.setText("일반문의");
+                break;
+
+            case "2" :
+                subject_text.setText("계정문의");
+                break;
+
+            case "3" :
+                subject_text.setText("환불문의");
+                break;
+        }
+
+
         switch (result) {
             case "1" :
                 result_text.setText("답변 준비중");

@@ -119,7 +119,6 @@ public class MyOrderListActivity extends AppCompatActivity {
         }
 
         setOrderList(output.toString());
-        System.out.println("orderList > " + output.toString());
     }
 
     public void setOrderList(String str) {

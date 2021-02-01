@@ -17,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import adapter.Chat_room_list_Adapter;
 import chat.MsgUtils;
@@ -31,8 +33,10 @@ public class Chat_room_listFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Message message;
-    public static Chat_room_list_Adapter adapter;
+    private Chat_room_list_Adapter adapter;
     private LinearLayoutManager layoutManager;
+    private final Date today = new Date();
+    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
     private String userId_db;
 
@@ -92,6 +96,8 @@ public class Chat_room_listFragment extends Fragment {
                 String message = intent.getStringExtra("message");
                 String fromId = intent.getStringExtra("fromId");
                 String time = intent.getStringExtra("time");
+                System.out.println("chatRoomListFrag time : " + time);
+
 
                 ChattingRoomListHelper roomListHelper = new ChattingRoomListHelper(context);
                 ChattingRoomListDto roomListDto = new ChattingRoomListDto();
@@ -152,6 +158,7 @@ public class Chat_room_listFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), Chat_roomActivity.class);
                 intent.putExtra("roomName", roomList.getRoomName());
                 intent.putExtra("userId_db", userId_db);
+//                intent.putExtra("time", timeNow.format(today));
 
                 startActivity(intent);
 

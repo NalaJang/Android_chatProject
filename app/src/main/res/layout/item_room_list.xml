@@ -48,6 +48,8 @@
             android:layout_alignBottom="@id/user_img_item"
             android:layout_centerHorizontal="true"
             android:maxWidth="200dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="20dp"
             android:text="채팅의 마지막 내용"
             />

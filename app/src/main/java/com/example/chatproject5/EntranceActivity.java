@@ -130,7 +130,7 @@ public class EntranceActivity extends AppCompatActivity {
         chatConnThread = new ChatConnThread(this, userId_db);
         //핸들러 객체에 넣기, 소켓 연결
         chatConnHandler.post(chatConnThread);
-        MsgUtils.setConnThread(chatConnThread);
+        MsgUtils.setConnThread(chatConnThread);//서버에 신호보내기
 
 
         //추가
@@ -212,7 +212,7 @@ public class EntranceActivity extends AppCompatActivity {
         }
         return true;
     }
-
+/*
     public void search(String urlStr) {
 
         StringBuilder output = new StringBuilder();
@@ -279,6 +279,7 @@ public class EntranceActivity extends AppCompatActivity {
 
         }
     }
+    */
 
 
     //broadcast 해제

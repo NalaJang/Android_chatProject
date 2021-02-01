@@ -1,6 +1,7 @@
 package adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
                 case "1" :
                     status_text.setText("주문완료");
+                    status_text.setTextColor(Color.parseColor("#D81B60"));
                     break;
 
                 case "2" :
@@ -100,6 +102,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
                 case "4" :
                     status_text.setText("배송완료");
+                    status_text.setTextColor(Color.parseColor("#FF018786"));
                    break;
             }
         }

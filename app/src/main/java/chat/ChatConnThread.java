@@ -241,6 +241,8 @@ public class ChatConnThread extends Thread{
                         intent.putExtra("message", message.getMessage());
                         intent.putExtra("fromId", message.getFromId());
                         intent.putExtra("time", timeNow.format(today));
+
+                        System.out.println(TAG + " , time : " + timeNow.format(today));
                         context.sendBroadcast(intent);
 
 

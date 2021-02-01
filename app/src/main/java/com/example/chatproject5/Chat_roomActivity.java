@@ -228,8 +228,7 @@ public class Chat_roomActivity extends AppCompatActivity {
 
 
 
-                    et.setText("");             //메세지 보낸 후 비우기
-
+                    et.setText("");            //메세지 보낸 후 비우기
 
                     adapter3.notifyDataSetChanged();//새로고침
                     listView.setSelection(messageItems.size() -1);//리스트뷰의 마지막 위치로 스크롤 위치 이동

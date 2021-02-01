@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
+            android:textColor="#B5B0AA"
             android:textSize="20dp"
             android:text="2021.01.12"
             />
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textSize="20dp"
-            android:textColor="@color/teal_700"
+            android:textStyle="bold"
             android:text="배송 중"
             />
 
