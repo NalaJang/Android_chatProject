@@ -95,7 +95,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                     intent.putExtra("userAddress2e_db", userAddress2.getText().toString());
 
                     //context.startActivity(intent);
-                    //에러 : FLAG_ACTIVITY_NEW_TASK flag -> ListView 의 "한 아이템을 클릭했을 경우, startActivity를 사용해 새로운 Activity를 생성하려 했을 때"
+                    //에러 : FLAG_ACTIVITY_NEW_TASK flag -> ListView 의 "한 아이템을 클릭했을 경우, startActivity 를 사용해 새로운 Activity를 생성하려 했을 때"
                     //수정 ↓
                     context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
                 }
@@ -112,7 +112,8 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             switch (address.getResult()) {
 
                 case "0" :
-                    result.setText("");
+//                    result.setText("");
+                    result.setVisibility(View.GONE);
                     break;
 
                 case "1" :

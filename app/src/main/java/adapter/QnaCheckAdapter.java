@@ -115,8 +115,7 @@ public class QnaCheckAdapter extends BaseAdapter {
                                 conn.setDoInput(true);
 
                                 OutputStream outputStream = conn.getOutputStream();
-                                String params = "num=" + Integer.parseInt(num.getText().toString());//-> int 로 고쳐주기
-                                System.out.println("num= " + num.getText().toString());
+                                String params = "num=" + Integer.parseInt(num.getText().toString());//int 로 고쳐주기
 
                                 outputStream.write(params.getBytes());
 

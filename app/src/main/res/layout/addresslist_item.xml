@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -84,10 +84,11 @@
                 android:id="@+id/userAddress2_addressList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/userAddress1_addressList"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/userAddress1_addressList"
                 android:layout_below="@+id/userName_addressList"
                 android:textSize="16dp"
-                android:text=" 나머지 주소"
+                android:text="나머지 주소"
                 />
 
             <Button

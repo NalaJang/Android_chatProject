@@ -45,9 +45,6 @@ public class MyInfoActivity extends AppCompatActivity {
     private AddressListAdapter adapter;
     private ArrayList<AddressDto> addressList = new ArrayList<>();
 
-//    AddAddressFragment addressFragment;
-
-//    static final int REQUEST_CODE_UPDATE = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +101,11 @@ public class MyInfoActivity extends AppCompatActivity {
                 String password = userPw_edit.getText().toString().trim();
                 String email = userEmail_edit.getText().toString().trim();
 
-                if(!password.isEmpty() || !email.isEmpty()) {
+                if(password.equals("") || email.equals("")) {
 
+                    Toast.makeText(getApplicationContext(), "모두 입력해 주세요.", Toast.LENGTH_SHORT).show();
+
+                } else {
 
                     new Thread(new Runnable() {
                         @Override
@@ -118,8 +118,6 @@ public class MyInfoActivity extends AppCompatActivity {
                         }
                     }).start();
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "모두 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 }
 
 //                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -161,6 +159,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
                 //getSupportFragmentManager().beginTransaction().replace(R.id.container, addressFragment).commit();
                 intent = new Intent(getApplicationContext(), AddressActivity.class);
+                intent.putExtra("userId_db", userId_db);
                 startActivity(intent);
             }
         });
@@ -171,10 +170,6 @@ public class MyInfoActivity extends AppCompatActivity {
     //기존 정보
     public void myInfo(String urlStr) {
         StringBuilder output = new StringBuilder();
-
-//        String id = userId.getText().toString();
-//        String pw = userPw.getText().toString();
-
 
         try {
             URL url = new URL(urlStr);
@@ -214,7 +209,6 @@ public class MyInfoActivity extends AppCompatActivity {
         }
 
         setUpdatedMyInfo(output.toString());    //잘라줄 값
-        System.out.println("기존 정보 : " + output.toString());
 
     }
 
@@ -310,7 +304,6 @@ public class MyInfoActivity extends AppCompatActivity {
         }
 
         setUpdate(output.toString());
-        System.out.println(output.toString());
 
     }
 
