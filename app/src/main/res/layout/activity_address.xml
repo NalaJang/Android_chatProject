@@ -79,18 +79,11 @@
                 android:hint="숫자만 입력"
                 />
 
-            <Button
-                android:id="@+id/search_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="주소검색"
-                />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="기본 주소"
+                android:text="주소"
                 />
 
             <EditText
@@ -100,24 +93,38 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="20dp"
-                android:hint="우편번호 찾기"
+                android:hint="기본 주소"
                 />
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="상세 주소"
-                />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/address2_add"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="20dp"
-                />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="상세 주소"
+                    />
+
+                <EditText
+                    android:id="@+id/address2_add"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="상세 주소"
+                    android:textSize="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/search_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/address2_add"
+                    android:text="주소검색"
+                    />
+            </RelativeLayout>
 
             <CheckBox
                 android:id="@+id/check_add"

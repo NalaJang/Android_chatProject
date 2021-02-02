@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,10 +24,13 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class EditAddressActivity extends AppCompatActivity {
+import adapter.AddressListAdapter;
 
-    private String userId_db, nickName, userName, phone, zip_num, address1, address2, result;
-    private TextView nickName_text, userName_text, phone_text, zip_num_text, address1_text, address2_text;
+public class EditAddressActivity extends AppCompatActivity {
+    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
+
+    private String num_db, userId_db, nickName, userName, phone, address1, address2, result;
+    private TextView nickName_text, userName_text, phone_text, address1_text, address2_text;
     private CheckBox checkBox;
 
     private Handler handler = new Handler();
@@ -36,17 +41,20 @@ public class EditAddressActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_edit_address);
 
+        setTitle("배송지 수정");
+
         nickName_text = findViewById(R.id.nickName_editAddr);
         userName_text = findViewById(R.id.name_editAddr);
         phone_text = findViewById(R.id.phone_editAddr);
-        zip_num_text = findViewById(R.id.zip_num_editAddr);
         address1_text = findViewById(R.id.address1_editAddr);
         address2_text = findViewById(R.id.address2_editAddr);
         checkBox = findViewById(R.id.check_editAddr);
+        Button searchButton = findViewById(R.id.search_eidtAddr);
         Button editButton = findViewById(R.id.button_editAddr);
 
 
         Intent intent = getIntent();
+        num_db = intent.getStringExtra(("num_db"));
         userId_db = intent.getStringExtra("userId_db");
 //        nickName_db = intent.getStringExtra("nickName_db");
 //        userName_db = intent.getStringExtra("userName_db");
@@ -61,7 +69,7 @@ public class EditAddressActivity extends AppCompatActivity {
 //        address2_text.setText(address2_db);
 
         //선택한 배송지
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/addressList.do";
+        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/myAddress.do";
 
         new Thread(new Runnable() {
             @Override
@@ -73,7 +81,25 @@ public class EditAddressActivity extends AppCompatActivity {
         }).start();
 
 
-        //수정
+        //주소 검색 버튼
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (searchButton != null) {
+                    searchButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getApplicationContext(), WebViewActivity.class);
+                            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+                        }
+                    });
+
+                }
+            }
+        });
+
+        //수정 버튼
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +127,25 @@ public class EditAddressActivity extends AppCompatActivity {
         });
     }   //end onCreate
 
+    //선택한 주소 값
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case SEARCH_ADDRESS_ACTIVITY:
+                if (resultCode == RESULT_OK) {
+
+                    //webViewActivity 에서 선택한 주소 값 가져오기
+                    String data = intent.getExtras().getString("data");
+
+                    if (data != null) {
+                        address1_text.setText(data);
+                    }
+                }
+                break;
+        }
+    }
+
+    //기존 정보
     public void myAddress(String urlStr) {
         StringBuilder output = new StringBuilder();
 
@@ -116,7 +161,8 @@ public class EditAddressActivity extends AppCompatActivity {
                 OutputStream outputStream = conn.getOutputStream();
 
                 //값 넣어주기
-                String params = "id=" + userId_db;
+                String params = "no=" + num_db;
+
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -142,23 +188,22 @@ public class EditAddressActivity extends AppCompatActivity {
         setMyAddress(output.toString());
     }
 
+    //myAddress ->
     public void setMyAddress(String str) {
         Document doc = Jsoup.parse(str);
         Elements nickName_db = doc.select("ol > li.nickName");
         Elements userName_db = doc.select("ol > li.userName");
         Elements id_db = doc.select("ol > li.id");
         Elements phone_db = doc.select("ol > li.phone");
-        Elements zip_num_db = doc.select("ol > li.zip_num");
         Elements address1_db = doc.select("ol > li.address1");
         Elements address2_db = doc.select("ol > li.address2");
         Elements result_db = doc.select("ol > li.result");
 
         for(int i = 0, size = id_db.size(); i < size; i++) {
-            //userId_db, nickName, userName, phone, zip_num, address1, address2_db, result;
+
             nickName = nickName_db.text();
             userName = userName_db.text();
             phone = phone_db.text();
-            zip_num = zip_num_db.text();
             address1 = address1_db.text();
             address2 = address2_db.text();
             result = result_db.text();
@@ -179,22 +224,22 @@ public class EditAddressActivity extends AppCompatActivity {
                 nickName_text.setText(nickName);
                 userName_text.setText(userName);
                 phone_text.setText(phone);
-                zip_num_text.setText(zip_num);
                 address1_text.setText(address1);
                 address2_text.setText(address2);
             }
         });
     }
 
+    //주소 수정
     public void myAddressEdit(String urlStr) {
 
         nickName = nickName_text.getText().toString().trim();
         userName = userName_text.getText().toString().trim();
         phone = phone_text.getText().toString().trim();
-        zip_num = zip_num_text.getText().toString().trim();
         address1 = address1_text.getText().toString().trim();
         address2 = address2_text.getText().toString().trim();
 
+        System.out.println("editAddress nickname  -= " + nickName);
 
         StringBuilder output = new StringBuilder();
 
@@ -210,15 +255,15 @@ public class EditAddressActivity extends AppCompatActivity {
                 OutputStream outputStream = conn.getOutputStream();
 
                 //값 넣어주기
-                String params = "id=" + userId_db
+                String params = "no=" + num_db
+                                + "&id=" + userId_db
                                 + "&name=" + nickName
                                 + "&userName=" + userName
                                 + "&phone=" + phone
-                                + "&zip_num=" + zip_num
                                 + "&address1=" + address1
                                 + "&address2=" + address2
                                 + "&result=" + result;
-
+                System.out.println("editAddress params : " + params);
 
                 outputStream.write(params.getBytes());
 
@@ -242,15 +287,14 @@ public class EditAddressActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setMyAddressEdit(output.toString());
-
     }
 
+    //myAddressEdit ->
     public void setMyAddressEdit(String str) {
         Document doc = Jsoup.parse(str);
         Elements nickName_db = doc.select("ol > li.name");
         Elements userName_db = doc.select("ol > li.userName");
         Elements phone_db = doc.select("ol > li.phone");
-        Elements zip_num_db = doc.select("ol > li.zip_num");
         Elements address1_db = doc.select("ol > li.address1");
         Elements address2_db = doc.select("ol > li.address2");
         Elements result_db = doc.select("ol > li.result");
@@ -260,10 +304,10 @@ public class EditAddressActivity extends AppCompatActivity {
             nickName = nickName_db.text();
             userName = userName_db.text();
             phone = phone_db.text();
-            zip_num = zip_num_db.text();
             address1 = address1_db.text();
             address2 = address2_db.text();
             result = result_db.text();
+
 
         }
 
@@ -279,9 +323,10 @@ public class EditAddressActivity extends AppCompatActivity {
                 nickName_text.setText(nickName);
                 userName_text.setText(userName);
                 phone_text.setText(phone);
-                zip_num_text.setText(zip_num);
                 address1_text.setText(address1);
                 address2_text.setText(address2);
+
+                Toast.makeText(getApplicationContext(), "수정되었습니다.", Toast.LENGTH_SHORT).show();
 
             }
         });

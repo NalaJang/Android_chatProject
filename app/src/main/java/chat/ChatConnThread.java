@@ -281,6 +281,23 @@ public class ChatConnThread extends Thread{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            /*
+            finally {
+                try {
+
+                    if(socket != null) {
+                        socket.close();
+
+                        output.println(Signals.LOGOUT.getSignal() + delim1 + userId);
+
+                    }
+
+                } catch (Exception e) {
+
+                }
+            }
+
+             */
         }
     }   //end checkConnSocket
 

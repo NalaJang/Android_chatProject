@@ -114,6 +114,7 @@ public class Chat_room_list_Adapter extends RecyclerView.Adapter<Chat_room_list_
                 @Override
                 public void onClick(View v) {
 
+                    //getAdapterPosition() : viewHolder 에서 제공하는 현재 위치를 확인 할 수 있는 메소드
                     int position = getAdapterPosition();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());

@@ -8,15 +8,6 @@
     android:orientation="vertical"
     tools:context=".AddressActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:text="배송지 수정"
-        />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,6 +16,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical"
             >
 
@@ -83,23 +76,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="우편번호"
-                />
-
-            <EditText
-                android:id="@+id/zip_num_editAddr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="20dp"
-                android:hint="우편번호 찾기"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
                 android:text="기본 주소"
                 />
 
@@ -113,21 +89,36 @@
                 android:hint="기본 주소"
                 />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="상세 주소"
-                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/address2_editAddr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="20dp"
-                />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="상세 주소"
+                    />
+
+                <EditText
+                    android:id="@+id/address2_editAddr"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="상세 주소"
+                    android:textSize="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/search_eidtAddr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/address2_editAddr"
+                    android:textColor="@color/black"
+                    android:text="주소 검색"
+                    />
+            </RelativeLayout>
 
             <CheckBox
                 android:id="@+id/check_editAddr"
@@ -140,6 +131,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:layout_gravity="center"
                 android:background="@color/button"
                 android:textColor="@color/white"

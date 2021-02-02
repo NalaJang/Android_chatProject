@@ -84,11 +84,18 @@
                 android:id="@+id/userAddress2_addressList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@id/userAddress1_addressList"
-                android:layout_below="@+id/userName_addressList"
+                android:layout_below="@+id/userAddress1_addressList"
                 android:textSize="16dp"
                 android:text="나머지 주소"
+                />
+
+            <TextView
+                android:id="@+id/num_addressList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/edit_addressList"
+                android:visibility="gone"
                 />
 
             <Button
@@ -100,6 +107,15 @@
                 android:textColor="@color/white"
                 android:textSize="17dp"
                 android:text="수정"
+                />
+
+            <Button
+                android:id="@+id/delete_addressList"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/userAddress2_addressList"
+                android:text="삭제"
                 />
 
         </RelativeLayout>

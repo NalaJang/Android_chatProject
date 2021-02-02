@@ -76,7 +76,6 @@ public class QnaCheckAdapter extends BaseAdapter {
         indate.setText(qnaDto.getIndate());
         title.setText(qnaDto.getTitle());
         num.setText(qnaDto.getNum());
-        num.setVisibility(View.GONE);
         result.setText(qnaDto.getResult());
 
 
@@ -84,15 +83,16 @@ public class QnaCheckAdapter extends BaseAdapter {
         switch (qnaDto.getResult()) {
             case "1" :
                 result.setText("답변 준비중");
+                result.setTextColor(Color.parseColor("black"));
                 break;
 
             case "2" :
                 result.setText("답변 완료");
-                result.setTextColor(Color.parseColor("#FF018786"));
+                result.setTextColor(Color.parseColor("#D81B60"));
                 break;
         }
 
-        //문의내역 질문 클릭
+        //문의내역 제목 클릭
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

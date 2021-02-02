@@ -93,7 +93,7 @@ public class MyBodyActivity extends AppCompatActivity {
 //        weight_edit.setText(weight_db);
 //        foot_edit.setText(foot_db);
 
-        //등록한 바디 프로필 내역
+        //기존 바디 프로필 내역
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -126,6 +126,8 @@ public class MyBodyActivity extends AppCompatActivity {
             }
         });
     }   //end onCreate
+
+
 
     //기존 바디 프로필
     public void myBodyProfile(String urlStr) {
@@ -174,8 +176,6 @@ public class MyBodyActivity extends AppCompatActivity {
         Log.d("====", output.toString());
     }
 
-    String b;
-
     public void setMyBodyProfile(String str) {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
@@ -209,39 +209,13 @@ public class MyBodyActivity extends AppCompatActivity {
                 height = height_db.text();
                 weight = weight_db.text();
 
-
-//                shoulder_edit.setText(shoulder_db.text());
-//                arm_edit.setText(arm_db.text());
-//                bust_edit.setText(bust_db.text());
-//                waist_edit.setText(waist_db.text());
-//                totalUpperBody_edit.setText(totalUpperBody_db.text());
-//                hip_edit.setText(hip_db.text());
-//                thigh_edit.setText(thigh_db.text());
-//                calf_edit.setText(calf_db.text());
-//                totalLowerBody_edit.setText(totalLowerBody_db.text());
-//                height_edit.setText(height_db.text());
-//                weight_edit.setText(weight_db.text());
-//                foot_edit.setText(foot_db.text());
-
-//                intent.putExtra("shoulder_db", shoulder_db.get(i).text());
-//                intent.putExtra("arm_db", arm_db.get(i).text());
-//                intent.putExtra("bust_db", bust_db.get(i).text());
-//                intent.putExtra("waist_db", waist_db.get(i).text());
-//                intent.putExtra("totalUpperBody_db", totalUpperBody_db.get(i).text());
-//                intent.putExtra("hip_db", hip_db.get(i).text());
-//                intent.putExtra("thigh_db", thigh_db.get(i).text());
-//                intent.putExtra("calf_db", calf_db.get(i).text());
-//                intent.putExtra("totalLowerBody_db", totalLowerBody_db.get(i).text());
-//                intent.putExtra("foot_db", foot_db.get(i).text());
-//                intent.putExtra("height_db", height_db.get(i).text());
-//                intent.putExtra("weight_db", weight_db.get(i).text());
-
             } else if (result.get(0).text().equals("실패")) {
 
             }
             println();
         }
     }
+
 
     public void println() {
         handler.post(new Runnable() {
@@ -333,7 +307,6 @@ public class MyBodyActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setEditProfile(output.toString());
-        Log.d("====", output.toString());
     }
 
     public void setEditProfile(String str) {
@@ -355,13 +328,6 @@ public class MyBodyActivity extends AppCompatActivity {
 
         for(int i = 0, size = shoulder_db.size(); i < size; i++) {
 
-//            height_edit.setText(height_db.text());
-//            b = shoulder_db.text();
-            /*
-            , , bust, waist, totalUpperBody,
-            hip, thigh, calf, totalLowerBody, height, weight, foot;
-             */
-
             shoulder = shoulder_db.text();
             arm = arm_db.text();
             bust = bust_db.text();
@@ -371,8 +337,9 @@ public class MyBodyActivity extends AppCompatActivity {
             thigh = thigh_db.text();
             calf = calf_db.text();
             totalLowerBody = totalLowerBody_db.text();
-            weight = weight_db.text();
+            height = height_db.text();
             foot = foot_db.text();
+            weight = weight_db.text();
 
         }
         println2();
@@ -395,6 +362,8 @@ public class MyBodyActivity extends AppCompatActivity {
                 height_edit.setText(height);
                 weight_edit.setText(weight);
                 foot_edit.setText(foot);
+
+                Toast.makeText(MyBodyActivity.this, "정보가 수정되었습니다.", Toast.LENGTH_SHORT).show();
 
             }
         });

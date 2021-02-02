@@ -3,8 +3,8 @@ package chat;
 import android.content.Context;
 import android.util.Log;
 
+
 import dto.Message;
-import dto.MessageData;
 
 public class MsgUtils {
     private static ChatConnThread connThread;

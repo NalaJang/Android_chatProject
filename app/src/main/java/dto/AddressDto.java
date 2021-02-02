@@ -2,6 +2,7 @@ package dto;
 
 public class AddressDto {
 
+    private String no;
     private String nickName;
     private String userName;
     private String id;
@@ -14,7 +15,8 @@ public class AddressDto {
     @Override
     public String toString() {
         return "AddressDto{" +
-                "nickName='" + nickName + '\'' +
+                "no=" + no +
+                ", nickName='" + nickName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", id='" + id + '\'' +
                 ", phone='" + phone + '\'' +
@@ -27,7 +29,7 @@ public class AddressDto {
 
     public AddressDto() {}
 
-    public AddressDto(String nickName, String userName, String id, String phone, String zip_num, String address1, String address2, String result) {
+    public AddressDto(String no, String nickName, String userName, String id, String phone, String zip_num, String address1, String address2, String result) {
         this.nickName = nickName;
         this.userName = userName;
         this.id = id;
@@ -36,6 +38,15 @@ public class AddressDto {
         this.address1 = address1;
         this.address2 = address2;
         this.result = result;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public AddressDto setNo(String no) {
+        this.no = no;
+        return this;
     }
 
     public String getNickName() {

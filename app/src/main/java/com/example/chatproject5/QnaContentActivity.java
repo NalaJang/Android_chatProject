@@ -60,7 +60,7 @@ public class QnaContentActivity extends AppCompatActivity {
 
             case "2" :
                 result_text.setText("답변 완료");
-                result_text.setTextColor(Color.parseColor("#FF018786"));
+                result_text.setTextColor(Color.parseColor("#D81B60"));
                 break;
         }
     }

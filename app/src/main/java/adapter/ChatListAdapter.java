@@ -117,7 +117,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
                     if(position != RecyclerView.NO_POSITION) {
 
-                        builder.setPositiveButton("삭제", (dialog, which) -> {    //-> 람다식
+                        builder.setPositiveButton(R.string.delete, (dialog, which) -> {    //-> 람다식
 
 
                             System.out.println(items.get(position).toString());

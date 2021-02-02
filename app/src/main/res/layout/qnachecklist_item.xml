@@ -43,7 +43,7 @@
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/result_qnaCheck"
             android:layout_below="@+id/result_qnaCheck"
-            android:text="num"
+            android:visibility="gone"
             />
 
         <TextView
@@ -54,7 +54,6 @@
             android:layout_marginRight="10dp"
             android:layout_alignParentEnd="true"
             android:textSize="17dp"
-            android:textColor="@color/colorAccent"
             android:text="답변현황"
             />
     </RelativeLayout>

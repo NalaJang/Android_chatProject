@@ -132,7 +132,6 @@ public class QnaCheckFragment extends Fragment {
 
         }
         setQnaList(output.toString());
-        Log.d("output ===", output.toString());
 
     }
 
@@ -164,7 +163,6 @@ public class QnaCheckFragment extends Fragment {
 
                     //qnaList.add(qna);
                     //adapter.add(qna);
-                    System.out.println("qnaCheck, num : " + num.get(j).text());
                     adapter2.addItem(qna);    //*****
 
                     println2();

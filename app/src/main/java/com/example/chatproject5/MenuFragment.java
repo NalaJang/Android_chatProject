@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import chat.MsgUtils;
 import database.ChattingRoomListHelper;
 
 public class MenuFragment extends Fragment {
@@ -68,6 +69,7 @@ public class MenuFragment extends Fragment {
         Button myPointButton = rootView.findViewById(R.id.point_menu);
         Button qnaButton = rootView.findViewById(R.id.qna_menu);
         Button goShopButton = rootView.findViewById(R.id.goShop_menu);
+        Button logoutButton = rootView.findViewById(R.id.logout_button);
 
 
         /***************** 내 정보 *****************/
@@ -161,8 +163,29 @@ public class MenuFragment extends Fragment {
             }
         });
 
+
+        /***************** 로그아웃 *****************/
+        /*
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("userId_db", "");
+                intent.putExtra("userPw_db", "");
+                startActivity(intent);
+
+                //서버에 신호 보내기
+
+            }
+        });
+
+         */
+
+
+
         return rootView;
-    }
+    }   //end onCreate;
 
 
     public void myBodyList(String urlStr) {

@@ -133,7 +133,7 @@ public class MyInfoActivity extends AppCompatActivity {
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new AddressListAdapter(addressList, getApplicationContext(), userId_db);
+        adapter = new AddressListAdapter(addressList, MyInfoActivity.this, userId_db);
         recyclerView.setAdapter(adapter);
 
 
@@ -307,6 +307,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
     }
 
+    //update ->
     public void setUpdate(String outputStr) {
         Document doc = Jsoup.parse(outputStr);
         Elements result = doc.select("p.result");
@@ -396,9 +397,10 @@ public class MyInfoActivity extends AppCompatActivity {
         setAddressList(output.toString());
     }
 
-    //DB 에서 가져온 배송지 목록
+    //DB 에서 가져온 배송지 목록(myAddressList)
     public void setAddressList(String str) {
         Document doc = Jsoup.parse(str);
+        Elements no_db = doc.select("ol > li.no");
         Elements nickName_db = doc.select("ol > li.nickName");
         Elements userName_db = doc.select("ol > li.userName");
         Elements id_db = doc.select("ol > li.id");
@@ -410,7 +412,8 @@ public class MyInfoActivity extends AppCompatActivity {
 
         for(int i = 0, size = id_db.size(); i < size; i++) {
 
-            AddressDto addressDto = new AddressDto().setNickName(nickName_db.get(i).text())
+            AddressDto addressDto = new AddressDto().setNo(no_db.get(i).text())
+                                                    .setNickName(nickName_db.get(i).text())
                                                     .setUserName(userName_db.get(i).text())
                                                     .setId(id_db.get(i).text())
                                                     .setPhone(phone_db.get(i).text())
@@ -431,7 +434,6 @@ public class MyInfoActivity extends AppCompatActivity {
             public void run() {
 
                 recyclerView.setAdapter(adapter);
-
             }
         });
     }
@@ -449,7 +451,5 @@ public class MyInfoActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }
