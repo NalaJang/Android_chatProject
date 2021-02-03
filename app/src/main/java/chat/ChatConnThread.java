@@ -37,6 +37,8 @@ public class ChatConnThread extends Thread{
     private Socket socket;
     private String userId;
 
+    private boolean run = true;
+
 
 //    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");    //-> timeNow.format(new Date()); , 현재시간을 계속 받아야해서
 //    private Date today = new Date();
@@ -51,7 +53,7 @@ public class ChatConnThread extends Thread{
     private String delim2 = "/&-";
     private String delim4 = "/~=";
 
-    private BroadcastReceiver receiver;
+//    private BroadcastReceiver receiver;
 
 
     //생성자 생성
@@ -103,8 +105,6 @@ public class ChatConnThread extends Thread{
                 roomId = msg.getRoomId();
                 toId = msg.getToId();
 
-                Log.d(TAG, "checkIn 의 roomId ====> " + roomId);
-                Log.d(TAG, "checkIn 의 toId ======> " + toId);
 
                 break;
 
@@ -131,14 +131,39 @@ public class ChatConnThread extends Thread{
             case LOGOUT :
                 System.out.println("logout 들어옴");
 
-                sendMsg = Signals.LOGOUT.getSignal() + delim1;
-                userId = null;
+                sendMsg = Signals.LOGOUT.getSignal() + delim1 + userId;
+//                userId = null;
+
+                System.out.println("여기");
+                closeConn();
+                closeSocket();
+
+//                try {
+//
+//                    if(socket != null) {
+//                        run = false;
+//                        System.out.println("run 값 = " + run);
+////                        socket.close();
+////                        input.close();
+////                        output.close();
+//
+//
+//                        closeSocket();
+//                    }
+
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+
                 break;
 
         }   //end switch
 
         try {
+            System.out.println("try 문안의 run = " + run);
             checkConnSocket();
+
             output.println(sendMsg);
 //            output.flush();
 
@@ -159,9 +184,9 @@ public class ChatConnThread extends Thread{
     public void run() {
 
         //message 읽기
-        while(true) {
+        while(run) {
             try {
-
+                System.out.println("run 의 run = " + run);
                 Log.d(TAG, "while 문");
 
                 checkConnSocket();  //소켓 연결 및 output, input 생성
@@ -195,9 +220,6 @@ public class ChatConnThread extends Thread{
 
                          //현재 채팅중인 방에서 메세지를 받을 때
                         if(roomId.equals(currentRoomId)) {
-
-                            Log.d(TAG, "룸아이디 : " + roomId + "메세지 : " + message.getMessage());
-
 
                             Intent intent = new Intent("broadcast_" + roomId);
                             intent.putExtra("message", message.getMessage());
@@ -250,7 +272,6 @@ public class ChatConnThread extends Thread{
                         intent.putExtra("fromId", message.getFromId());
                         intent.putExtra("time", new SimpleDateFormat("a K:mm").format(new Date()));
 
-                        System.out.println(TAG + " , time : " + new SimpleDateFormat("a K:mm").format(new Date()));
                         context.sendBroadcast(intent);
 
 
@@ -258,9 +279,6 @@ public class ChatConnThread extends Thread{
 
                     case MSG_IMG :
                         break;
-
-                    case LOGOUT :
-
 
                 }
 
@@ -270,10 +288,15 @@ public class ChatConnThread extends Thread{
         }
     }
 
+    public void closeConn() {
+        run = false;
+    }
+
     //연결 확인
     public synchronized void checkConnSocket() {
-        while(true && !isOnLine()) {
 
+        while(run && !isOnLine()) {
+            System.out.println("run =  " + run);
             Log.d(TAG, "synchronized void checkConnSocket 들어옴 ");
 
             try {
@@ -290,25 +313,10 @@ public class ChatConnThread extends Thread{
                 Thread.sleep(100);
 
             } catch (Exception e) {
+
                 e.printStackTrace();
             }
-            /*
-            finally {
-                try {
 
-                    if(socket != null) {
-                        socket.close();
-
-                        output.println(Signals.LOGOUT.getSignal() + delim1 + userId);
-
-                    }
-
-                } catch (Exception e) {
-
-                }
-            }
-
-             */
         }
     }   //end checkConnSocket
 

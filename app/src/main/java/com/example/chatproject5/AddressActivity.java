@@ -227,7 +227,9 @@ public class AddressActivity extends AppCompatActivity {
 
 //           intent.putStringArrayListExtra("addInfo", addInfo);
 
+
         }
+
 
     }
 
