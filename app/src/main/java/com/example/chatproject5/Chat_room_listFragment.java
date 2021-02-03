@@ -35,8 +35,8 @@ public class Chat_room_listFragment extends Fragment {
     private Message message;
     private Chat_room_list_Adapter adapter;
     private LinearLayoutManager layoutManager;
-    private final Date today = new Date();
-    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+//    private final Date today = new Date();
+//    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
     private String userId_db;
 

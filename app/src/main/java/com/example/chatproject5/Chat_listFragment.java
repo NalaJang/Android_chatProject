@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,17 +23,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 
 import adapter.ChatListAdapter;
-import database.ChattingRoomListHelper;
 import dto.ChatListDto;
-import dto.ChattingRoomListDto;
-import dto.Message;
 
 
 public class Chat_listFragment extends Fragment {
@@ -54,13 +46,16 @@ public class Chat_listFragment extends Fragment {
 
     private Handler handler = new Handler();
     private RecyclerView recyclerView;
-    private ChatListAdapter adapter;
+    static ChatListAdapter adapter;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_chat_list, container, false);
+
 
         //타이틀 변경
         ActionBar actionBar = ((EntranceActivity)getActivity()).getSupportActionBar();
@@ -122,7 +117,6 @@ public class Chat_listFragment extends Fragment {
 
             }
         }).start();
-
 
         return rootView;
     }   //end onCreateView

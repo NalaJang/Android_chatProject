@@ -1,5 +1,6 @@
 package com.example.chatproject5;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,8 @@ import adapter.AddressListAdapter;
 import dto.AddressDto;
 
 public class MyInfoActivity extends AppCompatActivity {
+
+    public static final int EDIT_REQUEST_CODE = 1;
 
     private Intent intent;
     private Handler handler = new Handler();
@@ -157,10 +160,10 @@ public class MyInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //getSupportFragmentManager().beginTransaction().replace(R.id.container, addressFragment).commit();
                 intent = new Intent(getApplicationContext(), AddressActivity.class);
                 intent.putExtra("userId_db", userId_db);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, EDIT_REQUEST_CODE);
             }
         });
     }   //end onCreate
@@ -438,6 +441,21 @@ public class MyInfoActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+//        AddressListAdapter.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == EDIT_REQUEST_CODE) {  //요청 판단
+            if(resultCode == RESULT_OK) {   //성공 시
+
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        }
+    }
 
     //뒤로 가기
     @Override

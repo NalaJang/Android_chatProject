@@ -43,8 +43,8 @@ public class Chat_roomActivity extends AppCompatActivity {
     private ArrayList<MessageData> messageItems = new ArrayList<>();
 //    private MessageAdapter2 adapter;
 
-    private Date today = new Date();
-    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
+//    private Date today = new Date();
+//    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
     //추가
     private MessageAdapter3 adapter3;
@@ -179,7 +179,8 @@ public class Chat_roomActivity extends AppCompatActivity {
                         roomListDto = new ChattingRoomListDto().setRoomName(roomName)
                                                                 .setMyId(userId_db)
                                                                 .setOtherId(roomName)
-                                                                .setTime(timeNow.format(today));
+                                                                .setTime(new SimpleDateFormat("a K:mm").format(new Date()));
+//                                                                .setTime(timeNow.format(today));
 
                         roomListHelper.insert(roomListDto);
 
@@ -200,7 +201,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                     messageData.setOtherId(roomName);
                     messageData.setRoomName(roomName);
                     messageData.setContent(msg);   //리스트에 목록이 추가되는 것처럼 대화가 추가되는 것
-                    messageData.setTime(timeNow.format(today));
+                    messageData.setTime(new SimpleDateFormat("a K:mm").format(new Date()));
 
                     newMessageList.add(messageData);
                     messageItems.add(messageData); //추가
@@ -212,7 +213,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                     msgData.setToId(roomName);
                     msgData.setFromId(userId_db);
                     msgData.setMessage(et.getText().toString());
-                    msgData.setTime(timeNow.format(today));
+                    msgData.setTime(new SimpleDateFormat("a K:mm").format(new Date()));
                     msgData.setRoomId(roomName);
                     msgData.setPhoto("");
 
@@ -223,7 +224,7 @@ public class Chat_roomActivity extends AppCompatActivity {
 
 
                     /**/
-                    roomListHelper.update(msg, timeNow.format(today), roomName);    //업데이트
+                    roomListHelper.update(msg, new SimpleDateFormat("a K:mm").format(new Date()), roomName);    //업데이트
                     /**/
 
 
@@ -266,7 +267,7 @@ public class Chat_roomActivity extends AppCompatActivity {
                                                 .setOtherId(messageData.getOtherId())
                                                 .setRoomName(roomName)
                                                 .setContent(newMessageList.get(i).getContent())
-                                                .setTime(timeNow.format(today));
+                                                .setTime(new SimpleDateFormat("a K:mm").format(new Date()));
 
 
             boolean insert = msgHelper.insert(data);

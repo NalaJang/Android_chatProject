@@ -1,6 +1,8 @@
 package adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,8 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
     private ArrayList<SearchListDto> listViewItemList = new ArrayList<>() ;
     // 필터링된 결과 데이터를 저장하기 위한 ArrayList. 최초에는 전체 리스트 보유.
     private ArrayList<SearchListDto> filteredItemList = listViewItemList ;
+
+    public static Intent intent;
 
     private Context context;
     private Handler handler = new Handler();
@@ -110,8 +114,8 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
                                 OutputStream outputStream = conn.getOutputStream();
                                 String params = "id=" + myId
-                                        + "&workerNum=" + workerNum.getText().toString()
-                                        + "&workerId=" + workerId.getText().toString();
+                                            + "&workerNum=" + workerNum.getText().toString()
+                                            + "&workerId=" + workerId.getText().toString();
 
                                 outputStream.write(params.getBytes());
 
@@ -136,7 +140,8 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                             e.printStackTrace();
 
                         }
-                        println(output.toString());
+                        setSelectWorker(output.toString());
+                        println();
                     }
                 }).start();
             }
@@ -146,14 +151,17 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
     }   //end getView
 
 
-    public void setCheckList(String str) {
+    public void setSelectWorker(String str) {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
+        Elements workerId_db = doc.select("ol > li.workerId");
 
         for(int i = 0, size = result.size(); i < size; i++) {
-            if(result.get(0).text().equals("이미선택한상담사")) {
+            if(result.get(0).text().equals("등록성공")) {
 
-                println2();
+                intent = new Intent();
+                intent.putExtra("workerId_db", workerId_db.text());
+//                ((Activity)context).setResult(2, intent);
 
             }
        }
@@ -162,7 +170,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
 
     //출력 메소드
-    public  void println(String str) {
+    public  void println() {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -171,19 +179,6 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
             }
         });
     }
-
-
-    //출력 메소드
-    public  void println2() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                Toast.makeText(context, "이미 등록되어있는 상담사 입니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
 
 
     @Override

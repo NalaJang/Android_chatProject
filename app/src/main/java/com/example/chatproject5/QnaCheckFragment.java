@@ -108,6 +108,7 @@ public class QnaCheckFragment extends Fragment {
 
                 OutputStream outputStream = conn.getOutputStream();
                 String params = "id=" + userId_db;
+                System.out.println("qnaCheckfrag id = " + userId_db);
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));

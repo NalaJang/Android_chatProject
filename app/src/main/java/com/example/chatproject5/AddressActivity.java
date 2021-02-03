@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,11 +22,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class AddressActivity extends AppCompatActivity {
 
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;//기존
 
+    private Intent intent = new Intent();
     private Handler handler = new Handler();
     private String userId_db, nickName, name, phone, address1, address2, result;
 
@@ -37,6 +40,7 @@ public class AddressActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_address);
 
         Intent intent = getIntent();
@@ -194,7 +198,8 @@ public class AddressActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        setInsertAddress(output.toString());
+//        setInsertAddress(output.toString());
+        println();
     }
 
     public void setInsertAddress(String str) {
@@ -207,11 +212,23 @@ public class AddressActivity extends AppCompatActivity {
         Elements address2_db = doc.select("ol > li.address2");
         Elements result_db = doc.select("ol > li.result");
 
+
+        ArrayList<String> addInfo = new ArrayList<>();
+
         for(int i = 0, size = id_db.size(); i < size; i++) {
+
+            addInfo.add(nickName_db.text());
+            addInfo.add(userName_db.text());
+            addInfo.add(id_db.text());
+            addInfo.add(phone_db.text());
+            addInfo.add(address1_db.text());
+            addInfo.add(address2_db.text());
+            addInfo.add(result_db.text());
+
+//           intent.putStringArrayListExtra("addInfo", addInfo);
 
         }
 
-        println();
     }
 
     public void println() {
@@ -221,6 +238,21 @@ public class AddressActivity extends AppCompatActivity {
                 Toast.makeText(AddressActivity.this, "배송지가 추가되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //뒤로 가기
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
+
+                setResult(RESULT_OK, intent);
+                finish();
+
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

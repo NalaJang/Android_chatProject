@@ -40,6 +40,21 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
     private ArrayList<SearchListDto> items = new ArrayList<>();
 
+    //추가
+    @Override
+    public void onBackPressed() {
+//        Chat_listFragment chat_listFragment = new Chat_listFragment();
+//        Intent intent = new Intent(this, chat_listFragment.getClass());
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+        Chat_listFragment.adapter.notifyDataSetChanged();
+
+        super.onBackPressed();
+
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +171,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
     }
 
+    //기존 상담사 목록
     public void coordinatorList(String urlStr) {
         StringBuilder output = new StringBuilder();
 
@@ -212,9 +228,9 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
             if(hashSet.contains(workerId_db.get(i).text())) {
 
-                System.out.println("===================");
-                continue;   //-> adapter 에 등록하지 않고(↓실행않고) for 문을 넘어감
+                continue;   //-> adapter 에 등록하지 않고(↓실행하지 않고) for 문을 넘어감
             }
+
             SearchListDto searchListDto = new SearchListDto();
             searchListDto.setWorkerNum(workerNum_db.get(i).text());
             searchListDto.setWorkerId(workerId_db.get(i).text());

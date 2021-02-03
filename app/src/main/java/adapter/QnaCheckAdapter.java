@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chatproject5.QnaContentActivity;
 import com.example.chatproject5.R;
@@ -92,8 +93,7 @@ public class QnaCheckAdapter extends BaseAdapter {
                 break;
         }
 
-        //문의내역 제목 클릭
-        title.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -103,50 +103,57 @@ public class QnaCheckAdapter extends BaseAdapter {
                     @Override
                     public void run() {
 
-                        StringBuilder output = new StringBuilder();
-
-                        try {
-                            URL url = new URL(urlStr);
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-                            if(conn != null) {
-                                conn.setConnectTimeout(10000);
-                                conn.setRequestMethod("POST");
-                                conn.setDoInput(true);
-
-                                OutputStream outputStream = conn.getOutputStream();
-                                String params = "num=" + Integer.parseInt(num.getText().toString());//int 로 고쳐주기
-
-                                outputStream.write(params.getBytes());
-
-                                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                                String line = null;
-
-                                while(true) {
-                                    line = reader.readLine();
-
-                                    if(line == null) {
-                                        break;
-                                    }
-
-                                    output.append(line + "\n");
-
-                                }
-                                reader.close();
-                                conn.disconnect();
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                        }
-                        setQnaList(output.toString());
+                        clickQna(urlStr, Integer.parseInt(num.getText().toString()));
                     }
                 }).start();
+
             }
         });
 
         return convertView;
+    }
+
+
+    //문의 내용 보기
+   public void clickQna(String urlStr, int num) {
+        StringBuilder output = new StringBuilder();
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+                String params = "num=" + num; //int 로 고쳐주기
+
+                outputStream.write(params.getBytes());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line = null;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        setQnaList(output.toString());
     }
 
     public void setQnaList(String str) {

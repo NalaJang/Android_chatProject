@@ -31,8 +31,7 @@
         <activity android:name=".MyBodyActivity" />
         <activity android:name=".MyOrderListActivity" />
         <activity
-            android:name=".AddressActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".AddressActivity" />
         <activity android:name=".MyInfoActivity" />
         <activity
             android:name=".MyProfileActivity"

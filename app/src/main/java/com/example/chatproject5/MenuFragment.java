@@ -25,7 +25,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import chat.MsgUtils;
+import chat.Signals;
 import database.ChattingRoomListHelper;
+import dto.Message;
 
 public class MenuFragment extends Fragment {
 
@@ -165,23 +167,40 @@ public class MenuFragment extends Fragment {
 
 
         /***************** 로그아웃 *****************/
-        /*
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*
+                 message.setSignal(Signals.CHECK_OUT.getSignal() + "");
+                MsgUtils.sendMsg(message);
+                MsgUtils.setCurrentRoom("");
+                 */
+                //서버에 신호 보내기
+                Message message = new Message();
+                message.setSignal(Signals.LOGOUT.getSignal() + "");
+
+                MsgUtils.sendMsg(message);
+
 
                 intent = new Intent(getContext(), MainActivity.class);
                 intent.putExtra("userId_db", "");
                 intent.putExtra("userPw_db", "");
                 startActivity(intent);
 
-                //서버에 신호 보내기
 
+/*
+ message = new Message();
+                message.setSignal(Signals.CHECK_IN.getSignal() + "");
+                message.setRoomId(roomList.getRoomName());
+                message.setToId(roomList.getRoomName());
+                message.setPhoto("");
+
+
+                MsgUtils.sendMsg(message);
+ */
             }
         });
-
-         */
-
 
 
         return rootView;

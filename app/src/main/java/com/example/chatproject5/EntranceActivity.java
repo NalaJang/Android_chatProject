@@ -204,7 +204,11 @@ public class EntranceActivity extends AppCompatActivity {
                     public void run() {
 
 //                        search(urlStr);
-                        startActivity(intent);  //정보를 넘긴 후 startActivity 적어주기
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+//                        startActivity(intent);  //정보를 넘긴 후 startActivity 적어주기
+
+                        startActivityForResult(intent, 2);
                     }
                 }).start();
 
@@ -212,74 +216,6 @@ public class EntranceActivity extends AppCompatActivity {
         }
         return true;
     }
-/*
-    public void search(String urlStr) {
-
-        StringBuilder output = new StringBuilder();
-
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            if(conn != null) {
-                conn.setConnectTimeout(10000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-
-                OutputStream outputStream = conn.getOutputStream();
-                String params = "id=user&pw=1234";
-                outputStream.write(params.getBytes());
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
-
-                while(true) {
-                    line = reader.readLine();
-
-                    if(line == null) {
-                        break;
-                    }
-
-                    output.append(line + "\n");
-
-                }
-                reader.close();
-                conn.disconnect();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        setSearchWorker(output.toString());
-//        Log.d("workeroutput", output.toString());
-    }
-
-
-    public void setSearchWorker(String str) {
-
-        Document doc = Jsoup.parse(str);
-        Elements workerNum_db = doc.select("ol > li.num");
-        Elements workerId_db = doc.select("ol > li.id");
-        Elements workerContent_db = doc.select("ol > li.content");
-
-        ArrayList<String> items = new ArrayList<>();
-
-        for(int i = 0; i < workerId_db.size(); i++) {
-
-            //num, content 추가
-//            items.add(workerNum_db.get(i).text());
-//            items.add(workerId_db.get(i).text());
-////            items.add(workerContent_db.get(i).text());
-//
-//            intent.putStringArrayListExtra("strings", items);
-//            intent.putExtra("workerNum_db", workerNum_db.get(i).text());
-////            intent.putExtra("workerId_db", workerId_db.get(i).text());
-//            intent.putExtra("workerContent_db", workerContent_db.get(i).text());
-
-        }
-    }
-    */
 
 
     //broadcast 해제

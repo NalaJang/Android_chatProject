@@ -37,9 +37,9 @@ public class ChatConnThread extends Thread{
     private Socket socket;
     private String userId;
 
-//    private SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm");
-    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
-    private Date today = new Date();
+
+//    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");    //-> timeNow.format(new Date()); , 현재시간을 계속 받아야해서
+//    private Date today = new Date();
     private String currentRoomId;
     private String roomId;
     private String toId;
@@ -127,6 +127,14 @@ public class ChatConnThread extends Thread{
 
                 break;
 
+            //로그아웃
+            case LOGOUT :
+                System.out.println("logout 들어옴");
+
+                sendMsg = Signals.LOGOUT.getSignal() + delim1;
+                userId = null;
+                break;
+
         }   //end switch
 
         try {
@@ -194,7 +202,7 @@ public class ChatConnThread extends Thread{
                             Intent intent = new Intent("broadcast_" + roomId);
                             intent.putExtra("message", message.getMessage());
                             intent.putExtra("fromId", message.getFromId());
-                            intent.putExtra("time", timeNow.format(today));
+                            intent.putExtra("time", new SimpleDateFormat("a K:mm").format(new Date()));
                             context.sendBroadcast(intent);  //-> chatRoomActivity 로 전달
 
 
@@ -208,7 +216,7 @@ public class ChatConnThread extends Thread{
                                                             .setOtherId(message.getToId())
                                                             .setRoomName(message.getFromId())
                                                             .setContent(message.getMessage())
-                                                            .setTime(timeNow.format(today));
+                                                            .setTime(new SimpleDateFormat("a K:mm").format(new Date(System.currentTimeMillis())));
 
 
                             dbHelper.insert(messageData);
@@ -225,7 +233,7 @@ public class ChatConnThread extends Thread{
                                                                         .setOtherId(message.getFromId())
                                                                         .setLastContent(message.getMessage())
                                                                         .setProfileImage("")
-                                                                        .setTime(timeNow.format(today));
+                                                                        .setTime(new SimpleDateFormat("a K:mm").format(new Date(System.currentTimeMillis())));
 
                                 chattingRoomListHelper.insert(roomListDto);
 
@@ -240,9 +248,9 @@ public class ChatConnThread extends Thread{
                         Intent intent = new Intent("broadcast_entrance");
                         intent.putExtra("message", message.getMessage());
                         intent.putExtra("fromId", message.getFromId());
-                        intent.putExtra("time", timeNow.format(today));
+                        intent.putExtra("time", new SimpleDateFormat("a K:mm").format(new Date()));
 
-                        System.out.println(TAG + " , time : " + timeNow.format(today));
+                        System.out.println(TAG + " , time : " + new SimpleDateFormat("a K:mm").format(new Date()));
                         context.sendBroadcast(intent);
 
 
@@ -250,6 +258,9 @@ public class ChatConnThread extends Thread{
 
                     case MSG_IMG :
                         break;
+
+                    case LOGOUT :
+
 
                 }
 

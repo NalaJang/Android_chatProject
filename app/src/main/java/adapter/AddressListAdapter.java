@@ -1,5 +1,6 @@
 package adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatproject5.EditAddressActivity;
+import com.example.chatproject5.MyInfoActivity;
 import com.example.chatproject5.R;
 
 import java.io.BufferedReader;
@@ -109,11 +111,11 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                     //context.startActivity(intent);
                     //에러 : FLAG_ACTIVITY_NEW_TASK flag
                     //↑ ListView 의 "한 아이템을 클릭했을 경우, startActivity 를 사용해 새로운 Activity 를 생성하려 했을 때"
-                    //수정 ↓
-                    context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
+                    //↓ 수정
+//                    context.startActivity(intent.addFlags(FLAG_ACTIVITY_NEW_TASK));
 
+                    ((Activity)context).startActivityForResult(intent, MyInfoActivity.EDIT_REQUEST_CODE);
 
-                    notifyItemChanged(getAdapterPosition());
                 }
 
             });
@@ -157,6 +159,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                 }
             }); //end deleteButton
         }
+
 
         public void setItem(AddressDto address) {
             num.setText(address.getNo());
@@ -225,5 +228,13 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
     }   //end viewHolder
 
-
+    //추가
+//    public static void onActivityResult(int requestCode, int resultCode, Intent data) {
+//
+//        if(requestCode == 1) {
+//            if(resultCode == 1) {
+//
+//            }
+//        }
+//    }
 }

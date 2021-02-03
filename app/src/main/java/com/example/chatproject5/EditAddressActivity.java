@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import adapter.AddressListAdapter;
 
@@ -35,6 +36,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
     private Handler handler = new Handler();
 
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class EditAddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_address);
 
         setTitle("배송지 수정");
+
+        intent = new Intent();
 
         nickName_text = findViewById(R.id.nickName_editAddr);
         userName_text = findViewById(R.id.name_editAddr);
@@ -56,17 +60,8 @@ public class EditAddressActivity extends AppCompatActivity {
         Intent intent = getIntent();
         num_db = intent.getStringExtra(("num_db"));
         userId_db = intent.getStringExtra("userId_db");
-//        nickName_db = intent.getStringExtra("nickName_db");
-//        userName_db = intent.getStringExtra("userName_db");
-//        phone_db = intent.getStringExtra("userPhone_db");
-//        address1_db = intent.getStringExtra("userAddress1_db");
-//        address2_db = intent.getStringExtra("userAddress2e_db");
 
-//        nickName_text.setText(nickName_db);
-//        userName_text.setText(userName_db);
-//        phone_text.setText(phone_db);
-//        address1_text.setText(address1_db);
-//        address2_text.setText(address2_db);
+
 
         //선택한 배송지
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/myAddress.do";
@@ -99,6 +94,7 @@ public class EditAddressActivity extends AppCompatActivity {
             }
         });
 
+
         //수정 버튼
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +122,7 @@ public class EditAddressActivity extends AppCompatActivity {
             }
         });
     }   //end onCreate
+
 
     //선택한 주소 값
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -308,7 +305,6 @@ public class EditAddressActivity extends AppCompatActivity {
             address2 = address2_db.text();
             result = result_db.text();
 
-
         }
 
         println2();
@@ -326,6 +322,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 address1_text.setText(address1);
                 address2_text.setText(address2);
 
+
                 Toast.makeText(getApplicationContext(), "수정되었습니다.", Toast.LENGTH_SHORT).show();
 
             }
@@ -339,7 +336,9 @@ public class EditAddressActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
 
+                setResult(RESULT_OK, intent);
                 finish();
+
                 return true;
             }
         }
