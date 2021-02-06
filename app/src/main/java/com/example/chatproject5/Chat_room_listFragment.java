@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -66,7 +67,6 @@ public class Chat_room_listFragment extends Fragment {
         //정보 받기
         Bundle bundle = this.getArguments();
         userId_db = bundle.getString("userId_db");
-
 
 
         //DB 에서 채팅목록 가져오기

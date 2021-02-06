@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.jsoup.Jsoup;
@@ -33,6 +34,7 @@ public class Chat_listFragment extends Fragment {
 
     private String userId_db;
     private String userContent_db;
+    private TextView textView;
 
 //    private Date today = new Date();
 //    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
@@ -72,6 +74,7 @@ public class Chat_listFragment extends Fragment {
         userId.setText(userId_db);
         content.setText(userContent_db);
 
+        textView = rootView.findViewById(R.id.text_chat_list);
 
 
         //자신의 프로필 클릭
@@ -106,7 +109,7 @@ public class Chat_listFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
 
-        //DB 에서 선택한 코디네이터 목록 가져오기
+        //선택한 코디네이터 목록 DB 에서 가져오기
         final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectedWorkerList.do";
 
         new Thread(new Runnable() {
@@ -122,7 +125,7 @@ public class Chat_listFragment extends Fragment {
     }   //end onCreateView
 
 
-
+    //DB 코디네이터 목록
     public void selectedCoordinatorList(String urlStr) {
 
         StringBuilder output = new StringBuilder();
@@ -173,29 +176,36 @@ public class Chat_listFragment extends Fragment {
     public void setWorkerList(String str) {
 
         Document doc = Jsoup.parse(str);
+        Elements result = doc.select("p.result");
         Elements workerNum_db = doc.select("ol > li.workerNum");
         Elements workerId_db = doc.select("ol > li.workerId");
         Elements workerContent_db = doc.select("ol > li.workerContent");
 
         EntranceActivity.hashSet.clear();//추가
 
-        for(int j = 0; j < workerId_db.size(); j++) {
+        for(int i = 0, size = result.size(); i < size; i++) {
+            if(result.get(0).text().equals("목록있음")) {
 
-            ChatListDto chatListDto = new ChatListDto();
-            chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
-            chatListDto.setWorkerId(workerId_db.get(j).text());
-            chatListDto.setContent(workerContent_db.get(j).text());
+                for(int j = 0; j < workerId_db.size(); j++) {
 
-            EntranceActivity.hashSet.add(chatListDto.getWorkerId());//-> 내가 등록한 상담사 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+                    ChatListDto chatListDto = new ChatListDto();
+                    chatListDto.setNum(Integer.parseInt(workerNum_db.get(j).text()));
+                    chatListDto.setWorkerId(workerId_db.get(j).text());
+                    chatListDto.setContent(workerContent_db.get(j).text());
 
-            adapter.addItem(chatListDto);
-        }
+                    EntranceActivity.hashSet.add(chatListDto.getWorkerId());//-> 내가 등록한 상담사 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+
+                    adapter.addItem(chatListDto);
+                }
 
                 println();
 
+            }
+        }
+
     }   //end setWorkerList
 
-
+    //"목록있음"에 대한 출력 결과
     public void println() {
         handler.post(new Runnable() {
             @Override
@@ -203,6 +213,8 @@ public class Chat_listFragment extends Fragment {
 
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+                textView.setVisibility(View.GONE);
             }
         });
     }

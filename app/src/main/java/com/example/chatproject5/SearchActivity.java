@@ -116,13 +116,14 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
                 if (filterText.length() > 0) {
 
+                    //setFilterText 함수로 필터링을 수행한다 (작성한 텍스트를 팝업으로 알림)
                     listview.setFilterText(filterText) ;
 
                 } else {
                     listview.clearTextFilter() ;
                 }
             }
-
+            //검색 관련 override
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -132,29 +133,9 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
             }
         });
 
-
-        /*
-                //선택한 아이디
-                String clickedItem = (String)parent.getAdapter().getItem(position);
-
-                Toast.makeText(getApplicationContext(), "클릭된 아이디 : " + clickedItem + position, Toast.LENGTH_SHORT).show();
-
-                //정보 보내기
-                intent = new Intent(getApplicationContext(), WorkerProfileActivity.class);
-                intent.putExtra("userId_db", userId_db);
-                intent.putExtra("workerId_db", clickedItem);
-                intent.putExtra("workerContent_db", workerContent_db);
-                intent.putExtra("position", listview.getCheckedItemPosition());
-
-                startActivity(intent);
-
-            }
-        });
-
-         */
-
     }// end onCreate
 
+    //검색 관련 override
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -170,6 +151,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
     public void afterTextChanged(Editable s) {
 
     }
+
 
     //기존 상담사 목록
     public void coordinatorList(String urlStr) {

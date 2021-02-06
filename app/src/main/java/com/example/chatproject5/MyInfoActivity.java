@@ -463,6 +463,7 @@ public class MyInfoActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
 
+                setResult(RESULT_OK, intent);
                 finish();
                 return true;
             }

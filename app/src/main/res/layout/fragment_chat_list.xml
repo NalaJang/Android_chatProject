@@ -55,15 +55,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"/>
 
-    <!--Button
-        android:id="@+id/button_chat_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="새로운 코디네이터 등록"
-        />
-
-    <TextView
+    <!--TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -76,6 +68,16 @@
         android:layout_marginBottom="5dp"
         android:textColor="#660C0C0C"
         android:text="상담사"
+        />
+
+    <TextView
+        android:id="@+id/text_chat_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:textSize="18dp"
+        android:text="상단의 아이콘을 눌러 코디네이터를 등록해보세요."
         />
 
     <androidx.recyclerview.widget.RecyclerView

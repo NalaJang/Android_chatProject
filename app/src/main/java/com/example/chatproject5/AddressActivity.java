@@ -202,6 +202,7 @@ public class AddressActivity extends AppCompatActivity {
         println();
     }
 
+    /*
     public void setInsertAddress(String str) {
         Document doc = Jsoup.parse(str);
         Elements nickName_db = doc.select("ol > li.nickName");
@@ -230,8 +231,8 @@ public class AddressActivity extends AppCompatActivity {
 
         }
 
-
     }
+     */
 
     public void println() {
         handler.post(new Runnable() {

@@ -260,7 +260,6 @@ public class EditAddressActivity extends AppCompatActivity {
                                 + "&address1=" + address1
                                 + "&address2=" + address2
                                 + "&result=" + result;
-                System.out.println("editAddress params : " + params);
 
                 outputStream.write(params.getBytes());
 

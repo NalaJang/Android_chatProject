@@ -32,7 +32,7 @@ import dto.SearchListDto;
 
 public class SearchListAdapter extends BaseAdapter implements Filterable {
 
-    // Adapter 에 추가된 데이터를 저장하기 위한 ArrayList. (원본 데이터 리스트)
+    // 기존 데이터 리스트
     private ArrayList<SearchListDto> listViewItemList = new ArrayList<>() ;
     // 필터링된 결과 데이터를 저장하기 위한 ArrayList. 최초에는 전체 리스트 보유.
     private ArrayList<SearchListDto> filteredItemList = listViewItemList ;
@@ -89,7 +89,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         workerContent.setText(listViewItem.getWorkerContent());
 
 
-        //코디네이터 등록
+        //코디네이터 등록 버튼
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,6 +197,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         listViewItemList.add(item);
     }
 
+    //검색 관련 메소드들
     @Override
     public Filter getFilter() {
 
@@ -208,11 +209,12 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
     private class ListFilter extends Filter {
 
-        @Override
+        @Override   //필터링 수행 메소드, 필터링된 결과 리스트를 result 에 담아 리턴한다.
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults results = new FilterResults() ;
 
+            //검색 결과가 없을 경우
             if (constraint == null || constraint.length() == 0) {
 
                 results.values = listViewItemList ;
@@ -225,27 +227,29 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
                     //코디네이터의 아이디와 대화명 모두 필터링 대상으로
                     if (item.getWorkerId().toUpperCase().contains(constraint.toString().toUpperCase()) ||
-                            item.getWorkerContent().toUpperCase().contains(constraint.toString().toUpperCase()))
+                        item.getWorkerContent().toUpperCase().contains(constraint.toString().toUpperCase()))
                     {
                         itemList.add(item) ;
                     }
                 }
-
+                //검색 결과에 맞는 정보와 수를 담는다.
                 results.values = itemList ;
                 results.count = itemList.size() ;
             }
             return results;
         }
 
-        @Override
+        @Override   //performFiltering 에서의 필터링 된 결과를 리스트뷰에 갱신
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-            // update listview by filtered data list.
+
             filteredItemList = (ArrayList<SearchListDto>) results.values ;
 
-            // notify
+            //검색 결과가 있을 경우
             if (results.count > 0) {
                 notifyDataSetChanged() ;
+
+            //검색 결과가 없을 경우
             } else {
                 notifyDataSetInvalidated() ;
             }

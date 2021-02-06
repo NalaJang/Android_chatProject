@@ -142,13 +142,13 @@ public class EntranceActivity extends AppCompatActivity {
 
         //첫 화면 고정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, chat_room_listActivity).commit();
+
         //정보 보내기
         chat_room_listActivity.setArguments(bundle);
 
 
-
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.tab2);  //첫 화면 아이콘 지정
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -197,18 +197,16 @@ public class EntranceActivity extends AppCompatActivity {
                 intent = new Intent(EntranceActivity.this, SearchActivity.class);
                 intent.putExtra("userId_db", userId_db);
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/workerList.do";
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
 
-//                        search(urlStr);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-//                        startActivity(intent);  //정보를 넘긴 후 startActivity 적어주기
+                        startActivity(intent);  //정보를 넘긴 후 startActivity 적어주기
 
-                        startActivityForResult(intent, 2);
+//                        startActivityForResult(intent, 2);
                     }
                 }).start();
 
@@ -216,7 +214,6 @@ public class EntranceActivity extends AppCompatActivity {
         }
         return true;
     }
-
 
     //broadcast 해제
     public void onDestroy() {
