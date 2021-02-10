@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import adapter.SearchListAdapter;
+import chat.Constants;
 import dto.ChatListDto;
 import dto.SearchListDto;
 
@@ -30,17 +31,17 @@ import dto.SearchListDto;
  ******************************************/
 public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
-    private ListView listview = null ;
-    private Intent intent;
-
+    private ListView listview = null;
 
     private String userId_db;
     private SearchListAdapter adapter;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
-    private ArrayList<SearchListDto> items = new ArrayList<>();
+    static HashSet<String> hashSet = new HashSet<>();
 
-    //추가
+//    private ArrayList<SearchListDto> items = new ArrayList<>();
+
+/*
     @Override
     public void onBackPressed() {
 //        Chat_listFragment chat_listFragment = new Chat_listFragment();
@@ -50,9 +51,9 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         Chat_listFragment.adapter.notifyDataSetChanged();
 
         super.onBackPressed();
-
-
     }
+
+ */
 
 
     @Override
@@ -62,7 +63,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
 
         //정보 받기
-        intent = getIntent();
+        Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
 
         adapter = new SearchListAdapter(getApplicationContext(), userId_db) ;
@@ -70,7 +71,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         listview = findViewById(R.id.listView_search);
         listview.setAdapter(adapter);
 
-        final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/selectedWorkerList.do";
+        final String urlStr2 = Constants.SERVER_URL + "selectedWorkerList.do";
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -81,7 +82,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
 
 
         //DB 에서 코디네이터 목록 가져오기
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/workerList.do";
+        final String urlStr = Constants.SERVER_URL + "workerList.do";
 
         new Thread(new Runnable() {
             @Override
@@ -171,7 +172,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -194,9 +195,6 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         setWorkerList(output.toString());
     }
 
-    static HashSet<String> hashSet = new HashSet<>();
-
-
 
     public void setWorkerList(String str) {
         Document doc = Jsoup.parse(str);
@@ -204,13 +202,11 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
         Elements workerId_db = doc.select("ol > li.id");
         Elements workerContent_db = doc.select("ol > li.content");
 
-//        System.out.println("=====hashSet : " + EntranceActivity.hashSet.toString());
-
         for(int i = 0, size = workerNum_db.size(); i < size; i++) {
 
             if(hashSet.contains(workerId_db.get(i).text())) {
 
-                continue;   //-> adapter 에 등록하지 않고(↓실행하지 않고) for 문을 넘어감
+                continue;   //-> adapter 에 등록하지 않고(아래 코드를 실행하지 않고) for 문을 넘어감
             }
 
             SearchListDto searchListDto = new SearchListDto();
@@ -254,7 +250,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -293,7 +289,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher{
             chatListDto.setWorkerId(workerId_db.get(j).text());
             chatListDto.setContent(workerContent_db.get(j).text());
 
-            hashSet.add(chatListDto.getWorkerId());//-> 내가 등록한 상담사 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+            //↓ 내가 등록한 상담사만 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+            hashSet.add(chatListDto.getWorkerId());
 
 //            adapter.addItem(chatListDto);
         }

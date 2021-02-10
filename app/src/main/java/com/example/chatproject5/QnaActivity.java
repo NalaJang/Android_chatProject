@@ -11,8 +11,8 @@ import com.google.android.material.tabs.TabLayout;
 
 public class QnaActivity extends AppCompatActivity {
 
-    QnaAddFragment qnaAddFragment;
-    QnaCheckFragment checkFragment;
+    private QnaAddFragment qnaAddFragment;
+    private QnaCheckFragment checkFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

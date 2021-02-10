@@ -2,36 +2,23 @@ package com.example.chatproject5;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.pedro.library.AutoPermissions;
-import com.pedro.library.AutoPermissionsListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -39,20 +26,18 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import adapter.AddressListAdapter;
+import chat.Constants;
 import dto.AddressDto;
 
-public class MyInfoActivity extends AppCompatActivity implements AutoPermissionsListener {
+public class MyInfoActivity extends AppCompatActivity {
 
     public static final int EDIT_REQUEST_CODE = 1;
-    public static final int PERMISSION_REQUEST_CODE = 101;
 
     private Intent intent;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
-    private String updateUrlStr, img_path;
-    private ImageView userImage_image;
     private String userId_db, userPw_db;
-    private String userPw, userContent, userName, userEmail, userPhone, userImage;
+    private String userPw, userContent, userName, userEmail, userPhone;
     private EditText userContent_edit, userName_edit, userId_edit, userPw_edit, userEmail_edit, userPhone_edit;
 
     private RecyclerView recyclerView;
@@ -71,11 +56,7 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
         //정보 받기
         intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
-//        String userContent_db = intent.getStringExtra("userContent_db");
-//        String userName_db = intent.getStringExtra("userName_db");
         userPw_db = intent.getStringExtra("userPw_db");
-//        String userEmail_db = intent.getStringExtra("userEmail_db");
-//        String userPhone_db = intent.getStringExtra("userPhone_db");
 
 
         userContent_edit = findViewById(R.id.userContent_info);
@@ -84,8 +65,6 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
         userPw_edit = findViewById(R.id.userPw_info);
         userEmail_edit = findViewById(R.id.userEmail_info);
         userPhone_edit = findViewById(R.id.userPhone_info);
-        userImage_image = findViewById(R.id.userImage_info);
-        Button basicImageButton = findViewById(R.id.basicImage_info);
 
 
         //기존 사용자 정보
@@ -93,22 +72,12 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
             @Override
             public void run() {
 
-                final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/login.do";
+                final String urlStr2 = Constants.SERVER_URL + "login.do";
 
                 myInfo(urlStr2);
 
             }
         }).start();
-
-        /* **************** 이미지 선택 버튼 *****************/
-        Button selectImageButton = findViewById(R.id.selectImage_info);
-        selectImageButton.setOnClickListener(v -> {
-            openGallery();
-
-            AutoPermissions.Companion.loadAllPermissions(this, PERMISSION_REQUEST_CODE);
-        });
-
-
 
 
         /* **************** 정보 수정 버튼 *****************/
@@ -126,13 +95,12 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
 
                 } else {
 
-
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            updateUrlStr = "http://192.168.0.17:8080/webapp/webServer/userInfoUpdate.do";
+                            final String updateUrlStr = Constants.SERVER_URL + "userInfoUpdate.do";
 
-                            update(updateUrlStr, img_path);
+                            update(updateUrlStr);
 
 
                         }
@@ -158,7 +126,7 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
 
 
         //DB 에서 배송지 목록가져오기
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/addressList.do";
+        final String urlStr = Constants.SERVER_URL + "addressList.do";
 
         new Thread(() -> myAddressList(urlStr)).start();
 
@@ -257,16 +225,9 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
         });
     }
 
-    //이미지 선택
-    public void openGallery() {
-        intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PERMISSION_REQUEST_CODE);
-    }
 
     //DB 회원 정보 업데이트
-    public void update(String urlStr, String img_path) {
+    public void update(String urlStr) {
         StringBuilder output = new StringBuilder();
 
         userPw = userPw_edit.getText().toString();
@@ -274,14 +235,10 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
         userEmail = userEmail_edit.getText().toString();
         userPhone = userPhone_edit.getText().toString();
 
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-
 
         try {
             //추가
-            FileInputStream fileInputStream = new FileInputStream(img_path);
+//            FileInputStream fileInputStream = new FileInputStream(img_path);
 
 
             URL url = new URL(urlStr);
@@ -295,7 +252,11 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
                 OutputStream outputStream = conn.getOutputStream();
 
                 //값 넣어주기
-                String params = "id=" + userId_db + "&content=" + userContent + "&pw=" + userPw + "&email=" + userEmail + "&phone=" + userPhone;
+                String params = "id=" + userId_db
+                            + "&content=" + userContent
+                            + "&pw=" + userPw
+                            + "&email=" + userEmail
+                            + "&phone=" + userPhone;
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -317,8 +278,6 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "다시 시도해주세요", Toast.LENGTH_SHORT).show();
-
         }
 
         setUpdate(output.toString());
@@ -455,7 +414,7 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
 
         //정보 수정
         if(requestCode == EDIT_REQUEST_CODE) {  //요청 판단
-            if(resultCode == RESULT_OK) {   //성공 시
+            if(resultCode == RESULT_OK) {       //성공 시
 
                 Intent intent = getIntent();
                 finish();
@@ -463,62 +422,6 @@ public class MyInfoActivity extends AppCompatActivity implements AutoPermissions
             }
         }
 
-        //앨범 접근 권한 요청
-        if(requestCode == PERMISSION_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-
-                //선택한 사진의 경로 얻어오기
-               Uri fileUri = data.getData();
-                ContentResolver resolver = getContentResolver();
-
-                try {
-                    InputStream inputStream = resolver.openInputStream(fileUri);
-                    Bitmap imgBitmap = BitmapFactory.decodeStream(inputStream);
-                    userImage_image.setImageBitmap(imgBitmap);
-
-                    inputStream.close(); //io 닫기
-
-                    String imgPath = getRealPathFromUri(fileUri);
-                    new AlertDialog.Builder(this).setMessage(fileUri.toString() + "\n" + imgPath).create().show();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    //AutoPermissionsListener 관련 메소드 ~ onGranted 까지
-    @Override
-    public void onDenied(int i, String[] strings) {
-
-        Toast.makeText(this, "갤러리 접근이 제한되었습니다." + strings.length, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onGranted(int i, String[] strings) {
-
-        Toast.makeText(this, "갤러리 접근이 승인되었습니다." + strings.length, Toast.LENGTH_SHORT).show();
-    }
-
-    public String getRealPathFromUri(Uri uri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        CursorLoader loader = new CursorLoader(this, uri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        //이미지 경로 값
-        String result = cursor.getString(column_index);
-        System.out.println("MyInfoAct , result = " + result);
-
-        String imgName = result.substring(result.lastIndexOf("/" + 1));
-        System.out.println("MyInfoAct , imgName = " + imgName);
-
-        cursor.close();
-
-        return result;
     }
 
 

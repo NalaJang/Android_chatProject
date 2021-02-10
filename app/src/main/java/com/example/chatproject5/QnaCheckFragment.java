@@ -1,20 +1,15 @@
 package com.example.chatproject5;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import adapter.QnaCheckAdapter;
+import chat.Constants;
 import dto.QnaDto;
 
 
@@ -39,7 +35,7 @@ public class QnaCheckFragment extends Fragment {
 
 //    private ArrayAdapter adapter;
     private QnaCheckAdapter adapter2;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private ArrayList<QnaDto> qnaList;
 //    private QnaDto qnaDto;
 
@@ -62,23 +58,9 @@ public class QnaCheckFragment extends Fragment {
 
         adapter2 = new QnaCheckAdapter(qnaList, getContext());
 
-        /*
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String clickedItem = (String)parent.getAdapter().getItem(position);
-
-                Toast.makeText(getContext(), "이벤트" + clickedItem + position, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-         */
-
 
         //문의 내역 가져오기
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/qnaList.do";
+        final String urlStr = Constants.SERVER_URL + "qnaList.do";
 
         new Thread(new Runnable() {
             @Override
@@ -108,11 +90,11 @@ public class QnaCheckFragment extends Fragment {
 
                 OutputStream outputStream = conn.getOutputStream();
                 String params = "id=" + userId_db;
-                System.out.println("qnaCheckfrag id = " + userId_db);
+
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();

@@ -6,7 +6,7 @@ public class ListViewItem {
 
     private Drawable iconDrawable ;
     private String textStr ;
-
+/*
     public void setIcon(Drawable icon) {
         iconDrawable = icon ;
     }
@@ -20,4 +20,6 @@ public class ListViewItem {
     public String getText() {
         return this.textStr ;
     }
+
+ */
 }

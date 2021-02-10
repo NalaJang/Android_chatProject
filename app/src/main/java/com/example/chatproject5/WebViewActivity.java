@@ -30,6 +30,7 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
+
         webView = findViewById(R.id.webView);
 
         //웹뷰 세팅(새창과 관련한 동작)

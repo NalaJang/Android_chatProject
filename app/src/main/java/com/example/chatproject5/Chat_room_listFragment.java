@@ -15,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import adapter.Chat_room_list_Adapter;
 import chat.MsgUtils;
@@ -32,18 +29,19 @@ import dto.Message;
 
 public class Chat_room_listFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private String userId_db;
+
     private Message message;
+    private RecyclerView recyclerView;
     private Chat_room_list_Adapter adapter;
     private LinearLayoutManager layoutManager;
+
+    private BroadcastReceiver receiver;
+
+
 //    private final Date today = new Date();
 //    private final SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
 
-    private String userId_db;
-
-//    private Chat_room_listFragment chat_room_listFragment;
-
-    private BroadcastReceiver receiver;
 
 //    @Override
 //    public void onResume() {

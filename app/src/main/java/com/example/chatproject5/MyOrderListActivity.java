@@ -7,12 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,9 +18,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 import adapter.OrderAdapter;
+import chat.Constants;
 import dto.OrderDto;
 
 /******************************************
@@ -38,7 +33,7 @@ public class MyOrderListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private String userId_db;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
 
     @Override
@@ -66,7 +61,7 @@ public class MyOrderListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //DB 에서 주문 목록가져오기
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/orderList.do";
+        final String urlStr = Constants.SERVER_URL + "orderList.do";
 
         new Thread(new Runnable() {
             @Override
@@ -123,7 +118,6 @@ public class MyOrderListActivity extends AppCompatActivity {
 
     public void setOrderList(String str) {
         Document doc = Jsoup.parse(str);
-        Elements order = doc.select("p.result");
         Elements pname = doc.select("ol > li.pname");
         Elements image = doc.select("ol > li.image");
         Elements quantity = doc.select("ol > li.quantity");

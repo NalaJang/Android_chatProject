@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,8 +23,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import database.UserHelper;
-import dto.UserDto;
+import chat.Constants;
 
 /******************************************
               아이디 비밀번호 찾기
@@ -39,8 +37,8 @@ public class Search_userInfoActivity extends AppCompatActivity {
     EditText userName, userId, userPhone, userPhone2;
 
 
-    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/findId.do";    //아이디
-    final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/findPw.do";   //비밀번호
+    final String urlStr = Constants.SERVER_URL + "findId.do";    //아이디
+    final String urlStr2 = Constants.SERVER_URL + "findPw.do";   //비밀번호
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +143,7 @@ public class Search_userInfoActivity extends AppCompatActivity {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -166,6 +164,9 @@ public class Search_userInfoActivity extends AppCompatActivity {
         }
 
         setFindId(output.toString());
+
+        userName.setText("");
+        userPhone.setText("");
     }
 
     //아이디 찾기
@@ -179,9 +180,6 @@ public class Search_userInfoActivity extends AppCompatActivity {
 
                 validId(findId.get(0).text());
 
-
-                userName.setText("");
-                userPhone.setText("");
 
             } else if(result.get(0).text().equals("실패")){
 
@@ -214,7 +212,7 @@ public class Search_userInfoActivity extends AppCompatActivity {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -235,7 +233,9 @@ public class Search_userInfoActivity extends AppCompatActivity {
         }
 
         setFindPw(output.toString());
-        Log.d("findPw", output.toString());
+
+        userId.setText("");
+        userPhone2.setText("");
     }
 
     //비밀번호 찾기
@@ -249,14 +249,12 @@ public class Search_userInfoActivity extends AppCompatActivity {
 
                 validPw(findPw.get(0).text());
 
-                userId.setText("");
-                userPhone2.setText("");
-
 
             } else if(result.get(0).text().equals("실패")){
 
                 invalid();
             }
+
 
         }
     }
@@ -339,12 +337,10 @@ public class Search_userInfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
+        if (item.getItemId() == android.R.id.home) {//toolbar 의 back 키 눌렀을 때 동작
 
-                finish();
-                return true;
-            }
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

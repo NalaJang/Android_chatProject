@@ -19,16 +19,13 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import database.UserHelper;
-import database.WorkerHelper;
+import chat.Constants;
 
 /******************************************
                    회원가입
  ******************************************/
 public class Sign_upActivity extends AppCompatActivity {
 
-    UserHelper db;
-    WorkerHelper workerHelper;
 
     Intent intent;
     Handler handler = new Handler();
@@ -43,11 +40,9 @@ public class Sign_upActivity extends AppCompatActivity {
 
         setTitle("회원가입");
 
-        db = new UserHelper(this);
-        workerHelper = new WorkerHelper(this);
 
         CheckBox check1, check2;
-        Button button, button2;
+        Button button;
 
         userName = findViewById(R.id.userName_sign_up);
         userId = findViewById(R.id.userId_sign_up);
@@ -105,7 +100,7 @@ public class Sign_upActivity extends AppCompatActivity {
                     Toast.makeText(Sign_upActivity.this, "휴대폰번호를 입력해 주세요.", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/signUp.do";
+                    final String urlStr = Constants.SERVER_URL + "signUp.do";
 
                     new Thread(new Runnable() {
                         @Override
@@ -141,11 +136,15 @@ public class Sign_upActivity extends AppCompatActivity {
                 conn.setDoInput(true);
 
                 OutputStream outputStream = conn.getOutputStream();
-                String params = "id=" + id + "&name=" + name + "&pw=" + pw + "&email=" + email + "&phone=" + phone;
+                String params = "id=" + id
+                            + "&name=" + name
+                            + "&pw=" + pw
+                            + "&email=" + email
+                            + "&phone=" + phone;
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -188,12 +187,10 @@ public class Sign_upActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
+        if (item.getItemId() == android.R.id.home) {//toolbar 의 back 키 눌렀을 때 동작
 
-                finish();
-                return true;
-            }
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -105,12 +105,10 @@ public class EntranceActivity extends AppCompatActivity {
         String userPhone_db = intent.getStringExtra("userPhone_db");
         String userContent_db = intent.getStringExtra("userContent_db");
         String userProfilePhoto_db = intent.getStringExtra("userProfilePhoto_db");
-        String userPoint_db = intent.getStringExtra("userPoint_db");
 
 
-
+        //정보 전달
         intent.putExtra("userId_db", userId_db);
-//        Toast.makeText(getApplicationContext(), "userId =" + userId_db, Toast.LENGTH_SHORT).show();
 
 
         //프래그먼트로 정보 전달
@@ -122,7 +120,6 @@ public class EntranceActivity extends AppCompatActivity {
         bundle.putString("userPhone_db", userPhone_db);
         bundle.putString("userContent_db", userContent_db);
         bundle.putString("userProfilePhoto_db", userProfilePhoto_db);
-        bundle.putString("userPoint_db", userPoint_db);
 
 
         //생성자 -> 로그인 성공으로 들어오면 새로운 핸들러 생성과 동시에 스레드 시작
@@ -190,8 +187,8 @@ public class EntranceActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.search_menu :
 
-                intent = getIntent();
-                userId_db = intent.getStringExtra("userId_db");
+//                intent = getIntent();
+//                userId_db = intent.getStringExtra("userId_db");
 
                 //정보 보내기
                 intent = new Intent(EntranceActivity.this, SearchActivity.class);
@@ -206,7 +203,6 @@ public class EntranceActivity extends AppCompatActivity {
 
                         startActivity(intent);  //정보를 넘긴 후 startActivity 적어주기
 
-//                        startActivityForResult(intent, 2);
                     }
                 }).start();
 

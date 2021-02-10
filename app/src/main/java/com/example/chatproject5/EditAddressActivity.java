@@ -1,6 +1,5 @@
 package com.example.chatproject5;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +21,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
-import adapter.AddressListAdapter;
+import chat.Constants;
 
 public class EditAddressActivity extends AppCompatActivity {
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
@@ -34,9 +31,9 @@ public class EditAddressActivity extends AppCompatActivity {
     private TextView nickName_text, userName_text, phone_text, address1_text, address2_text;
     private CheckBox checkBox;
 
-    private Handler handler = new Handler();
-
+    private final Handler handler = new Handler();
     private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,14 +54,14 @@ public class EditAddressActivity extends AppCompatActivity {
         Button editButton = findViewById(R.id.button_editAddr);
 
 
-        Intent intent = getIntent();
+        intent = getIntent();
         num_db = intent.getStringExtra(("num_db"));
         userId_db = intent.getStringExtra("userId_db");
 
 
 
         //선택한 배송지
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/myAddress.do";
+        final String urlStr = Constants.SERVER_URL + "myAddress.do";
 
         new Thread(new Runnable() {
             @Override
@@ -85,8 +82,8 @@ public class EditAddressActivity extends AppCompatActivity {
                     searchButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(getApplicationContext(), WebViewActivity.class);
-                            startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+                            intent = new Intent(getApplicationContext(), WebViewActivity.class);
+                            startActivityForResult(intent, SEARCH_ADDRESS_ACTIVITY);
                         }
                     });
 
@@ -109,7 +106,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     result = "0";
                 }
 
-                final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/addressUpdate.do";
+                final String urlStr2 = Constants.SERVER_URL + "addressUpdate.do";
 
                 new Thread(new Runnable() {
                     @Override
@@ -163,7 +160,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -236,7 +233,6 @@ public class EditAddressActivity extends AppCompatActivity {
         address1 = address1_text.getText().toString().trim();
         address2 = address2_text.getText().toString().trim();
 
-        System.out.println("editAddress nickname  -= " + nickName);
 
         StringBuilder output = new StringBuilder();
 
@@ -264,7 +260,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();

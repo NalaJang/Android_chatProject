@@ -19,15 +19,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 import adapter.PointAdapter;
+import chat.Constants;
 import dto.PointDto;
 
 public class MyPointActivity extends AppCompatActivity {
 
-    private Intent intent;
-    private ArrayList<PointDto> pointList =  new ArrayList<>();
+    //    private ArrayList<PointDto> pointList =  new ArrayList<>();
 
     private String userId_db;
     private TextView total_text;
@@ -35,7 +34,7 @@ public class MyPointActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PointAdapter adapter;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class MyPointActivity extends AppCompatActivity {
         setTitle("포인트");
 
         //정보받기
-        intent = getIntent();
+        Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
 
         total_text = findViewById(R.id.total_point);
@@ -60,7 +59,7 @@ public class MyPointActivity extends AppCompatActivity {
         adapter = new PointAdapter();
         recyclerView.setAdapter(adapter);
 
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/pointList.do";
+        final String urlStr = Constants.SERVER_URL + "pointList.do";
 
         new Thread(new Runnable() {
             @Override
@@ -90,7 +89,7 @@ public class MyPointActivity extends AppCompatActivity {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
 
@@ -145,7 +144,7 @@ public class MyPointActivity extends AppCompatActivity {
 
 
                     total  += Integer.parseInt(point.get(j).text());
-                    total_text.setText(Integer.toString(total) + " point");
+                    total_text.setText(total + " point");
                 }
 
 //            }

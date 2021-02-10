@@ -22,13 +22,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import database.BodyHelper;
-import dto.BodyDto;
+import chat.Constants;
 
 public class MyBodyActivity extends AppCompatActivity {
 
-//    private BodyHelper db;
-    private Handler handler = new Handler();
+
+    private final Handler handler = new Handler();
 
     private TextView height_edit, weight_edit, foot_edit;
     private TextView shoulder_edit, arm_edit, bust_edit, waist_edit, totalUpperBody_edit,
@@ -50,20 +49,7 @@ public class MyBodyActivity extends AppCompatActivity {
         //정보 받기
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
-        /*
-        shoulder_db = intent.getStringExtra("shoulder_db");
-        arm_db = intent.getStringExtra("arm_db");
-        bust_db = intent.getStringExtra("bust_db");
-        waist_db = intent.getStringExtra("waist_db");
-        totalUpperBody_db = intent.getStringExtra("totalUpperBody_db");
-        hip_db = intent.getStringExtra("hip_db");
-        thigh_db = intent.getStringExtra("thigh_db");
-        calf_db = intent.getStringExtra("calf_db");
-        totalLowerBody_db = intent.getStringExtra("totalLowerBody_db");
-        height_db = intent.getStringExtra("height_db");
-        weight_db = intent.getStringExtra("weight_db");
-        foot_db = intent.getStringExtra("foot_db");
-*/
+
 
         shoulder_edit = findViewById(R.id.shoulder_edit);
         arm_edit = findViewById(R.id.arm_edit);
@@ -79,26 +65,12 @@ public class MyBodyActivity extends AppCompatActivity {
         foot_edit = findViewById(R.id.foot_body);
 
 
-        //값 넣어주기
-//        shoulder_edit.setText(shoulder_db);
-//        arm_edit.setText(arm_db);
-//        bust_edit.setText(bust_db);
-//        waist_edit.setText(waist_db);
-//        totalUpperBody_edit.setText(totalUpperBody_db);
-//        hip_edit.setText(hip_db);
-//        thigh_edit.setText(thigh_db);
-//        calf_edit.setText(calf_db);
-//        totalLowerBody_edit.setText(totalLowerBody_db);
-//        height_edit.setText(height_db);
-//        weight_edit.setText(weight_db);
-//        foot_edit.setText(foot_db);
-
         //기존 바디 프로필 내역
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/mybodyList.do";
+                final String urlStr = Constants.SERVER_URL + "mybodyList.do";
 
                 myBodyProfile(urlStr);
 
@@ -113,7 +85,7 @@ public class MyBodyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String urlStr2 = "http://192.168.0.17:8080/webapp/webServer/myBodyUpdate.do";
+                final String urlStr2 = Constants.SERVER_URL + "myBodyUpdate.do";
 
                 new Thread(new Runnable() {
                     @Override
@@ -151,7 +123,7 @@ public class MyBodyActivity extends AppCompatActivity {
 
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -173,7 +145,6 @@ public class MyBodyActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         setMyBodyProfile(output.toString());
-        Log.d("====", output.toString());
     }
 
     public void setMyBodyProfile(String str) {
@@ -285,7 +256,7 @@ public class MyBodyActivity extends AppCompatActivity {
 
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -371,12 +342,10 @@ public class MyBodyActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{ //toolbar 의 back 키 눌렀을 때 동작
+        if (item.getItemId() == android.R.id.home) {//toolbar 의 back 키 눌렀을 때 동작
 
-                finish();
-                return true;
-            }
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

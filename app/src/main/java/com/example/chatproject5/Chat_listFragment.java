@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.jsoup.Jsoup;
@@ -27,13 +26,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import adapter.ChatListAdapter;
+import chat.Constants;
 import dto.ChatListDto;
 
 
 public class Chat_listFragment extends Fragment {
 
-    private String userId_db;
-    private String userContent_db;
+    private String userId_db, userContent_db;
     private TextView textView;
 
 //    private Date today = new Date();
@@ -46,7 +45,7 @@ public class Chat_listFragment extends Fragment {
 //
 //    private ChattingRoomListHelper roomListHelper;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private RecyclerView recyclerView;
     static ChatListAdapter adapter;
 
@@ -110,7 +109,7 @@ public class Chat_listFragment extends Fragment {
 
 
         //선택한 코디네이터 목록 DB 에서 가져오기
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/selectedWorkerList.do";
+        final String urlStr = Constants.SERVER_URL + "selectedWorkerList.do";
 
         new Thread(new Runnable() {
             @Override
@@ -130,8 +129,8 @@ public class Chat_listFragment extends Fragment {
 
         StringBuilder output = new StringBuilder();
 
-        Bundle bundle = this.getArguments();
-        userId_db = bundle.getString("userId_db");
+//        Bundle bundle = this.getArguments();
+//        userId_db = bundle.getString("userId_db");
 
         try {
             URL url = new URL(urlStr);
@@ -147,7 +146,7 @@ public class Chat_listFragment extends Fragment {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -193,7 +192,8 @@ public class Chat_listFragment extends Fragment {
                     chatListDto.setWorkerId(workerId_db.get(j).text());
                     chatListDto.setContent(workerContent_db.get(j).text());
 
-                    EntranceActivity.hashSet.add(chatListDto.getWorkerId());//-> 내가 등록한 상담사 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+                    //↓ 내가 등록한 상담사만 담기(중복해서 담을 수 없음, 꺼낼 때 순서 x, 찾는 속도가 빠름)
+                    EntranceActivity.hashSet.add(chatListDto.getWorkerId());
 
                     adapter.addItem(chatListDto);
                 }

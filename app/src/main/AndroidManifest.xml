@@ -18,13 +18,12 @@
             android:name=".QnaContentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditAddressActivity" />
-        <activity android:name=".WebViewActivity" />
+        <activity
+            android:name=".WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AlbumActivity" />
         <activity
             android:name=".PlusMenuActivity"
-            android:theme="@style/Popup" />
-        <activity
-            android:name=".WorkerProfileActivity"
             android:theme="@style/Popup" />
         <activity android:name=".QnaActivity" />
         <activity android:name=".MyPointActivity" />

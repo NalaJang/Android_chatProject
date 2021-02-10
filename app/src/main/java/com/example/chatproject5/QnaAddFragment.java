@@ -2,13 +2,11 @@ package com.example.chatproject5;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,21 +28,21 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import chat.Constants;
+
 /******************************************
                   문의하기
  ******************************************/
 public class QnaAddFragment extends Fragment {
 
-    private Spinner spinner;
     private CheckBox check;
     private EditText title_edit, content_edit, email_edit;
-    private Button cancelButton, insertButton;
 
     private String userId_db;
     private String[] subjects = {"일반문의", "계정문의", "환불문의"};
     private String subject_db;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,14 +61,14 @@ public class QnaAddFragment extends Fragment {
         content_edit = rootView.findViewById(R.id.content_qna);
         email_edit = rootView.findViewById(R.id.email_qna);
 
-        cancelButton = rootView.findViewById(R.id.cancel_qna);
-        insertButton = rootView.findViewById(R.id.insert_qna);
+        Button cancelButton = rootView.findViewById(R.id.cancel_qna);
+        Button insertButton = rootView.findViewById(R.id.insert_qna);
 
 
 
         //spinner 에 값 넣어주기
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
-        spinner = rootView.findViewById(R.id.spinner_qna);
+        Spinner spinner = rootView.findViewById(R.id.spinner_qna);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -136,7 +134,7 @@ public class QnaAddFragment extends Fragment {
 
                 } else {
 
-                    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/qnaInsert.do";
+                    final String urlStr = Constants.SERVER_URL + "qnaInsert.do";
 
                     new Thread(new Runnable() {
                         @Override
@@ -172,13 +170,16 @@ public class QnaAddFragment extends Fragment {
                 conn.setDoInput(true);
 
                 OutputStream outputStream = conn.getOutputStream();
-                String params =
-                        "subject=" + subject_db + "&title=" + title_db + "&content=" + content_db + "&id=" + userId_db + "&email=" + email_db;
+                String params = "subject=" + subject_db
+                            + "&title=" + title_db
+                            + "&content=" + content_db
+                            + "&id=" + userId_db
+                            + "&email=" + email_db;
 
                 outputStream.write(params.getBytes());  //connection 으로부터 outputStream 을 얻어 params 를 byte 배열로 할당
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();
@@ -196,6 +197,7 @@ public class QnaAddFragment extends Fragment {
 
         } catch (Exception e) {
             e.printStackTrace();
+            println2();
         }
         setQnaInsert(output.toString());
     }

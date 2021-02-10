@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import chat.Constants;
 import dto.QnaDto;
 
 public class QnaCheckAdapter extends BaseAdapter {
@@ -97,7 +98,7 @@ public class QnaCheckAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                final String urlStr = "http://192.168.0.17:8080/webapp/webServer/qnaContent.do";
+                final String urlStr = Constants.SERVER_URL + "qnaContent.do";
 
                 new Thread(new Runnable() {
                     @Override
@@ -133,7 +134,7 @@ public class QnaCheckAdapter extends BaseAdapter {
                 outputStream.write(params.getBytes());
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
+                String line;
 
                 while(true) {
                     line = reader.readLine();

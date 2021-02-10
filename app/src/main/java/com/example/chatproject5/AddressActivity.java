@@ -43,6 +43,8 @@ public class AddressActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_address);
 
+        setTitle("배송지 추가하기");
+
         Intent intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
 

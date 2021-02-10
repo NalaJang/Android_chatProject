@@ -8,37 +8,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import chat.MsgUtils;
 import chat.Signals;
-import database.ChattingRoomListHelper;
 import dto.Message;
 
 public class MenuFragment extends Fragment {
 
-    private Bundle bundle;
     private Intent intent;
-    private Handler handler = new Handler();
-
-    private TextView userId_text, userContent_text;
-
-    private String userId_db, userPw_db, userContent_db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,31 +34,17 @@ public class MenuFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(false); //뒤로 가기 버튼 비활성화
 
         //정보 받기
-        bundle = this.getArguments();
-        userId_db = bundle.getString("userId_db");
-        String userName_db = bundle.getString("userName_db");
-        userPw_db = bundle.getString("userPw_db");
-        String userEmail_db = bundle.getString("userEmail_db");
-        String userPhone_db = bundle.getString("userPhone_db");
-        userContent_db = bundle.getString("userContent_db");
-        String userProfilePhoto_db = bundle.getString("userProfilePhoto_db");
+        Bundle bundle = this.getArguments();
+        String userId_db = bundle.getString("userId_db");
+        String userPw_db = bundle.getString("userPw_db");
+        String userContent_db = bundle.getString("userContent_db");
 
 
-        userId_text = rootView.findViewById(R.id.userId_menu);
-        userContent_text = rootView.findViewById(R.id.userContent_menu);
+        TextView userId_text = rootView.findViewById(R.id.userId_menu);
+        TextView  userContent_text = rootView.findViewById(R.id.userContent_menu);
+
         userId_text.setText(userId_db);
         userContent_text.setText(userContent_db);
-
-
-        final String urlStr = "http://192.168.0.17:8080/webapp/webServer/login.do";
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                myProfile(urlStr);
-            }
-        }).start();
-
 
 
         Button myInfoButton = rootView.findViewById(R.id.myInfo_button);
@@ -86,6 +54,9 @@ public class MenuFragment extends Fragment {
         Button qnaButton = rootView.findViewById(R.id.qna_menu);
         Button goShopButton = rootView.findViewById(R.id.goShop_menu);
         Button logoutButton = rootView.findViewById(R.id.logout_button);
+
+        /* **************** 기존 정보 *****************/
+
 
 
         /* **************** 내 정보 *****************/
@@ -175,75 +146,7 @@ public class MenuFragment extends Fragment {
             }
         });
 
-
         return rootView;
     }   //end onCreate;
-
-    public void myProfile(String urlStr) {
-        StringBuilder output = new StringBuilder();
-
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            if(conn != null) {
-                conn.setConnectTimeout(10000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-
-                OutputStream outputStream = conn.getOutputStream();
-
-                //값 넣어주기
-                String params = "id=" + userId_db + "&pw=" + userPw_db;
-
-                outputStream.write(params.getBytes());
-
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line = null;
-
-                while(true) {
-                    line = reader.readLine();
-
-                    if(line == null) {
-                        break;
-                    }
-
-                    output.append(line + "\n");
-
-                }
-                reader.close();
-                conn.disconnect();
-            } else {
-
-                Log.i("통신 결과", conn.getResponseCode()+"에러");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        setMyProfile(output.toString());
-        System.out.println("수정된 정보 ; " + output.toString());
-    }
-
-    public void setMyProfile(String str) {
-        Document doc = Jsoup.parse(str);
-        Elements userId = doc.select("ol > li.id");
-        Elements userContent = doc.select("ol > li.content");
-
-        userContent_db = userContent.text();
-
-        println();
-    }
-
-    public void println() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                System.out.println("들어옴");
-                userContent_text.setText(userContent_db);
-            }
-        });
-    }
 
 }

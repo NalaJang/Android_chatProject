@@ -3,13 +3,10 @@ package com.example.chatproject5;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,22 +22,17 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import chat.ChatConnThread;
-import chat.MsgUtils;
-import chat.ThreadUtils;
-import database.UserHelper;
-import dto.CoordinatorDto;
-import dto.UserDto;
+import chat.Constants;
 
 /******************************************
                   로그인
  ******************************************/
 public class MainActivity extends AppCompatActivity {
 
-    EditText userId, userPw;
+    private EditText userId, userPw;
 
-    Intent intent;
-    Handler handler = new Handler();
+    private Intent intent;
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
-                    final String urlStr = "http://192.168.0.17:8080/webapp/webServer/login.do";
+                    final String urlStr = Constants.SERVER_URL + "login.do";
 
                     new Thread(new Runnable() {
                         @Override
@@ -96,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });   //end search_id
+
 
 
         //회원가입 클릭
@@ -170,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         Elements userPhone = doc.select("ol > li.phone");
         Elements userContent = doc.select("ol > li.content");
         Elements userProfilePhoto = doc.select("ol > li.profilePhoto");
-        Elements userPoint = doc.select("ol > li.point");
 
 
         for(int i = 0; i < result.size(); i++) {
@@ -180,14 +172,12 @@ public class MainActivity extends AppCompatActivity {
 
                 intent = new Intent(MainActivity.this, EntranceActivity.class);
                 intent.putExtra("userId_db", userId.text());
-                intent.putExtra("userName_db", userName.text());
+//                intent.putExtra("userName_db", userName.text());
                 intent.putExtra("userPw_db", userPw.text());
-                intent.putExtra("userEmail_db", userEmail.text());
-                intent.putExtra("userPhone_db", userPhone.text());
+//                intent.putExtra("userEmail_db", userEmail.text());
+//                intent.putExtra("userPhone_db", userPhone.text());
                 intent.putExtra("userContent_db", userContent.text());
                 intent.putExtra("userProfilePhoto_db", userProfilePhoto.text());
-                intent.putExtra("userPoint_db", userPoint.text());
-
                 startActivity(intent);
                 finish();
 
@@ -210,12 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
                 builder.setTitle(R.string.info);
                 builder.setMessage("다시 생각해보세요.");
-                builder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                builder.setPositiveButton(R.string.close, null);
                 builder.show();
             }
         });
