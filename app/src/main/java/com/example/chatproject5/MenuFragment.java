@@ -14,6 +14,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import chat.Constants;
 import chat.MsgUtils;
 import chat.Signals;
 import dto.Message;
@@ -21,6 +32,9 @@ import dto.Message;
 public class MenuFragment extends Fragment {
 
     private Intent intent;
+    private final Handler handler = new Handler();
+    private String userId_db, userPw_db, userContent;
+    private TextView userContent_text;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,16 +49,14 @@ public class MenuFragment extends Fragment {
 
         //정보 받기
         Bundle bundle = this.getArguments();
-        String userId_db = bundle.getString("userId_db");
-        String userPw_db = bundle.getString("userPw_db");
-        String userContent_db = bundle.getString("userContent_db");
+        userId_db = bundle.getString("userId_db");
+        userPw_db = bundle.getString("userPw_db");
 
 
         TextView userId_text = rootView.findViewById(R.id.userId_menu);
-        TextView  userContent_text = rootView.findViewById(R.id.userContent_menu);
+        userContent_text = rootView.findViewById(R.id.userContent_menu);
 
         userId_text.setText(userId_db);
-        userContent_text.setText(userContent_db);
 
 
         Button myInfoButton = rootView.findViewById(R.id.myInfo_button);
@@ -55,8 +67,18 @@ public class MenuFragment extends Fragment {
         Button goShopButton = rootView.findViewById(R.id.goShop_menu);
         Button logoutButton = rootView.findViewById(R.id.logout_button);
 
-        /* **************** 기존 정보 *****************/
 
+        //기존 사용자 정보
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final String urlStr2 = Constants.SERVER_URL + "login.do";
+
+                myInfo(urlStr2);
+
+            }
+        }).start();
 
 
         /* **************** 내 정보 *****************/
@@ -148,5 +170,75 @@ public class MenuFragment extends Fragment {
 
         return rootView;
     }   //end onCreate;
+
+    //기존 정보
+    public void myInfo(String urlStr) {
+        StringBuilder output = new StringBuilder();
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+
+                //값 넣어주기
+                String params = "id=" + userId_db + "&pw=" + userPw_db;
+
+                outputStream.write(params.getBytes());
+
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setMyInfo(output.toString());    //잘라줄 값
+
+    }
+
+    public void setMyInfo(String str) {
+
+        Document doc = Jsoup.parse(str);
+        Elements result = doc.select("p.result");
+        Elements userContent_db = doc.select("ol > li.content");
+        Elements userProfilePhoto_db = doc.select("ol > li.profilePhoto");
+
+
+        for(int i = 0; i < result.size(); i++) {
+
+            if(result.get(0).text().equals("로그인 성공")) {
+
+                userContent = userContent_db.text();
+            }
+        }
+        println3();
+    }
+
+    public void println3() {
+        handler.post(() -> {
+
+            userContent_text.setText(userContent);
+        });
+    }
 
 }

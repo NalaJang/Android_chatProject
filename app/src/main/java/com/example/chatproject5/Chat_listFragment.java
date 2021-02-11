@@ -32,18 +32,10 @@ import dto.ChatListDto;
 
 public class Chat_listFragment extends Fragment {
 
-    private String userId_db, userContent_db;
-    private TextView textView;
-
-//    private Date today = new Date();
-//    private SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
-
+    private String userId_db, userPw_db, userContent;
+    private TextView textView, content;
 
     private ArrayList<ChatListDto> chatList = new ArrayList<>();
-//    private ChattingRoomListDto roomListDto;
-//    private Message message;
-//
-//    private ChattingRoomListHelper roomListHelper;
 
     private final Handler handler = new Handler();
     private RecyclerView recyclerView;
@@ -65,15 +57,29 @@ public class Chat_listFragment extends Fragment {
         //정보 받기
         Bundle bundle = this.getArguments();
         userId_db = bundle.getString("userId_db");
-        userContent_db = bundle.getString("userContent_db");
+        userPw_db = bundle.getString("userPw_db");
+        userContent = bundle.getString("userContent_db");
 
         //사용자 정보 세팅
         TextView userId = rootView.findViewById(R.id.userId_list);
-        TextView content = rootView.findViewById(R.id.content_list);
+        content = rootView.findViewById(R.id.content_list);
         userId.setText(userId_db);
-        content.setText(userContent_db);
+//        content.setText(userContent);
 
         textView = rootView.findViewById(R.id.text_chat_list);
+
+
+        //기존 사용자 정보
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final String urlStr2 = Constants.SERVER_URL + "login.do";
+
+                myInfo(urlStr2);
+
+            }
+        }).start();
 
 
         //자신의 프로필 클릭
@@ -84,7 +90,7 @@ public class Chat_listFragment extends Fragment {
 
                 Intent intent = new Intent(getContext(), MyProfileActivity.class);
                 intent.putExtra("userId_db", userId_db);
-                intent.putExtra("userContent_db", userContent_db);
+                intent.putExtra("userContent_db", userContent);
 
                 startActivity(intent);
 
@@ -122,6 +128,78 @@ public class Chat_listFragment extends Fragment {
 
         return rootView;
     }   //end onCreateView
+
+
+
+    //기존 정보
+    public void myInfo(String urlStr) {
+        StringBuilder output = new StringBuilder();
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            if(conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+
+                //값 넣어주기
+                String params = "id=" + userId_db + "&pw=" + userPw_db;
+
+                outputStream.write(params.getBytes());
+
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+
+                while(true) {
+                    line = reader.readLine();
+
+                    if(line == null) {
+                        break;
+                    }
+
+                    output.append(line + "\n");
+
+                }
+                reader.close();
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setMyInfo(output.toString());    //잘라줄 값
+
+    }
+
+    public void setMyInfo(String str) {
+
+        Document doc = Jsoup.parse(str);
+        Elements result = doc.select("p.result");
+        Elements userContent_db = doc.select("ol > li.content");
+        Elements userProfilePhoto_db = doc.select("ol > li.profilePhoto");
+
+
+        for(int i = 0; i < result.size(); i++) {
+
+            if(result.get(0).text().equals("로그인 성공")) {
+
+                userContent = userContent_db.text();
+            }
+        }
+        println3();
+    }
+
+    public void println3() {
+        handler.post(() -> {
+
+            content.setText(userContent);
+        });
+    }
 
 
     //DB 코디네이터 목록

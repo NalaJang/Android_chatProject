@@ -95,22 +95,14 @@ public class MyInfoActivity extends AppCompatActivity {
 
                 } else {
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final String updateUrlStr = Constants.SERVER_URL + "userInfoUpdate.do";
+                    new Thread(() -> {
+                        final String updateUrlStr = Constants.SERVER_URL + "userInfoUpdate.do";
 
-                            update(updateUrlStr);
+                        update(updateUrlStr);
 
-
-                        }
                     }).start();
 
                 }
-
-//                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-
             }
         }); //end editButton onClick
 
@@ -300,6 +292,7 @@ public class MyInfoActivity extends AppCompatActivity {
                 userPw = userPw_db.text();
                 userEmail = userEmail_db.text();
                 userPhone = userPhone_db.text();
+
 
             }
         }
