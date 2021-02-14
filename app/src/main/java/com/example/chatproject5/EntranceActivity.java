@@ -99,10 +99,7 @@ public class EntranceActivity extends AppCompatActivity {
         //정보 받기*****
         intent = getIntent();
         userId_db = intent.getStringExtra("userId_db");
-        String userName_db = intent.getStringExtra("userName_db");
         String userPw_db = intent.getStringExtra("userPw_db");
-        String userEmail_db = intent.getStringExtra("userEmail_db");
-        String userPhone_db = intent.getStringExtra("userPhone_db");
         String userContent_db = intent.getStringExtra("userContent_db");
         String userProfilePhoto_db = intent.getStringExtra("userProfilePhoto_db");
 
@@ -114,10 +111,7 @@ public class EntranceActivity extends AppCompatActivity {
         //프래그먼트로 정보 전달
         Bundle bundle = new Bundle();
         bundle.putString("userId_db", userId_db);
-        bundle.putString("userName_db", userName_db);
         bundle.putString("userPw_db", userPw_db);
-        bundle.putString("userEmail_db", userEmail_db);
-        bundle.putString("userPhone_db", userPhone_db);
         bundle.putString("userContent_db", userContent_db);
         bundle.putString("userProfilePhoto_db", userProfilePhoto_db);
 

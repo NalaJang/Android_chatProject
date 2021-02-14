@@ -157,10 +157,7 @@ public class MainActivity extends AppCompatActivity {
         Document doc = Jsoup.parse(str);
         Elements result = doc.select("p.result");
         Elements userId = doc.select("ol > li.id");
-        Elements userName = doc.select("ol > li.name");
         Elements userPw = doc.select("ol > li.pw");
-        Elements userEmail = doc.select("ol > li.email");
-        Elements userPhone = doc.select("ol > li.phone");
         Elements userContent = doc.select("ol > li.content");
         Elements userProfilePhoto = doc.select("ol > li.profilePhoto");
 
@@ -172,10 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
                 intent = new Intent(MainActivity.this, EntranceActivity.class);
                 intent.putExtra("userId_db", userId.text());
-//                intent.putExtra("userName_db", userName.text());
                 intent.putExtra("userPw_db", userPw.text());
-//                intent.putExtra("userEmail_db", userEmail.text());
-//                intent.putExtra("userPhone_db", userPhone.text());
                 intent.putExtra("userContent_db", userContent.text());
                 intent.putExtra("userProfilePhoto_db", userProfilePhoto.text());
                 startActivity(intent);
